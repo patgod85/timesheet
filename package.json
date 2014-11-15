@@ -1,0 +1,14 @@
+{
+    "author": "patgod85",
+    "name": "patgod85.timesheet",
+    "version": "0.0.1",
+
+    "dependencies": {
+        "sqlite3": "*",
+        "jade": "*",
+        "express" : "3.x"
+    },
+    "devDependencies" : {
+
+    }
+}

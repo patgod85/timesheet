@@ -1,0 +1,12 @@
+doctype html
+html(lang="en")
+    head
+        title My Site - #{title}
+        block scripts
+            script(src='/jquery.js')
+        link(href='http://localhost:3000/css/index.css', rel="stylesheet")
+    body
+        block content
+        block foot
+            #footer
+                p patgod85.timesheet
