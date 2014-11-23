@@ -1,5 +1,16 @@
 var http = require("http");
 var url = require("url");
+var auth = require("http-auth");
+
+var basic= auth.basic(
+    {
+        realm: "Добрый добрый",
+        msg401: "Bad"
+    },
+    function(username, password, callback){
+        callback(username === "victor" && password === "victor1");
+    }
+);
 
 function start(route, handle) {
   function onRequest(request, response) {
@@ -13,13 +24,12 @@ function start(route, handle) {
     });
 
     request.addListener("end", function() {
-      route(handle, pathname, response, postData);
+      route(handle, pathname, request, response, postData);
     });
 
   }
 
-  http.createServer(onRequest).listen(8888);
-
+  http.createServer(basic, onRequest).listen(8888);
 }
 
 exports.start = start;

@@ -1,7 +1,7 @@
-function route(handle, pathname, response, postData) {
+function route(handle, pathname, request, response, postData) {
 
   if (typeof handle[pathname] === 'function') {
-    handle[pathname](response, postData);
+    handle[pathname](response, request, postData);
   } else {
 
     response.writeHead(404, {"Content-Type": "text/plain"});

@@ -1,6 +1,6 @@
 var jade = require('jade');
 
-exports.teams = function(response) {
+exports.teams = function(response, request) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
@@ -17,7 +17,7 @@ exports.teams = function(response) {
                     return;
                 }
 
-                var body = jade.renderFile('app/views/teams.jade', {rows: rows});
+                var body = jade.renderFile('app/views/teams.jade', {rows: rows, user: request.user});
 
                 response.writeHead(200, {"Content-Type": "text/html"});
                 response.write(body);
