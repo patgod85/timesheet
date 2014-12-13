@@ -13,4 +13,5 @@ block content
             and powerful features.
         ul
             each row in rows
-                li= row.name
+                li
+                    a(href = '/team/?id=' + row.id)= row.name

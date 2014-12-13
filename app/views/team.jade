@@ -1,0 +1,9 @@
+extends ./masterPage
+block content
+    h1 Information about team <strong>!{team.name}</strong>
+    #container.col
+        p.
+            The best team ever
+        ul
+            each employee in employees
+                li= employee.name

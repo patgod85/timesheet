@@ -1,0 +1,11 @@
+{
+  "name": "patgod85.timesheet",
+  "version": "0.0.1",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "basis": "*",
+  }
+}

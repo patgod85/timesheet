@@ -7,9 +7,13 @@
         "sqlite3": "*",
         "jade": "*",
         "express" : "3.x",
-        "http-auth": "*"
+        "http-auth": "*",
+        "cors": "*",
+        "gulp": "*",
+        "gulp-jade": "*"
     },
     "devDependencies" : {
 
-    }
+    },
+    "scripts": { "start": "set NODE_ENV=production && node app"}
 }

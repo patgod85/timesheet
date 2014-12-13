@@ -1,12 +1,11 @@
-var jade = require('jade');
 
-exports.teams = function(response, request) {
+exports.index = function(response) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
         db.serialize(function () {
-            db.all("SELECT name FROM team;", function (err, rows) {
+            db.all("SELECT * FROM team;", function (err, rows) {
 
                 console.log(err);
 
@@ -17,9 +16,16 @@ exports.teams = function(response, request) {
                     return;
                 }
 
-                var body = jade.renderFile('app/views/teams.jade', {rows: rows, user: request.user});
+//                viewModel.rows = rows;
 
-                response.writeHead(200, {"Content-Type": "text/html"});
+                var body = JSON.stringify(rows);//jade.renderFile('app/views/teams.jade', viewModel);
+
+//                response.writeHead(200, {"Content-Type": "application/json"});
+                response.writeHead(200, {
+//                    "access-control-allow-origin": "*",
+                    "content-type": "application/json",
+                    "content-length": body.length
+                });
                 response.write(body);
                 response.end();
             });
