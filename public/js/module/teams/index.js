@@ -3,7 +3,6 @@ require('basis.ui');
 var ajax = require('basis.net.ajax');
 
 var list = new basis.ui.Node({
-    container: document.body,
     template: resource('./template/list.tmpl')
 });
 
@@ -12,6 +11,9 @@ var Item = basis.ui.Node.subclass({
     binding: {
         name: function(node){
             return node.name;
+        },
+        id: function(node){
+            return node.id;
         }
     }
 });
@@ -26,15 +28,12 @@ module.exports = list;
 
 ajax.request({
     url: 'http://localhost:8888/teams',
-    params: {
-        userId: 123
-    },
     handler: {
         success: function(transport, request, response){
             var arr = [];
             for(var i in response){
                 if(response.hasOwnProperty(i)){
-                    arr.push(new Item({ name: response[i].name }));
+                    arr.push(new Item(response[i]));
                 }
             }
 

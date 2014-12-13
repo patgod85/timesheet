@@ -1,4 +1,3 @@
-var jade = require('jade');
 var url = require('url');
 
 exports.index = function(response, request, viewModel) {
@@ -31,9 +30,13 @@ exports.index = function(response, request, viewModel) {
                     viewModel.team = team;
                     viewModel.id = query.id;
 
-                    var body = jade.renderFile('app/views/team.jade', viewModel);
+                    var body = JSON.stringify(viewModel);
 
-                    response.writeHead(200, {"Content-Type": "text/html"});
+                    response.writeHead(200, {
+                        "content-type": "application/json",
+                        "content-length": body.length
+                    });
+
                     response.write(body);
                     response.end();
                 });
