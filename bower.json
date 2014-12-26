@@ -6,6 +6,6 @@
     "**/*.txt"
   ],
   "dependencies": {
-    "basis": "*",
+    "basis": "*"
   }
 }

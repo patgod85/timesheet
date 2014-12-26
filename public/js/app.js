@@ -1,8 +1,12 @@
 require('basis.ui');
 
+var MonthSelector = require('./module/month-selector/index.js');
+
+
 new basis.ui.Node({
     container: document.getElementById('teams'),
     childNodes: [
+        new MonthSelector(),
         require('./module/teams/index.js')
     ]
 });
