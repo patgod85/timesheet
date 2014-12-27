@@ -11,9 +11,9 @@ var Employee = basis.ui.Node.subclass({
 });
 
 
-module.exports = function(name){
+module.exports = function(name, month){
     var node = new Employee({ name: name });
-    node.setChildNodes([new Month('December')]);
+    node.setChildNodes([new Month(month)]);
     return node;
 };
 

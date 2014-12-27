@@ -3,7 +3,7 @@ var ajax = require('basis.net.ajax');
 
 var employeeConstructor = require('../employee/index.js');
 
-module.exports = function(id, team){
+module.exports = function(id, month, team){
     if(typeof team === 'undefined'){
         team = new basis.ui.Node({
             data: {
@@ -29,7 +29,7 @@ module.exports = function(id, team){
                 var arr = [];
                 for(var i in response.employees){
                     if(response.employees.hasOwnProperty(i)){
-                        arr.push(employeeConstructor(response.employees[i].name));
+                        arr.push(employeeConstructor(response.employees[i].name, month));
                     }
                 }
                 team.data.name = response.team.name;

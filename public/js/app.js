@@ -1,24 +1,30 @@
 require('basis.ui');
+var router = basis.require('basis.router');
 
-var MonthSelector = require('./module/month-selector/index.js');
+var monthSelectorConstructor = require('./module/month-selector/index.js');
 
+var selectedMonth = 'February';
+
+var changeMonth = function (newSelectedMonth) {
+    selectedMonth = newSelectedMonth;
+    router.navigate('team/1/' + selectedMonth);
+};
 
 new basis.ui.Node({
     container: document.getElementById('teams'),
     childNodes: [
-        new MonthSelector(),
+        monthSelectorConstructor(selectedMonth, changeMonth),
         require('./module/teams/index.js')
     ]
 });
 
-var router = basis.require('basis.router');
 var currentTeam;
 router.start();
-router.add('team/:id', {
+router.add('team/:id/:month', {
     enter: function(){},
-    match: function(id){
+    match: function(id, month){
         var teamConstructor = require('./module/team/index.js');
-        currentTeam = teamConstructor(id, currentTeam);
+        currentTeam = teamConstructor(id, month, currentTeam);
     },
     leave: function(){}
 });

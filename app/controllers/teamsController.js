@@ -7,8 +7,6 @@ exports.index = function(response) {
         db.serialize(function () {
             db.all("SELECT * FROM team;", function (err, rows) {
 
-                console.log(err);
-
                 if (err) {
                     response.writeHead(500, {"Content-Type": "text/html"});
                     response.write('There is a problem');
