@@ -1,6 +1,6 @@
 body {
     color: darkcyan;
-    width: 600px;
+    width: 800px;
     margin: 0 auto;
     background-color: silver;
 }
@@ -23,5 +23,9 @@ table.month {
         background-color: white;
         width: 30px;
         text-align: center;
+
+        &.weekend {
+            background-color: yellow;
+        }
     }
 }

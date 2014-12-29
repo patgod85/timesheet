@@ -8,18 +8,18 @@ exports.index = function(response, request, viewModel) {
         var query = url.parse(request.url, true).query;
 
         db.serialize(function () {
-            db.all("SELECT * FROM employee WHERE team_id = ?", query.id, function (employeesErr, employees) {
 
-                if (employeesErr) {
+            db.get("SELECT * FROM team WHERE code = ?", query.code, function (teamErr, team) {
+                if (teamErr) {
                     response.writeHead(500, {"Content-Type": "text/html"});
                     response.write('There is a problem');
                     response.end();
                     return;
                 }
 
-                db.get("SELECT * FROM team WHERE id = ?", query.id, function (teamErr, team) {
+                db.all("SELECT * FROM employee WHERE team_id = ?", team.id, function (employeesErr, employees) {
 
-                    if (teamErr) {
+                    if (employeesErr) {
                         response.writeHead(500, {"Content-Type": "text/html"});
                         response.write('There is a problem');
                         response.end();
@@ -28,7 +28,7 @@ exports.index = function(response, request, viewModel) {
 
                     viewModel.employees = employees;
                     viewModel.team = team;
-                    viewModel.id = query.id;
+                    viewModel.id = query.code;
 
                     var body = JSON.stringify(viewModel);
 

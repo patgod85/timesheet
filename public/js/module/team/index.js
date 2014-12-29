@@ -3,11 +3,11 @@ var ajax = require('basis.net.ajax');
 
 var employeeConstructor = require('../employee/index.js');
 
-module.exports = function(id, month, team){
+module.exports = function(teamCode, month, year, team){
     if(typeof team === 'undefined'){
         team = new basis.ui.Node({
             data: {
-                name: id
+                name: teamCode
             },
             container: document.getElementById('team'),
             template: resource('./template/index.tmpl'),
@@ -22,14 +22,14 @@ module.exports = function(id, month, team){
     ajax.request({
         url: 'http://localhost:8888/team/',
         params: {
-            id: id
+            code: teamCode
         },
         handler: {
             success: function(transport, request, response){
                 var arr = [];
                 for(var i in response.employees){
                     if(response.employees.hasOwnProperty(i)){
-                        arr.push(employeeConstructor(response.employees[i].name, month));
+                        arr.push(employeeConstructor(response.employees[i].name, month, year));
                     }
                 }
                 team.data.name = response.team.name;
