@@ -15,7 +15,7 @@ var Month = basis.ui.Node.subclass({
         }
     }
 });
-module.exports = function(monthName, year){
+module.exports = function(monthName, year, employeeDays){
     var node = new Month({name: monthName, year: year});
 
     var childNodes = [];
@@ -23,9 +23,13 @@ module.exports = function(monthName, year){
     var month = moment(year + ":" + monthName, "YYYY:MMMM");
 
     for(var i = 0; i < month.daysInMonth(); i++){
+        var date = month.date(i + 1);
         childNodes.push(new Day({data: {
             name: i+1,
-            weekend: [6, 7].indexOf(month.date(i+1).isoWeekday()) != -1
+            weekend: [6, 7].indexOf(date.isoWeekday()) != -1,
+            type: employeeDays.hasOwnProperty(date.format("DD.MM.YYYY"))
+                ? employeeDays[date.format("DD.MM.YYYY")].day_type_id
+                : ''
         }}));
     }
 

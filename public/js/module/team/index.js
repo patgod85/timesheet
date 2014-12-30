@@ -29,7 +29,7 @@ module.exports = function(teamCode, month, year, team){
                 var arr = [];
                 for(var i in response.employees){
                     if(response.employees.hasOwnProperty(i)){
-                        arr.push(employeeConstructor(response.employees[i].name, month, year));
+                        arr.push(employeeConstructor(response.employees[i], month, year));
                     }
                 }
                 team.data.name = response.team.name;

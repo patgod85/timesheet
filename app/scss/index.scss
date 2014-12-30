@@ -27,5 +27,9 @@ table.month {
         &.weekend {
             background-color: yellow;
         }
+
+        &.type_1 {
+            background-color: red;
+        }
     }
 }
