@@ -34,8 +34,11 @@ new basis.ui.Node({
         monthSelectorConstructor(selectedMonth, changeMonth),
         yearSelectorConstructor(selectedYear, changeYear),
         teamsConstructor(changeTeam)
+        //agenda
     ]
 });
+
+require('./module/agenda/index.js');
 
 var currentTeam;
 router.start();
