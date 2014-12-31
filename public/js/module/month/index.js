@@ -6,11 +6,12 @@ var Day = require('../day/index.js');
 
 var Month = basis.ui.Node.subclass({
     template: resource('./template/index.tmpl'),
+    className: "Month",
     binding: {
-        name: "name",
-        year: "year",
-        isActive: "isActive",
-        workingDays: "workingDays"
+        name: "data:name",
+        year: "data:year",
+        isActive: "data:isActive",
+        workingDays: "data:workingDays"
     }
 });
 module.exports = function(monthName, year, employeeDays, isActive, work_start, work_end){
@@ -38,7 +39,8 @@ module.exports = function(monthName, year, employeeDays, isActive, work_start, w
         }
 
         childNodes.push(new Day({data: {
-            name: name,
+            day: i+1,
+            title: name,
             weekend: isWeekend,
             type: hasType
                 ? employeeDays[date.format("DD.MM.YYYY")].day_type_id
@@ -46,7 +48,7 @@ module.exports = function(monthName, year, employeeDays, isActive, work_start, w
         }}));
     }
 
-    var node = new Month({name: monthName, year: year, isActive: isActive? "employee_month": "header_month", workingDays: workingDays});
+    var node = new Month({data: {name: monthName, year: year, isActive: isActive? "employee_month": "header_month", workingDays: workingDays}});
 
     node.setChildNodes(childNodes);
 

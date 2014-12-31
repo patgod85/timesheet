@@ -2,14 +2,26 @@ require('basis.ui');
 
 module.exports = basis.ui.Node.subclass({
     data: {
-        name: '',
+        day: null,
+        title: '',
         weekend: false,
-        type: ''
+        type: '',
+        checked: false
     },
     template: resource('./template/index.tmpl'),
     binding: {
-        name: 'data:name',
+        day: "data:day",
+        title: 'data:title',
         weekend: 'data:weekend',
-        type: 'data:type'
+        type: 'data:type',
+        checked: function(node){
+            return node.data.checked ? 'checked_day' : '';
+        }
+    },
+    action: {
+        dayClick: function(){
+            this.data.checked = !this.data.checked;
+            this.updateBind('checked');
+        }
     }
 });

@@ -6,11 +6,13 @@ var indexController = require("./app/controllers/indexController");
 var teamsController = require("./app/controllers/teamsController");
 var teamController = require("./app/controllers/teamController");
 var dayTypesController = require("./app/controllers/dayTypesController");
+var setTypeController = require("./app/controllers/setTypeController");
 
 var handle = {
     "/": indexController.index,
     "/teams": teamsController.index,
     "/day-types": dayTypesController.index,
+    "/set-type": setTypeController.index,
     "/team/": teamController.index
 };
 

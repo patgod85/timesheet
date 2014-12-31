@@ -93,16 +93,25 @@ table.month {
     }
 }
 
-.agenda_box {
-    display: inline-block;
-    width: $day-width;
-    text-align: center;
+.agenda_li {
 
-    span:before {
-        content: "\00a0";
+    &:hover {
+        background-color: #fbfaef;
     }
 
-    @include day-types;
+    .agenda_box {
+        display: inline-block;
+        width: $day-width;
+        text-align: center;
+        border: 1px solid black;
+
+        span:before {
+            content: "\00a0";
+        }
+
+        @include day-types;
+    }
+
 }
 
 #teams {
@@ -140,7 +149,15 @@ table.month {
         }
 
         table.month {
+            td {
+                cursor: pointer;
 
+                &.checked_day {
+                    border-color: red;
+                    background-color: indianred;
+                    color: wheat;
+                }
+            }
         }
     }
 }
