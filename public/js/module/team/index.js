@@ -10,7 +10,7 @@ module.exports = function(teamCode, month, year, team){
             data: {
                 name: teamCode
             },
-            container: document.getElementById('team'),
+            container: document.getElementById('placeHolder'),
             template: resource('./template/index.tmpl'),
             binding: {
                 name: 'data:name'

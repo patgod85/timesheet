@@ -10,7 +10,9 @@
         "http-auth": "*",
         "cors": "*",
         "gulp": "*",
-        "gulp-jade": "*"
+        "gulp-jade": "*",
+        "gulp-sass": "*",
+        "gulp-minify-css": "*"
     },
     "devDependencies" : {
 

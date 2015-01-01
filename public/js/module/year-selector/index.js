@@ -13,12 +13,16 @@ var Option = basis.ui.Node.subclass({
 });
 
 
-module.exports = function(selectedYear, updateGlobalYear){
+module.exports = function(selectedYear, updateGlobalYear, navigatePublicHolidaysCallback){
     var Node = basis.ui.Node.subclass({
         template: resource('./template/index.tmpl'),
         action: {
             setYear: function(event){
-                updateGlobalYear(event.sender.value);
+                this.data.year = event.sender.value;
+                updateGlobalYear(this.data.year);
+            },
+            navigatePublicHolidays: function(){
+                navigatePublicHolidaysCallback(this.data.year);
             }
         }
     });
@@ -36,7 +40,7 @@ module.exports = function(selectedYear, updateGlobalYear){
     }
 
 
-    var node = new Node();
+    var node = new Node({data: {year: selectedYear}});
 
     node.setChildNodes(childNodes);
 

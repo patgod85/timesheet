@@ -4,7 +4,7 @@ var ajax = require('basis.net.ajax');
 module.exports = function (applyTypeCallback) {
 
     var node = new basis.ui.Node({
-        container: document.getElementById('agenda'),
+        container: document.getElementById('placeHolder'),
         template: resource('./template/index.tmpl'),
         childClass: {
             template: resource('./template/item.tmpl'),
