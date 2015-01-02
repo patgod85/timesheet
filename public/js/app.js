@@ -3,34 +3,15 @@ var moment = require('../../../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
 var router = basis.require('basis.router');
 
-var monthSelectorConstructor = require('./module/month-selector/index.js');
-var yearSelectorConstructor = require('./module/year-selector/index.js');
-var teamsConstructor = require('./module/teams/index.js');
 var agendaConstructor = require('./module/agenda/index.js');
 var publicHolidayConstructor = require('./module/public-holidays/year/index.js');
+var Toolbox = require('./module/toolbox/index.js');
 
-var selectedMonth = 'February';
-var selectedYear = '2014';
-var selectedTeam = '';
-
-function changeRoute(){
-    router.navigate('team/' + selectedTeam + '/' + selectedMonth + '/' + selectedYear);
-}
-
-function changeMonth(newSelectedMonth) {
-    selectedMonth = newSelectedMonth;
-    changeRoute();
-}
-
-function changeYear(newSelectedYear) {
-    selectedYear = newSelectedYear;
-    changeRoute();
-}
-
-function changeTeam(newTeam){
-    selectedTeam = newTeam;
-    changeRoute();
-}
+var toolboxData = {
+    month: 'February',
+    year: '2014',
+    team: ''
+};
 
 function applyTypeForSelectedDays(typeId){
     var postModel = [];
@@ -73,7 +54,7 @@ function applyTypeForSelectedDays(typeId){
                         checkedDays[i].updateBind('checked');
                     }
                     var teamConstructor = require('./module/team/index.js');
-                    currentTeam = teamConstructor(selectedTeam, selectedMonth, selectedYear, currentTeam);
+                    currentTeam = teamConstructor(toolboxData.team, toolboxData.month, toolboxData.year, currentTeam);
                 }
             }
         });
@@ -82,20 +63,7 @@ function applyTypeForSelectedDays(typeId){
     //console.log(postModel);
 }
 
-function navigatePublicHoliday(year){
-    router.navigate("public-holidays/" + year);
-}
-
-new basis.ui.Node({
-    container: document.getElementById('toolbox'),
-    childNodes: [
-        monthSelectorConstructor(selectedMonth, changeMonth),
-        yearSelectorConstructor(selectedYear, changeYear, navigatePublicHoliday),
-        teamsConstructor(changeTeam)
-        //agenda
-    ]
-});
-
+var toolbox = new Toolbox({data: toolboxData});
 
 var currentTeam;
 router.start();
@@ -105,9 +73,14 @@ router.add('team/:team/:month/:year', {
         if(typeof currentTeam === 'undefined'){
             document.getElementById('placeHolder').innerHTML = "";
         }
-        selectedMonth = month;
-        selectedYear = year;
-        selectedTeam = teamCode;
+
+        toolboxData.month = month;
+        toolboxData.year = year;
+        toolboxData.team = teamCode;
+
+        toolbox.data.year = year;
+        toolbox.updateBind('year');
+
         var teamConstructor = require('./module/team/index.js');
         currentTeam = teamConstructor(teamCode, month, year, currentTeam);
         agendaConstructor(applyTypeForSelectedDays);

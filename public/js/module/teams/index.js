@@ -1,10 +1,13 @@
+require('basis.dom');
 require('basis.ui');
 
 var ajax = require('basis.net.ajax');
 
-module.exports = function(changeTeam){
+module.exports = function(){
 
     var list = new basis.ui.Node({
+        //container: basis.dom.get('toolbox'),
+        autoDelegate: true,
         template: resource('./template/list.tmpl')
     });
 
@@ -20,8 +23,7 @@ module.exports = function(changeTeam){
         },
         action: {
             selectTeam: function(){
-                //console.log(this.data);
-                changeTeam(this.data.code);
+                this.parentNode.owner.emit_teamChange(this.data.code);
             }
         }
     });

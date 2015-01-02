@@ -1,3 +1,4 @@
+require('basis.dom');
 require('basis.ui');
 var Month = require('../month/index.js');
 var ajax = require('basis.net.ajax');
@@ -10,7 +11,8 @@ module.exports = function(teamCode, month, year, team){
             data: {
                 name: teamCode
             },
-            container: document.getElementById('placeHolder'),
+            container: basis.dom.get('placeHolder'),
+            //container: document.getElementById('placeHolder'),
             template: resource('./template/index.tmpl'),
             binding: {
                 name: 'data:name'
