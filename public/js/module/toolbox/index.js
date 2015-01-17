@@ -34,7 +34,7 @@ module.exports = basis.ui.Node.subclass({
         button: new basis.ui.button.Button({
             caption: 'Public holidays',
             click: function () {
-                router.navigate("public-holidays/" + this.data.year);
+                router.navigate("public-holidays/" + this.owner.data.month + '/' + this.owner.data.year);
             }
         }),
         teamsList: teamsConstructor()

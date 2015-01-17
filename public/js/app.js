@@ -87,12 +87,12 @@ router.add('team/:team/:month/:year', {
     },
     leave: function(){}
 });
-router.add('public-holidays/:year', {
+router.add('public-holidays/:month/:year', {
     enter: function(){},
-    match: function(year){
+    match: function(month, year){
         document.getElementById('placeHolder').innerHTML = "";
         currentTeam = undefined;
-        publicHolidayConstructor(year);
+        publicHolidayConstructor(month, year);
     },
     leave: function(){}
 });

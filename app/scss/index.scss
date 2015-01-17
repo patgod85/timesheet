@@ -161,3 +161,21 @@ table.month {
         }
     }
 }
+
+.Basis-Calendar {
+    .Basis-Calendar-Section-Month {
+        .Basis-Calendar-Node {
+            &.holiday {
+                background: red;
+                color: white;
+            }
+        }
+    }
+}
+
+#placeHolder {
+    .Basis-Calendar-ButtonPrevPeriod,
+    .Basis-Calendar-ButtonNextPeriod {
+        display: none;
+    }
+}

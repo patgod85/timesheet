@@ -36,3 +36,8 @@ CREATE TABLE [user](
   "surname" TEXT NOT NULL,
   "team_id" INTEGER NOT NULL REFERENCES  [team]("id")
 );
+
+CREATE TABLE [public_holiday](
+  "date" DATETIME NOT NULL PRIMARY KEY UNIQUE,
+  "description" TEXT
+);
