@@ -7,8 +7,8 @@ var moment = require('../../../components/moment/moment.js');
 var teamsConstructor = require('../teams/index.js');
 var MyCalendar = basis.ui.calendar.Calendar.subclass({
     childNodes: ['Year', 'YearDecade'],
-    handler: {
-        change: function () {
+    action: {
+        click: function () {
             this.owner.emit_monthChange(this.selectedDate.value);
         }
     }
@@ -34,14 +34,17 @@ module.exports = basis.ui.Node.subclass({
         button: new basis.ui.button.Button({
             caption: 'Public holidays',
             click: function () {
-                router.navigate("public-holidays/" + this.owner.data.month + '/' + this.owner.data.year);
+                this.owner.action.navigateToPublicHolidays(this.owner.data);
             }
         }),
         teamsList: teamsConstructor()
     },
     action: {
-        changeRoute: function(data) {
+        navigateToTeam: function(data) {
             router.navigate('team/' + data.team + '/' + data.month + '/' + data.year);
+        },
+        navigateToPublicHolidays: function(data){
+            router.navigate("public-holidays/" + data.month + '/' + data.year);
         }
     },
     emit_teamChange: basis.event.create('teamChange', 'team'),
@@ -49,14 +52,17 @@ module.exports = basis.ui.Node.subclass({
     handler: {
         'teamChange': function(sender, team){
             this.data.team = team;
-            this.action.changeRoute(this.data);
-            //console.log(this, team);
+            this.action.navigateToTeam(this.data);
         },
         'monthChange': function(sender, date){
             var momentDate = moment(date);
             this.data.month = momentDate.format("MMMM");
             this.data.year = momentDate.format("YYYY");
-            this.action.changeRoute(this.data);
+            if(location.hash.match(/public-holidays/)){
+                this.action.navigateToPublicHolidays(this.data);
+            }else{
+                this.action.navigateToTeam(this.data);
+            }
         }
     }
 });

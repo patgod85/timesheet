@@ -120,6 +120,7 @@ table.month {
     top: 30px;
     border: 1px solid darkslateblue;
     padding: 3px 5px;
+    width: 400px;
 
     h2 {
         margin: 3px 0 0;
@@ -127,6 +128,8 @@ table.month {
 }
 
 .team {
+
+    margin-top: 100px;
 
     .header_month {
         td {
@@ -173,9 +176,15 @@ table.month {
     }
 }
 
-#placeHolder {
-    .Basis-Calendar-ButtonPrevPeriod,
-    .Basis-Calendar-ButtonNextPeriod {
-        display: none;
-    }
+//#placeHolder {
+//    .Basis-Calendar-ButtonPrevPeriod,
+//    .Basis-Calendar-ButtonNextPeriod {
+//        display: none;
+//    }
+//}
+
+#sidebar {
+    float:left;
+    margin: 10px 20px 10px 10px;
 }
+
