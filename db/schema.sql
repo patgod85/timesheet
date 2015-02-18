@@ -34,6 +34,7 @@ CREATE TABLE [user](
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
   "name" TEXT NOT NULL,
   "surname" TEXT NOT NULL,
+  "password" TEXT,
   "team_id" INTEGER NOT NULL REFERENCES  [team]("id")
 );
 

@@ -1,0 +1,17 @@
+{
+    "express": {
+        "port": 8888
+    },
+
+    "session": {
+        "secret": "secret_key",
+        "key": "cid",
+        "cookie": {
+            "path": "/",
+            "httpOnly": true,
+            "maxAge": null
+        }
+    },
+
+    "credentials": ["admin","password"]
+}

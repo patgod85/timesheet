@@ -8,7 +8,11 @@ var teamsConstructor = require('../teams/index.js');
 var MyCalendar = basis.ui.calendar.Calendar.subclass({
     childNodes: ['Year', 'YearDecade'],
     action: {
-        click: function () {
+        click: function () {}
+    },
+    handler : {
+        change : function () {
+            //console.log(this.selectedDate.value);
             this.owner.emit_monthChange(this.selectedDate.value);
         }
     }
@@ -22,7 +26,6 @@ module.exports = basis.ui.Node.subclass({
         calendar: {
             instanceOf: MyCalendar,
             config: function(owner){
-                console.log(owner.data.year);
                 return {
                     date: (new Date).setFullYear(parseInt(owner.data.year))
                 }

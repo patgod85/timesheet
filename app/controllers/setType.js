@@ -1,11 +1,11 @@
 var url = require('url');
 
-exports.index = function (response, request, viewModel, postData) {
+module.exports = function (request, response) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
-        postData = JSON.parse(postData);
+        var postData = request.body;
 
         var dates = [];
         var dayQueryAmend = [];

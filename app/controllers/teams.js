@@ -1,32 +1,29 @@
-var url = require('url');
 
-exports.index = function(response, request, viewModel) {
+module.exports = function(request, response) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
         db.serialize(function () {
+            db.all("SELECT * FROM team;", function (err, rows) {
 
-            db.all("SELECT * FROM public_holiday", function (holidaysErr, holidays) {
-
-                if (holidaysErr) {
+                if (err) {
                     response.writeHead(500, {"Content-Type": "text/html"});
-                    response.write('There is a problem' + JSON.stringify(holidaysErr));
+                    response.write('There is a problem');
                     response.end();
                     return;
                 }
 
-                for(var i = 0; i < holidays.length; i++){
-                    viewModel[holidays[i].date.trim()] = holidays[i];
-                }
+//                viewModel.rows = rows;
 
-                var body = JSON.stringify(viewModel);
-//console.log(body);
+                var body = JSON.stringify(rows);//jade.renderFile('app/views/teams.jade', viewModel);
+
+//                response.writeHead(200, {"Content-Type": "application/json"});
                 response.writeHead(200, {
+//                    "access-control-allow-origin": "*",
                     "content-type": "application/json",
                     "content-length": body.length
                 });
-
                 response.write(body);
                 response.end();
             });

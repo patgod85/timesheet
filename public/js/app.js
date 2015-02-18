@@ -6,6 +6,7 @@ var router = basis.require('basis.router');
 var agendaConstructor = require('./module/agenda/index.js');
 var publicHolidayConstructor = require('./module/public-holidays/year/index.js');
 var Toolbox = require('./module/toolbox/index.js');
+var UserConstructor = require('./module/user/index.js');
 
 var toolboxData = {
     month: 'February',
@@ -46,6 +47,7 @@ function applyTypeForSelectedDays(typeId){
         ajax.request({
             url: 'http://localhost:8888/set-type',
             method: 'POST',
+            contentType: "application/json",
             postBody: JSON.stringify(postModel),
             handler: {
                 success: function(){
@@ -65,14 +67,13 @@ function applyTypeForSelectedDays(typeId){
 
 var toolbox = new Toolbox({data: toolboxData});
 
+var user = new UserConstructor();
+
 var currentTeam;
 router.start();
 router.add('team/:team/:month/:year', {
     enter: function(){},
     match: function(teamCode, month, year){
-        if(typeof currentTeam === 'undefined'){
-            document.getElementById('placeHolder').innerHTML = "";
-        }
 
         toolboxData.month = month;
         toolboxData.year = year;
@@ -82,8 +83,16 @@ router.add('team/:team/:month/:year', {
         toolbox.updateBind('year');
 
         var teamConstructor = require('./module/team/index.js');
-        currentTeam = teamConstructor(teamCode, month, year, currentTeam);
-        agendaConstructor(applyTypeForSelectedDays);
+
+        if(typeof currentTeam === 'undefined'){
+            basis.dom.get('placeHolder').innerHTML = "";
+            currentTeam = teamConstructor(teamCode, month, year, currentTeam);
+            agendaConstructor(applyTypeForSelectedDays);
+        }else{
+            currentTeam = teamConstructor(teamCode, month, year, currentTeam);
+        }
+
+
     },
     leave: function(){}
 });

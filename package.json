@@ -12,7 +12,15 @@
         "gulp": "*",
         "gulp-jade": "*",
         "gulp-sass": "*",
-        "gulp-minify-css": "*"
+        "gulp-minify-css": "*",
+        "passport": "*",
+        "passport-local": "*",
+        "require-tree": "*",
+        "nconf": "*",
+        "bootable": "*",
+        "bootable-environment": "*",
+        "up-express-logger": "*",
+        "process-pwd": "*"
     },
     "devDependencies" : {
 
