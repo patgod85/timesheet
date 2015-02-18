@@ -1,0 +1,17 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        title My Site - #{title}
+        block scripts
+        link(href='/build/style.css', rel="stylesheet")
+        script.
+            var NODE_ENV = 'production';
+    body
+        #auth
+        #toolbox
+        #placeHolder
+        block foot
+            #footer
+                p patgod85.timesheet
+        script(src='/build/script.js', basis-config="autoload: './js/app'")

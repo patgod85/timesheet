@@ -47,10 +47,13 @@ module.exports = function () {
     this.use(passport.initialize());
     this.use(passport.session());
 
-    this.use(cors());
+    this.use(cors({
+        credentials: true,
+        origin: 'http://localhost:8000'
+    }));
 
     this.use(this.router);
-    this.use(express.static(pwd + '/public'));
+    this.use(express.static('public'));
 
 
 };
