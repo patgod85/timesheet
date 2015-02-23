@@ -3,11 +3,8 @@
 /**
  * Module dependencies.
  */
-var log                 = require('winston-wrapper')(module);
 var config              = require('../../config');
 
-//var Post                = require('mongoose').model('Post');
-//var auth                = require('../../controllers/auth');
 var express = require('express');
 
 // End of dependencies.
