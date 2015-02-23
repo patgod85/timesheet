@@ -32,4 +32,5 @@ module.exports = function () {
     this.get('/register', controllers.users.register);
     this.get('/logout', controllers.users.logout);
 
+    this.get('/model', controllers.model);
 };
