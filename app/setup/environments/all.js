@@ -41,8 +41,8 @@ module.exports = function () {
         origin: 'http://localhost:8000'
     }));
 
-    this.use(this.router);
+    this.use(express.static('public/components', {maxAge: '1d'}));
     this.use(express.static('public'));
 
-
+    this.use(this.router);
 };

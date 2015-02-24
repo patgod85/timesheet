@@ -52,7 +52,7 @@ module.exports.register = function(req, res, next) {
 };
 
 module.exports.whoami = function(req, res) {
-    console.log(req.session);
+
     if(req.user){
         result(res, JSON.stringify({success: true, user: req.user}));
     }else{
