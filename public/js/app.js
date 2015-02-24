@@ -2,17 +2,73 @@ require('basis.ui');
 var moment = require('../../../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
 var router = basis.require('basis.router');
+var model;
 
 var agendaConstructor = require('./module/agenda/index.js');
 var publicHolidayConstructor = require('./module/public-holidays/year/index.js');
 var Toolbox = require('./module/toolbox/index.js');
 var UserConstructor = require('./module/user/index.js');
+var teamConstructor = require('./module/team/index.js');
+var currentTeam;
+var toolboxData;
 
-var toolboxData = {
-    month: 'February',
-    year: '2014',
-    team: ''
-};
+ajax.request({
+    url: 'http://localhost:8888/model',
+    method: 'GET',
+    handler: {
+        success: function(transport, request, response){
+            model = response;
+
+            toolboxData = {
+                month: 'March',
+                year: '2015',
+                team: '',
+                teams: model.teams
+            };
+
+            var toolbox = new Toolbox({data: toolboxData});
+
+            new UserConstructor();
+
+            router.start();
+            router.add('team/:team/:month/:year', {
+                enter: function(){},
+                match: function(teamCode, month, year){
+
+                    toolboxData.month = month;
+                    toolboxData.year = year;
+                    toolboxData.team = teamCode;
+
+                    toolbox.data.year = year;
+                    toolbox.updateBind('year');
+
+
+                    if(typeof currentTeam === 'undefined'){
+                        basis.dom.get('placeHolder').innerHTML = "";
+                        currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
+                        agendaConstructor(applyTypeForSelectedDays, model.dayTypes);
+                    }else{
+                        currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
+                    }
+
+
+                },
+                leave: function(){}
+            });
+            router.add('public-holidays/:month/:year', {
+                enter: function(){},
+                match: function(month, year){
+                    document.getElementById('placeHolder').innerHTML = "";
+                    currentTeam = undefined;
+                    publicHolidayConstructor(month, year, model.publicHolidays);
+                },
+                leave: function(){}
+            });
+        }
+    }
+});
+
+
 
 function applyTypeForSelectedDays(typeId){
     var postModel = [];
@@ -55,53 +111,10 @@ function applyTypeForSelectedDays(typeId){
                         checkedDays[i].data.checked = false;
                         checkedDays[i].updateBind('checked');
                     }
-                    var teamConstructor = require('./module/team/index.js');
-                    currentTeam = teamConstructor(toolboxData.team, toolboxData.month, toolboxData.year, currentTeam);
+                    //currentTeam = teamConstructor(toolboxData.team, toolboxData.month, toolboxData.year, currentTeam, model.teams);
                 }
             }
         });
     }
-
-    //console.log(postModel);
 }
 
-var toolbox = new Toolbox({data: toolboxData});
-
-var user = new UserConstructor();
-
-var currentTeam;
-router.start();
-router.add('team/:team/:month/:year', {
-    enter: function(){},
-    match: function(teamCode, month, year){
-
-        toolboxData.month = month;
-        toolboxData.year = year;
-        toolboxData.team = teamCode;
-
-        toolbox.data.year = year;
-        toolbox.updateBind('year');
-
-        var teamConstructor = require('./module/team/index.js');
-
-        if(typeof currentTeam === 'undefined'){
-            basis.dom.get('placeHolder').innerHTML = "";
-            currentTeam = teamConstructor(teamCode, month, year, currentTeam);
-            agendaConstructor(applyTypeForSelectedDays);
-        }else{
-            currentTeam = teamConstructor(teamCode, month, year, currentTeam);
-        }
-
-
-    },
-    leave: function(){}
-});
-router.add('public-holidays/:month/:year', {
-    enter: function(){},
-    match: function(month, year){
-        document.getElementById('placeHolder').innerHTML = "";
-        currentTeam = undefined;
-        publicHolidayConstructor(month, year);
-    },
-    leave: function(){}
-});

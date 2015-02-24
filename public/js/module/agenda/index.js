@@ -1,7 +1,6 @@
 require('basis.ui');
-var ajax = require('basis.net.ajax');
 
-module.exports = function (applyTypeCallback) {
+module.exports = function (applyTypeCallback, types) {
 
     var node = new basis.ui.Node({
         container: document.getElementById('placeHolder'),
@@ -21,24 +20,16 @@ module.exports = function (applyTypeCallback) {
     });
 
 
-    ajax.request({
-        url: 'http://localhost:8888/day-types',
-        handler: {
-            success: function (transport, request, response) {
-                var arr = [];
-                for (var i in response) {
-                    if (response.hasOwnProperty(i)) {
-                        arr.push({
-                            id: response[i].id,
-                            name: response[i].name
-                        });
-                    }
-                }
-                node.setChildNodes(arr);
-            },
-            failure: function (transport, request, error) {
-                console.log('response error:', error);
+    if(types){
+        var arr = [];
+        for (var i in types) {
+            if (types.hasOwnProperty(i)) {
+                arr.push({
+                    id: types[i].id,
+                    name: types[i].name
+                });
             }
         }
-    });
+        node.setChildNodes(arr);
+    }
 };

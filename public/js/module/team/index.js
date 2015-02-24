@@ -1,13 +1,12 @@
 require('basis.dom');
 require('basis.ui');
 var Month = require('../month/index.js');
-var ajax = require('basis.net.ajax');
 
 var employeeConstructor = require('../employee/index.js');
 
-module.exports = function(teamCode, month, year, team){
-    if(typeof team === 'undefined'){
-        team = new basis.ui.Node({
+module.exports = function(teamCode, month, year, existingNode, teams){
+    if(typeof existingNode === 'undefined'){
+        existingNode = new basis.ui.Node({
             data: {
                 name: teamCode
             },
@@ -20,31 +19,35 @@ module.exports = function(teamCode, month, year, team){
         });
     }
 
-    team.setChildNodes([]);
+    existingNode.setChildNodes([]);
 
-    ajax.request({
-        url: 'http://localhost:8888/team/',
-        params: {
-            code: teamCode
-        },
-        handler: {
-            success: function(transport, request, response){
-                var arr = [new Month(month, year, [], false)];
-                for(var i in response.employees){
-                    if(response.employees.hasOwnProperty(i)){
-                        arr.push(employeeConstructor(response.employees[i], month, year));
-                    }
+    if(teams){
+
+        var team = null;
+
+        for(var i in teams){
+            if(teams.hasOwnProperty(i)){
+                if(teams[i].code == teamCode){
+                    team = teams[i];
+                    break;
                 }
-                team.data.name = response.team.name;
-                team.updateBind('name');
-                team.setChildNodes(arr);
-            },
-            failure: function(transport, request, error){
-                console.log('response error:', error);
             }
         }
-    });
-    return team;
+
+        if(team !== null) {
+            var arr = [new Month(month, year, [], false)];
+            for (i in team.employees) {
+                if (team.employees.hasOwnProperty(i)) {
+                    arr.push(employeeConstructor(team.employees[i], month, year));
+                }
+            }
+            existingNode.data.name = team.name;
+            existingNode.updateBind('name');
+            existingNode.setChildNodes(arr);
+        }
+    }
+    
+    return existingNode;
 };
 
 

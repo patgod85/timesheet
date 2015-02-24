@@ -1,6 +1,5 @@
 require("basis.ui");
 basis.require('basis.ui.calendar');
-var ajax = require('basis.net.ajax');
 var moment = require('../../../../components/moment/moment.js');
 var publicHolidays = undefined;
 
@@ -17,28 +16,6 @@ function updateMonthWithPublicHolidays(monthNode, publicHolidays){
     }
 }
 
-function getPublicHolidays(monthNode) {
-
-    if(typeof publicHolidays !== 'undefined'){
-        updateMonthWithPublicHolidays(monthNode, publicHolidays);
-        return;
-    }
-
-    ajax.request({
-        url: 'http://localhost:8888/public-holidays',
-        handler: {
-            success: function (transport, request, response) {
-                publicHolidays = response;
-
-                updateMonthWithPublicHolidays(monthNode, publicHolidays);
-            },
-            failure: function (transport, request, error) {
-                console.log('response error:', error);
-            }
-        }
-    });
-}
-
 function bindHolidaysUpdateToPeriodChange(node){
     var monthNode;
 
@@ -53,17 +30,19 @@ function bindHolidaysUpdateToPeriodChange(node){
         monthNode.addHandler(
             {
                 periodChanged: function () {
-                    getPublicHolidays(monthNode);
+                    updateMonthWithPublicHolidays(monthNode, publicHolidays);
                 }
             },
             node
         );
 
-        getPublicHolidays(monthNode);
+        updateMonthWithPublicHolidays(monthNode, publicHolidays);
     }
 }
 
-module.exports = function (month, year) {
+module.exports = function (month, year, _publicHolidays) {
+
+    publicHolidays = _publicHolidays;
 
     var date = moment().month(month).year(year);
 

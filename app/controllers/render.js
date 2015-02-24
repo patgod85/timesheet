@@ -26,3 +26,11 @@ module.exports.build = function(req, response) {
     response.write(body);
     response.end();
 };
+
+module.exports.dev = function(req, response) {
+
+    var body = jade.renderFile('app/views/dev.jade', { user : req.user });
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(body);
+    response.end();
+};

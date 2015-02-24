@@ -1,22 +1,11 @@
 require('basis.ui');
-require('basis.ui.calendar');
 require('basis.ui.button');
 var router = require('basis.router');
 var moment = require('../../../components/moment/moment.js');
 
-var teamsConstructor = require('../teams/index.js');
-var MyCalendar = basis.ui.calendar.Calendar.subclass({
-    childNodes: ['Year', 'YearDecade'],
-    action: {
-        click: function () {}
-    },
-    handler : {
-        change : function () {
-            //console.log(this.selectedDate.value);
-            this.owner.emit_monthChange(this.selectedDate.value);
-        }
-    }
-});
+var Teams = require('./teams/index.js');
+var Calendar = require('./calendar/index.js');
+
 
 module.exports = basis.ui.Node.subclass({
     autoDelegate: true,
@@ -24,10 +13,28 @@ module.exports = basis.ui.Node.subclass({
     template: resource('./template/index.tmpl'),
     satellite: {
         calendar: {
-            instanceOf: MyCalendar,
+            instanceOf: Calendar,
             config: function(owner){
                 return {
                     date: (new Date).setFullYear(parseInt(owner.data.year))
+                }
+            }
+        },
+        teamsList: {
+            instanceOf: Teams,
+            config: function(owner){
+
+                var teams = owner.data.teams;
+                var arr = [];
+
+                for(var i in teams){
+                    if(teams.hasOwnProperty(i)){
+                        arr.push({data: {id: teams[i].id, name: teams[i].name, code: teams[i].code}});
+                    }
+                }
+
+                return {
+                    childNodes: arr
                 }
             }
         }
@@ -40,7 +47,7 @@ module.exports = basis.ui.Node.subclass({
                 this.owner.action.navigateToPublicHolidays(this.owner.data);
             }
         }),
-        teamsList: teamsConstructor()
+        teamsList: "satellite:teamsList"
     },
     action: {
         navigateToTeam: function(data) {

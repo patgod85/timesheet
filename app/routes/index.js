@@ -17,8 +17,9 @@ module.exports = function () {
     // Get user credentials if exists, and provide some data to views.
 
     // Render index page
-    this.get('/', controllers.render.index);
-    this.get('/build', controllers.render.build);
+    this.get('/login', controllers.render.index);
+    this.get('/dev', controllers.render.dev);
+    this.get('/', controllers.render.build);
 
     // editor for create or update posts.
     this.get('/teams', controllers.teams);
