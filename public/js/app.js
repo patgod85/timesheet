@@ -5,12 +5,12 @@ var router = basis.require('basis.router');
 var model;
 
 var agendaConstructor = require('./module/agenda/index.js');
-var publicHolidayConstructor = require('./module/public-holidays/year/index.js');
+var publicHolidayConstructor = require('./module/public-holidays/index.js');
 var Toolbox = require('./module/toolbox/index.js');
 var UserConstructor = require('./module/user/index.js');
 var teamConstructor = require('./module/team/index.js');
 var currentTeam;
-var toolboxData;
+var viewModel;
 
 ajax.request({
     url: 'http://localhost:8888/model',
@@ -19,48 +19,74 @@ ajax.request({
         success: function(transport, request, response){
             model = response;
 
-            toolboxData = {
+            viewModel = {
                 month: 'March',
                 year: '2015',
                 team: '',
                 teams: model.teams
             };
 
-            var toolbox = new Toolbox({data: toolboxData});
+            var toolbox = new Toolbox({data: viewModel});
 
             new UserConstructor();
+
+            var Pages = require('./module/pages/index.js').controller;
+            //var Page1 = require('./module/pages/index.js').page1;
+            //var Page2 = require('./module/pages/index.js').controller;
+            var pages = new Pages();
+
+            var page1 = {
+                name: 'publicHolidays',
+                childNodes: [
+                    publicHolidayConstructor(viewModel.month, viewModel.year, model.publicHolidays)
+                ]
+            };
+            var page2 = {
+                name: 'team',
+                childNodes: [
+                    teamConstructor('it', viewModel.month, viewModel.year, model.teams),
+                    agendaConstructor(applyTypeForSelectedDays, model.dayTypes)
+                ]
+            };
+
+            pages.setChildNodes([
+                page1,
+                page2
+            ]);
 
             router.start();
             router.add('team/:team/:month/:year', {
                 enter: function(){},
                 match: function(teamCode, month, year){
 
-                    toolboxData.month = month;
-                    toolboxData.year = year;
-                    toolboxData.team = teamCode;
+                    viewModel.month = month;
+                    viewModel.year = year;
+                    viewModel.team = teamCode;
 
                     toolbox.data.year = year;
                     toolbox.updateBind('year');
 
 
-                    if(typeof currentTeam === 'undefined'){
-                        basis.dom.get('placeHolder').innerHTML = "";
-                        currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
-                        agendaConstructor(applyTypeForSelectedDays, model.dayTypes);
-                    }else{
-                        currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
-                    }
+                    //if(typeof currentTeam === 'undefined'){
+                    //    basis.dom.get('placeHolder').innerHTML = "";
+                    //    currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
+                    //    agendaConstructor(applyTypeForSelectedDays, model.dayTypes);
+                    //}else{
+                    //    currentTeam = teamConstructor(teamCode, month, year, currentTeam, model.teams);
+                    //}
 
-
+                    pages.getChildByName('team').select();
                 },
                 leave: function(){}
             });
             router.add('public-holidays/:month/:year', {
                 enter: function(){},
                 match: function(month, year){
-                    document.getElementById('placeHolder').innerHTML = "";
-                    currentTeam = undefined;
-                    publicHolidayConstructor(month, year, model.publicHolidays);
+                    //document.getElementById('placeHolder').innerHTML = "";
+                    //currentTeam = undefined;
+                    //publicHolidayConstructor(month, year, model.publicHolidays);
+                    //
+                    pages.getChildByName('publicHolidays').select();
                 },
                 leave: function(){}
             });
@@ -111,7 +137,7 @@ function applyTypeForSelectedDays(typeId){
                         checkedDays[i].data.checked = false;
                         checkedDays[i].updateBind('checked');
                     }
-                    //currentTeam = teamConstructor(toolboxData.team, toolboxData.month, toolboxData.year, currentTeam, model.teams);
+                    //currentTeam = teamConstructor(viewModel.team, viewModel.month, viewModel.year, currentTeam, model.teams);
                 }
             }
         });

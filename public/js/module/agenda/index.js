@@ -3,7 +3,7 @@ require('basis.ui');
 module.exports = function (applyTypeCallback, types) {
 
     var node = new basis.ui.Node({
-        container: document.getElementById('placeHolder'),
+        //container: document.getElementById('placeHolder'),
         template: resource('./template/index.tmpl'),
         childClass: {
             template: resource('./template/item.tmpl'),
@@ -32,4 +32,6 @@ module.exports = function (applyTypeCallback, types) {
         }
         node.setChildNodes(arr);
     }
+
+    return node;
 };

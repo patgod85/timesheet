@@ -4,25 +4,24 @@ var Month = require('../month/index.js');
 
 var employeeConstructor = require('../employee/index.js');
 
-module.exports = function(teamCode, month, year, existingNode, teams){
-    if(typeof existingNode === 'undefined'){
-        existingNode = new basis.ui.Node({
-            data: {
-                name: teamCode
-            },
-            container: basis.dom.get('placeHolder'),
-            //container: document.getElementById('placeHolder'),
-            template: resource('./template/index.tmpl'),
-            binding: {
-                name: 'data:name'
-            }
-        });
-    }
+module.exports = function(teamCode, month, year, teams){
+    var existingNode = new basis.ui.Node({
+        data: {
+            name: teamCode
+        },
+        name: 'team',
+        //container: basis.dom.get('placeHolder'),
+        //container: document.getElementById('placeHolder'),
+        template: resource('./template/index.tmpl'),
+        binding: {
+            name: 'name',
+            code: 'data:name'
+        }
+    });
 
-    existingNode.setChildNodes([]);
+    //existingNode.setChildNodes([]);
 
     if(teams){
-
         var team = null;
 
         for(var i in teams){

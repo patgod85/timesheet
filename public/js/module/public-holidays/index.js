@@ -1,6 +1,6 @@
 require("basis.ui");
 basis.require('basis.ui.calendar');
-var moment = require('../../../../components/moment/moment.js');
+var moment = require('../../../components/moment/moment.js');
 var publicHolidays = undefined;
 
 function updateMonthWithPublicHolidays(monthNode, publicHolidays){
@@ -50,6 +50,10 @@ module.exports = function (month, year, _publicHolidays) {
         container: document.getElementById('placeHolder'),
         childNodes: ['Month', 'Year', 'YearDecade'],
         date: date.toDate(),
+        name: 'publicHolidays',
+        binding: {
+            name: 'name'
+        },
         //minDate: new Date(date.date(1).toJSON()),
         //maxDate: new Date(date.endOf('month').toJSON()),
         //isPrevPeriodEnabled: true,
