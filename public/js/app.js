@@ -5,7 +5,7 @@ var router = basis.require('basis.router');
 var model;
 
 var agendaConstructor = require('./module/agenda/index.js');
-var publicHolidayConstructor = require('./module/public-holidays/index.js');
+var PublicHolidays = require('./module/public-holidays/index.js');
 var Toolbox = require('./module/toolbox/index.js');
 var UserConstructor = require('./module/user/index.js');
 var teamConstructor = require('./module/team/index.js');
@@ -38,7 +38,8 @@ ajax.request({
             var page1 = {
                 name: 'publicHolidays',
                 childNodes: [
-                    publicHolidayConstructor(viewModel.month, viewModel.year, model.publicHolidays)
+                    new PublicHolidays()
+                    //publicHolidayConstructor(viewModel.month, viewModel.year, model.publicHolidays)
                 ]
             };
             var page2 = {
@@ -81,12 +82,10 @@ ajax.request({
             });
             router.add('public-holidays/:month/:year', {
                 enter: function(){},
-                match: function(month, year){
-                    //document.getElementById('placeHolder').innerHTML = "";
-                    //currentTeam = undefined;
-                    //publicHolidayConstructor(month, year, model.publicHolidays);
-                    //
-                    pages.getChildByName('publicHolidays').select();
+                match: function(){
+                    var page = pages.getChildByName('publicHolidays');
+                    page.select();
+                    page.getChildByName('PublicHolidaysYear').update({year: viewModel.year, publicHolidays: model.publicHolidays});
                 },
                 leave: function(){}
             });
