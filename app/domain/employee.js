@@ -4,16 +4,22 @@ module.exports.getAll = function(done) {
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
         db.serialize(function () {
-            db.all("SELECT * FROM employee e", function (err, employees) {
+
+            var query = "SELECT e.*, t.code AS team_code " +
+                    "FROM employee e " +
+                    "JOIN team t ON e.team_id = t.id ";
+
+            db.all(query, function (err, employees) {
 
                 if (err) {
                     done(null, 'Error');
                 }
 
-                var query = "SELECT e.*, ed.*, d.* " +
+                var query = "SELECT e.*, ed.*, d.*, t.code AS team_code " +
                     "FROM employee e " +
                     "JOIN employee_day ed ON e.id = ed.employee_id " +
-                    "JOIN day d ON d.id = ed.day_id ";
+                    "JOIN day d ON d.id = ed.day_id " +
+                    "JOIN team t ON e.team_id = t.id ";
 
                 db.all(query, function (err, days) {
 
@@ -24,16 +30,16 @@ module.exports.getAll = function(done) {
                     var teams = {};
 
                     for (var i = 0; i < employees.length; i++) {
-                        if(!teams.hasOwnProperty(employees[i].team_id)){
-                            teams[employees[i].team_id] = {employees: {}};
+                        if(!teams.hasOwnProperty(employees[i].team_code)){
+                            teams[employees[i].team_code] = {employees: {}};
                         }
-                        teams[employees[i].team_id].employees[employees[i].id] = employees[i];
-                        teams[employees[i].team_id].employees[employees[i].id].days = {};
+                        teams[employees[i].team_code].employees[employees[i].id] = employees[i];
+                        teams[employees[i].team_code].employees[employees[i].id].days = {};
                     }
 
                     for (i = 0; i < days.length; i++) {
                         //if(teams[employees[i].team_id].employees.hasOwnProperty(days[i].employee_id)) {
-                            teams[days[i].team_id].employees[days[i].employee_id].days[days[i].date] = (days[i]);
+                            teams[days[i].team_code].employees[days[i].employee_id].days[days[i].date] = (days[i]);
                         //}
                     }
 

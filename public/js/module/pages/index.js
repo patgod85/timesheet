@@ -1,10 +1,9 @@
 basis.require('basis.ui');
 
-module.exports.controller = basis.ui.Node.subclass({
+module.exports = basis.ui.Node.subclass({
     container: document.getElementById('page'),
     template: '<div>Page</div>',
     selection: true,
-    //childClass: basis.ui.Node.subclass,
     childClass: {
         template:
             '<div class="page page-{unselected}">' +
@@ -13,9 +12,5 @@ module.exports.controller = basis.ui.Node.subclass({
         binding: {
             name: 'name'
         }
-    }/*,
-    childNodes: [
-        {name: 'team'},
-        {name: 'publicHolidays'}
-    ]*/
+    }
 });

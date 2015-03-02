@@ -14,17 +14,17 @@ module.exports.getAll = function(done) {
                 var teams = {};
 
                 for(var i = 0; i < _teams.length; i++){
-                    teams[_teams[i].id] = _teams[i];
+                    teams[_teams[i].code] = _teams[i];
                 }
 
-                require('./employee').getAll(function(teamsById){
-                    if(teamsById === null){
+                require('./employee').getAll(function(teamsByCode){
+                    if(teamsByCode === null){
                         done(null, 'Error');
                     }
 
-                    for(var i in teamsById){
-                        if(teamsById.hasOwnProperty(i)){
-                            teams[i].employees = teamsById[i].employees;
+                    for(var i in teamsByCode){
+                        if(teamsByCode.hasOwnProperty(i)){
+                            teams[i].employees = teamsByCode[i].employees;
                         }
                     }
 

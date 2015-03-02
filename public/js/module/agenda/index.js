@@ -1,37 +1,29 @@
 require('basis.ui');
 
-module.exports = function (applyTypeCallback, types) {
-
-    var node = new basis.ui.Node({
-        //container: document.getElementById('placeHolder'),
-        template: resource('./template/index.tmpl'),
-        childClass: {
-            template: resource('./template/item.tmpl'),
-            binding: {
-                id: 'id',
-                name: 'name'
-            },
-            action: {
-                applyType: function () {
-                    applyTypeCallback(this.id);
-                }
+module.exports = basis.ui.Node.subclass({
+    name: 'Agenda',
+    template: resource('./template/index.tmpl'),
+    childClass: {
+        template: resource('./template/item.tmpl'),
+        binding: {
+            id: 'data:',
+            name: 'data:'
+        },
+        action: {
+            applyType: function () {
+                this.parentNode.parentNode.emit_applyDayType(this.data.id);
             }
         }
-    });
+    },
+    init: function(){
+        var self = this;
 
+        basis.ui.Node.prototype.init.call(this);
 
-    if(types){
-        var arr = [];
-        for (var i in types) {
-            if (types.hasOwnProperty(i)) {
-                arr.push({
-                    id: types[i].id,
-                    name: types[i].name
-                });
-            }
-        }
-        node.setChildNodes(arr);
+        var arr = Object.keys(self.dayTypes).map(function (key) {return {data: self.dayTypes[key]}});
+
+        self.setChildNodes(
+            arr
+        );
     }
-
-    return node;
-};
+});

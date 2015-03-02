@@ -1,4 +1,5 @@
 require('basis.ui.calendar');
+var moment = require('../../../../components/moment/moment.js');
 
 module.exports = basis.ui.calendar.Calendar.subclass({
     childNodes: ['Year', 'YearDecade'],
@@ -8,6 +9,13 @@ module.exports = basis.ui.calendar.Calendar.subclass({
     handler : {
         change : function () {
             this.owner.emit_monthChange(this.selectedDate.value);
+        },
+        update: function(){
+            var date = moment()
+                .year(parseInt(this.data.year))
+                .month(this.data.month);
+
+            this.selectedDate.set(date.toDate());
         }
     }
 });

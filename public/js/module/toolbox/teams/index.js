@@ -2,7 +2,6 @@ require('basis.dom');
 require('basis.ui');
 
 module.exports = basis.ui.Node.subclass({
-    autoDelegate: true,
     template: resource('./template/list.tmpl'),
     childClass: basis.ui.Node.subclass({
         template: resource('./template/item.tmpl'),
@@ -19,5 +18,19 @@ module.exports = basis.ui.Node.subclass({
                 this.parentNode.owner.emit_teamChange(this.data.code);
             }
         }
-    })
+    }),
+    handler: {
+        update: function(){
+            var teams = this.data.teams;
+            var arr = [];
+
+            for(var i in teams){
+                if(teams.hasOwnProperty(i)){
+                    arr.push({data: {id: teams[i].id, name: teams[i].name, code: teams[i].code}});
+                }
+            }
+
+            this.setChildNodes(arr);
+        }
+    }
 });

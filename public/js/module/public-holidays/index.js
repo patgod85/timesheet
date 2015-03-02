@@ -112,11 +112,13 @@ module.exports = basis.ui.Node.subclass({
     },
     handler: {
         update: function(){
-            var momentDate = moment().date(1).month(0).year(this.data.year);
+            var year = parseInt(this.data.year, 10);
+
+            var momentDate = moment().date(1).month(0).year(year);
 
             daysSource = [];
 
-            while(momentDate.format('YYYY') == this.data.year){
+            while(momentDate.format('YYYY') == year){
                 daysSource.push({
                     id: momentDate.format('DDD'),
                     monthId: parseInt(momentDate.format('M'), 10),

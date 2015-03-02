@@ -13,3 +13,4 @@
 !bin/symfony_requirements
 /composer.phar
 /.idea/
+/node_modules/

@@ -2,51 +2,38 @@ require('basis.dom');
 require('basis.ui');
 var Month = require('../month/index.js');
 
-var employeeConstructor = require('../employee/index.js');
+var Employee = require('../employee/index.js');
 
-module.exports = function(teamCode, month, year, teams){
-    var existingNode = new basis.ui.Node({
-        data: {
-            name: teamCode
-        },
-        name: 'team',
-        //container: basis.dom.get('placeHolder'),
-        //container: document.getElementById('placeHolder'),
-        template: resource('./template/index.tmpl'),
-        binding: {
-            name: 'name',
-            code: 'data:name'
-        }
-    });
-
-    //existingNode.setChildNodes([]);
-
-    if(teams){
-        var team = null;
-
-        for(var i in teams){
-            if(teams.hasOwnProperty(i)){
-                if(teams[i].code == teamCode){
-                    team = teams[i];
-                    break;
-                }
-            }
+module.exports = new basis.ui.Node.subclass({
+    name: 'Team',
+    template: resource('./template/index.tmpl'),
+    binding: {
+        name: 'name',
+        code: 'data:team'
+    },
+    childFactory: function(config){
+        if(config.hasOwnProperty('entity')){
+            return new Employee({data: config});
         }
 
-        if(team !== null) {
-            var arr = [new Month(month, year, [], false)];
-            for (i in team.employees) {
-                if (team.employees.hasOwnProperty(i)) {
-                    arr.push(employeeConstructor(team.employees[i], month, year));
+        return new Month({data: config});
+    },
+    handler: {
+        update: function(){
+            var arr = [{month: this.data.month, year: this.data.year}];
+
+            if(this.data.teams.hasOwnProperty(this.data.team)) {
+                var team = this.data.teams[this.data.team];
+                for (var i in team.employees) {
+                    if (team.employees.hasOwnProperty(i)) {
+                        arr.push(
+                            {entity: team.employees[i], month: this.data.month, year: this.data.year}
+                        )
+                    }
                 }
             }
-            existingNode.data.name = team.name;
-            existingNode.updateBind('name');
-            existingNode.setChildNodes(arr);
+
+            this.setChildNodes(arr);
         }
     }
-    
-    return existingNode;
-};
-
-
+});
