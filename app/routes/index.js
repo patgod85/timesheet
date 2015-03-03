@@ -20,6 +20,7 @@ module.exports = function () {
     this.get('/login', controllers.render.index);
     this.get('/dev', controllers.render.dev);
     this.get('/', controllers.render.build);
+    this.get('/b', controllers.render.build);
 
     // editor for create or update posts.
     this.get('/teams', controllers.teams);

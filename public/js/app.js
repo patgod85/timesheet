@@ -25,23 +25,17 @@ var model = new basis.data.Object({
     }
 });
 
-ajax.request({
-    url: modelUrl,
-    method: 'GET',
-    handler: {
-        success: function(transport, request, response){
+updateModel(function(transport, request, response){
 
-            model.update(response);
+    model.update(response);
 
-            new Toolbox({delegate: model});
+    new Toolbox({delegate: model});
 
-            new UserConstructor();
+    new UserConstructor();
 
-            initPages();
+    initPages();
 
-            initRoutes();
-        }
-    }
+    initRoutes();
 });
 
 function initPages(){
@@ -104,14 +98,12 @@ function initRoutes(){
     });
 }
 
-function updateModel(){
+function updateModel(done){
     ajax.request({
         url: modelUrl,
         method: 'GET',
         handler: {
-            success: function(transport, request, response){
-                model.update(response);
-            }
+            success: done
         }
     });
 }
@@ -158,7 +150,9 @@ function applyTypeForSelectedDays(currentTeam, typeId){
                         checkedDays[i].data.checked = false;
                         checkedDays[i].updateBind('checked');
                     }
-                    updateModel();
+                    updateModel(function(transport, request, response){
+                        model.update(response);
+                    });
                 }
             }
         });
