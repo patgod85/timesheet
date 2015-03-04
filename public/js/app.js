@@ -6,7 +6,7 @@ var router = basis.require('basis.router');
 var Agenda = require('./module/agenda/index.js');
 var PublicHolidays = require('./module/public-holidays/index.js');
 var Toolbox = require('./module/toolbox/index.js');
-var UserConstructor = require('./module/user/index.js');
+var User = require('./module/user/index.js');
 var Team = require('./module/team/index.js');
 var Pages = require('./module/pages/index.js');
 
@@ -25,18 +25,21 @@ var model = new basis.data.Object({
     }
 });
 
-updateModel(function(transport, request, response){
+new User({authCallback: onAuthenticationComplete});
 
-    model.update(response);
+function onAuthenticationComplete(){
 
-    new Toolbox({delegate: model});
+    updateModel(function(transport, request, response){
 
-    new UserConstructor();
+        model.update(response);
 
-    initPages();
+        new Toolbox({delegate: model});
 
-    initRoutes();
-});
+        initPages();
+
+        initRoutes();
+    });
+}
 
 function initPages(){
     pages = new Pages();
