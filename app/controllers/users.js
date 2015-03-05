@@ -1,8 +1,14 @@
 var passport = require("passport");
+var jade = require('jade');
 
-function result(res, body){
+function result(res, body, contentType){
+
+    if(!contentType){
+        contentType = "application/json";
+    }
+
     res.writeHead(200, {
-        "content-type": "application/json",
+        "content-type": contentType,
         "content-length": body.length
     });
 
@@ -15,8 +21,7 @@ function result(res, body){
 // При удачной авторизации данные пользователя будут храниться в req.user
 module.exports.login = function(req, res, next) {
     passport.authenticate('local',
-        function(err, user, info) {
-//console.log(req.session);
+        function(err, user) {
 
             return err
                 ? next(err)
@@ -34,7 +39,7 @@ module.exports.login = function(req, res, next) {
 // Здесь все просто =)
 module.exports.logout = function(req, res) {
     req.logout();
-    res.redirect('/');
+    result(res, jade.renderFile('app/views/logout.jade', {  }), "text/html");
 };
 
 // Регистрация пользователя. Создаем его в базе данных, и тут же, после сохранения, вызываем метод `req.logIn`, авторизуя пользователя

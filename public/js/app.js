@@ -31,9 +31,9 @@ function onAuthenticationComplete(){
 
     updateModel(function(transport, request, response){
 
-        model.update(response);
-
         new Toolbox({delegate: model});
+
+        model.update(response);
 
         initPages();
 

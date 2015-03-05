@@ -4,19 +4,17 @@ require('basis.ui.field');
 
 var profileService = require('./profileService.js');
 
-module.exports = basis.ui.Node.subclass({
-    autoDelegate: true,
-    container: basis.dom.get('auth'),
-    template: resource('./template/index.tmpl'),
+var LoginForm = basis.ui.Node.subclass({
     data: {
-        loginDisplay: 'block',
         username: 'victor',
-        password: 'victor1',
-        loggedInAs: ''
+        password: 'victor1'
     },
+    name: 'LoginForm',
+    template: resource('./template/loginForm.tmpl'),
     satellite: {
         username: {
             instanceOf: basis.ui.field.Text.subclass({
+                title: 'Login',
                 action: {
                     keyup: function (event) {
                         this.owner.update({
@@ -33,6 +31,7 @@ module.exports = basis.ui.Node.subclass({
         },
         password: {
             instanceOf: basis.ui.field.Password.subclass({
+                title: 'Password',
                 action: {
                     keyup: function (event) {
                         this.owner.update({
@@ -49,8 +48,6 @@ module.exports = basis.ui.Node.subclass({
         }
     },
     binding: {
-        loginDisplay: "data:",
-        loggedInAs: "data:",
         button: new basis.ui.button.Button({
             caption: 'Sign in',
             click: function () {
@@ -62,11 +59,11 @@ module.exports = basis.ui.Node.subclass({
     },
     action: {
         signIn: function (self, data) {
-
+            console.log(self);
             profileService
                 .signIn(function (data){
-                    self.update({loginDisplay: 'none', loggedInAs: data.user.name});
-                    self.authCallback();
+                    self.owner.authCallback();
+                    self.owner.update({loggedInAs: data.user.name});
                 })
                 .request({
                     postBody: JSON.stringify({
@@ -75,21 +72,60 @@ module.exports = basis.ui.Node.subclass({
                     })
                 });
         }
+    }
+});
+
+var LoginStatus = basis.ui.Node.subclass({
+    name: 'LoginStatus',
+    autoDelegate: true,
+    template: resource('./template/loginStatus.tmpl'),
+    binding: {
+        loggedInAs: function(node){
+            return node.owner.data.loggedInAs;
+        },
+        logoutButton: new basis.ui.button.Button({
+            caption: 'Logout',
+            click: function() {
+                window.location = "/logout";
+            }
+        })
+    }
+});
+
+module.exports = basis.ui.Node.subclass({
+    container: basis.dom.get('auth'),
+    template: resource('./template/index.tmpl'),
+    data: {
+        loggedInAs: ''
     },
+    satellite: {
+        loginForm: {
+            instanceOf: LoginForm,
+            existsIf: function(owner){
+                return owner.data.loggedInAs == ''
+            }
+        },
+        loginStatus: {
+            instanceOf: LoginStatus,
+            existsIf: function(owner){
+                return owner.data.loggedInAs != ''
+            }
+        }
+    },
+    binding: {
+        loginForm: "satellite:loginForm",
+        loginStatus: "satellite:loginStatus"
+    },
+
     init: function(){
         var self = this;
         basis.ui.Node.prototype.init.call(this);
         profileService
             .whoami(function (data){
-                self.update({loginDisplay: 'none', loggedInAs: data.user.name});
+                self.update({loggedInAs: data.user.name});
 
                 self.authCallback();
             })
             .request();
-    },
-    handler: {
-        update: function(){
-
-        }
     }
 });
