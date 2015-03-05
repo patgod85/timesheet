@@ -64,7 +64,6 @@ var Day = basis.entity.createType({
 
 module.exports = basis.ui.Node.subclass({
     name: 'PublicHolidaysYear',
-    container: document.getElementById('placeHolder'),
     template: '<div class="days-list"><div{childNodesElement}/><div class="clearfix"></div></div>',
     dataSource: Day.all,
     active: true,

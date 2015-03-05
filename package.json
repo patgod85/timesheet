@@ -11,6 +11,7 @@
         "cors": "*",
         "gulp": "*",
         "gulp-jade": "*",
+        "gulp-rename": "*",
         "gulp-sass": "*",
         "gulp-minify-css": "*",
         "passport": "*",

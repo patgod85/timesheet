@@ -29,7 +29,7 @@ module.exports = basis.ui.Node.subclass({
                     arr.push({data: {id: teams[i].id, name: teams[i].name, code: teams[i].code}});
                 }
             }
-console.log(arr);
+
             this.setChildNodes(arr);
         }
     }

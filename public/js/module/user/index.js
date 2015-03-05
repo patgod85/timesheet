@@ -59,7 +59,6 @@ var LoginForm = basis.ui.Node.subclass({
     },
     action: {
         signIn: function (self, data) {
-            console.log(self);
             profileService
                 .signIn(function (data){
                     self.owner.authCallback();
