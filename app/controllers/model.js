@@ -22,7 +22,7 @@ module.exports = function (request, response) {
 
         var model = {};
 
-        require('../domain/team').getAll(function(teams){
+        require('../domain/team').getAll(request.user, function(teams){
             if(teams === null){
                 showError('Fail on fetching of teams');
             }

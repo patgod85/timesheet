@@ -1,27 +1,37 @@
-module.exports.getAll = function(done) {
+module.exports.getAll = function(user, done) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
         db.serialize(function () {
 
-            var query = "SELECT e.*, t.code AS team_code " +
-                    "FROM employee e " +
-                    "JOIN team t ON e.team_id = t.id ";
+            var userCondition = '',
+                userConditionParams = [];
 
-            db.all(query, function (err, employees) {
+            if(!user.is_super){
+                userCondition = ' WHERE t.id = ? ';
+                userConditionParams = [user.team_id];
+            }
+
+            var query = "SELECT e.*, t.code AS team_code "
+                    + "FROM employee e "
+                    + "JOIN team t ON e.team_id = t.id "
+                    + userCondition;
+
+            db.all(query, userConditionParams, function (err, employees) {
 
                 if (err) {
                     done(null, 'Error');
                 }
 
-                var query = "SELECT e.*, ed.*, d.*, t.code AS team_code " +
-                    "FROM employee e " +
-                    "JOIN employee_day ed ON e.id = ed.employee_id " +
-                    "JOIN day d ON d.id = ed.day_id " +
-                    "JOIN team t ON e.team_id = t.id ";
+                var query = "SELECT e.*, ed.*, d.*, t.code AS team_code "
+                    + "FROM employee e "
+                    + "JOIN employee_day ed ON e.id = ed.employee_id "
+                    + "JOIN day d ON d.id = ed.day_id "
+                    + "JOIN team t ON e.team_id = t.id "
+                    + userCondition;
 
-                db.all(query, function (err, days) {
+                db.all(query, userConditionParams, function (err, days) {
 
                     if (err) {
                         done(null, 'Error');

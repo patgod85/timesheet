@@ -35,7 +35,8 @@ CREATE TABLE [user](
   "name" TEXT NOT NULL,
   "surname" TEXT NOT NULL,
   "password" TEXT,
-  "team_id" INTEGER NOT NULL REFERENCES  [team]("id")
+  "team_id" INTEGER NOT NULL REFERENCES  [team]("id"),
+  "is_super" BOOLEAN NOT NULL DEFAULT 0 CHECK (is_super IN (0,1))
 );
 
 CREATE TABLE [public_holiday](

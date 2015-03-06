@@ -81,6 +81,9 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
                         checkedDays[i].updateBind('checked');
                     }
                     model.sync();
+                },
+                failure: function(){
+                    alert("Setting of day type failed");
                 }
             }
         });
