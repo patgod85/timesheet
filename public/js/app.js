@@ -8,6 +8,7 @@ var User = require('./module/user/index.js');
 var Pages = require('./module/pages/index.js');
 var Page1 = require('./module/pages/pagePublicHolidays.js');
 var Page2 = require('./module/pages/pageTeam.js');
+var Page3 = require('./module/pages/pageAdmin.js');
 
 var pages;
 
@@ -54,7 +55,8 @@ new User({
                 router: router,
                 childNodes: [
                     Page1,
-                    Page2
+                    Page2,
+                    Page3
                 ]
             });
         });
