@@ -28,21 +28,28 @@ module.exports = function (request, response) {
             }
             model.teams = teams;
 
-            require('../domain/publicHoliday').getAll(function(publicHolidays){
-
-                if(publicHolidays === null){
-                    showError('Fail on fetching of public holidays');
+            require('../domain/employee').getAll(request.user, function(employees) {
+                if (employees === null) {
+                    showError('Fail on fetching of employees');
                 }
-                model.publicHolidays = publicHolidays;
+                model.employees = employees;
 
-                require('../domain/dayType').getAll(function(types){
+                require('../domain/publicHoliday').getAll(function (publicHolidays) {
 
-                    if(types === null){
-                        showError('Fail on fetching of days types');
+                    if (publicHolidays === null) {
+                        showError('Fail on fetching of public holidays');
                     }
-                    model.dayTypes = types;
+                    model.publicHolidays = publicHolidays;
 
-                    showSuccess();
+                    require('../domain/dayType').getAll(function (types) {
+
+                        if (types === null) {
+                            showError('Fail on fetching of days types');
+                        }
+                        model.dayTypes = types;
+
+                        showSuccess();
+                    })
                 })
             })
         });

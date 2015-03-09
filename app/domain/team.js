@@ -1,5 +1,31 @@
-
 module.exports.getAll = function(user, done) {
+
+    var sqlite3 = require('sqlite3').verbose();
+    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+
+        var userCondition = '',
+            userConditionParams = [];
+
+        if(!user.is_super){
+            userCondition = ' WHERE id = ? ';
+            userConditionParams = [user.team_id];
+        }
+
+        db.serialize(function () {
+            db.all("SELECT *, code AS team_code, '/' AS path FROM team " + userCondition, userConditionParams, function (err, teams) {
+
+                if (err) {
+                    done(null, 'Error');
+                }
+
+                done(teams);
+
+            });
+        });
+    });
+};
+
+module.exports.getAll2 = function(user, done) {
 
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {

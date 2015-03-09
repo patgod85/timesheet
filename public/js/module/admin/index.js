@@ -3,66 +3,72 @@ basis.require('basis.data.dataset');
 basis.require('basis.ui.tree');
 basis.require('basis.ui.button');
 
-module.exports = basis.ui.tree.Tree.subclass({
-    container: basis.dom.get('sourceTree'),
-    selection: { multiple: false },
-    init: function(){
-        basis.ui.Node.prototype.init.call(this);
 
-        var children = [];
+module.exports = function(dataSource) {
+    var grouping = {
+        childClass: basis.ui.PartitionNode,
+        rule: function (node) {
+            return node instanceof basis.ui.tree.Folder == false;
+        },
+        sorting: basis.getter('data.id')
+    };
 
-        var teams = this.delegate.data.teams;
-
-        for(var i in  teams){
-
-            if(teams.hasOwnProperty(i)) {
-
-                var e = teams[i].employees;
-                var es = [];
-                for(var j in e){
-                    if(e.hasOwnProperty(j)) {
-                        es.push(e[j]);
-                    }
-                }
-
-                children.push(new basis.ui.tree.Folder({
-                    data: {
-                        id: teams[i].code,
-                        title: teams[i].name
-                    },
-                    handler: {
-                        select: function(){
-                            this.parentNode.emit_select('team', this.data.id);
-                            //this.delegate.adminTeam = this;
-                            //console.log(this);
-                        }
-                    },
-                    childFactory: function (config) {
-                        return new basis.ui.tree.Node({
-                            data: {
-                                id: config.id,
-                                title: config.name + ' ' + config.surname
-                            },
-                            handler: {
-                                select: function(){
-                                    this.parentNode.parentNode.emit_select('user', this.data.id);
-                                    //this.delegate.adminTeam = this;
-                                    //console.log(this);
-                                }
-                            }
-                        })
-                    },
-                    childNodes: es
-                }));
+    var FileNode = basis.ui.tree.Node.subclass({
+        binding: {
+            title: 'data:name'
+        },
+        handler: {
+            select: function(){
+                this.parentNode.parentNode.emit_select('user', this.data.id);
             }
         }
+    });
 
-        this.setChildNodes(children);
-    },
-    handler: {
-        select: function(node, type, id){
-            this.delegate.update({adminSelected: {type: type, id: id}});
-            //console.log(this);
+    var FolderNode = basis.ui.tree.Folder.subclass({
+        binding: {
+            title: 'data:name'
+        },
+        sorting: basis.getter('data.name'),
+        grouping: grouping,
+        init: function () {
+            basis.ui.tree.Node.prototype.init.call(this);
+            this.setDataSource(dataSource.getSubset(this.data.path + '' + this.data.team_code + '/'));
+        },
+        handler: {
+            select: function(){
+                this.parentNode.emit_select('team', this.data.id);
+            }
         }
-    }
-});
+    });
+
+
+    var tree = basis.ui.tree.Tree.subclass({
+        selection: {multiple: false},
+        grouping: {
+            childClass: basis.ui.PartitionNode,
+            rule: function (node) {
+                return node instanceof basis.ui.tree.Folder == false;
+            },
+            sorting: basis.getter('data.id')
+        },
+        dataSource: dataSource.getSubset('/'),
+        childFactory: function(config){
+            if(config.delegate.data.hasOwnProperty('surname')) {
+                return new FileNode(config);
+            }
+            else {
+                return new FolderNode(basis.object.extend({childFactory: this.childFactory}, config));
+            }
+        },
+        init: function () {
+            basis.ui.tree.Node.prototype.init.call(this);
+        },
+        handler: {
+            select: function (node, type, id) {
+                this.delegate.update({adminSelected: {type: type, id: id}});
+            }
+        }
+    });
+
+    return new tree;
+};
