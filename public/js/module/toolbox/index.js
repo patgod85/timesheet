@@ -26,15 +26,24 @@ module.exports = basis.ui.Node.subclass({
     },
     binding: {
         calendar: "satellite:calendar",
-        button: new basis.ui.button.Button({
+        buttonPublicHolidays: new basis.ui.button.Button({
             caption: 'Public holidays',
             click: function () {
                 this.owner.action.navigateToPublicHolidays(this.owner.data);
             }
         }),
+        buttonAdmin: new basis.ui.button.Button({
+            caption: 'Admin area',
+            click: function () {
+                this.owner.action.navigateToAdmin(this.owner.data);
+            }
+        }),
         teamsList: "satellite:teamsList"
     },
     action: {
+        navigateToAdmin: function() {
+            router.navigate('admin');
+        },
         navigateToTeam: function(data) {
             router.navigate('team/' + data.team + '/' + data.month + '/' + data.year);
         },

@@ -26,13 +26,17 @@ module.exports = Page.subclass({
 
         this.router.add('team/:team/:month/:year', {
             match: function(teamCode, month, year){
-                self.update({
+                var data = {
                     team: teamCode,
                     month: month,
                     year: year + ' ' // Very strange bug. Without this space delegate does not change
-                });
+                };
+
+                self.update(data);
 
                 self.select();
+
+                self.getChildByName('Team').setDataSource(self.data.employeesByTeams.getSubset('/' + teamCode + '/'));
             }
         });
     }
@@ -57,7 +61,7 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
                         if(days[k].data.checked){
                             checkedDays.push(days[k]);
                             postModel.push({
-                                id: employee.data.entity.id,
+                                id: employee.data.id,
                                 date: moment().month(month.data.name).year(month.data.year).date(days[k].data.day).format('DD.MM.YYYY'),
                                 type: typeId
                             });

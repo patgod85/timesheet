@@ -19,7 +19,7 @@ module.exports = function(dataSource) {
         },
         handler: {
             select: function(){
-                this.parentNode.parentNode.emit_select('user', this.data.id);
+                this.parentNode.parentNode.emit_select('user', this.delegate);
             }
         }
     });
@@ -36,7 +36,7 @@ module.exports = function(dataSource) {
         },
         handler: {
             select: function(){
-                this.parentNode.emit_select('team', this.data.id);
+                this.parentNode.emit_select('team', this.delegate);
             }
         }
     });
@@ -64,8 +64,8 @@ module.exports = function(dataSource) {
             basis.ui.tree.Node.prototype.init.call(this);
         },
         handler: {
-            select: function (node, type, id) {
-                this.delegate.update({adminSelected: {type: type, id: id}});
+            select: function (node, type, delegate) {
+                this.parentNode.delegate.update({adminEdit: {delegate: delegate}});
             }
         }
     });

@@ -16,25 +16,25 @@ module.exports = Page.subclass({
             TeamsTree(this.delegate.data.employeesByTeams),
             new basis.ui.field.Text({
                 delegate: this.delegate,
+                title: "Name",
                 handler: {
                     update: function(){
+
                         //noinspection JSPotentiallyInvalidUsageOfThis
-                        //var d = this.delegate.data;
-                        //
-                        //if(d.adminSelected.type == 'team'){
-                        //    this.setValue(d.teams[d.adminSelected.id].name);
-                        //}
-                        //else{
-                        //    for(var i in d.teams){
-                        //        if(d.teams.hasOwnProperty(i) && d.teams[i].employees.hasOwnProperty(d.adminSelected.id)){
-                        //            this.setValue(
-                        //                d.teams[i].employees[d.adminSelected.id].name
-                        //                + ' '
-                        //                + d.teams[i].employees[d.adminSelected.id].surname
-                        //            );
-                        //        }
-                        //    }
-                        //}
+                        var d = this.delegate.data;
+
+                        if(d.adminEdit) {
+                            this.setValue(d.adminEdit.delegate.data.name);
+                        }
+                    }
+                },
+                action: {
+                    keyup: function(e){
+                        //noinspection JSPotentiallyInvalidUsageOfThis
+                        if(this.delegate.data.adminEdit) {
+                            //noinspection JSPotentiallyInvalidUsageOfThis
+                            this.delegate.data.adminEdit.delegate.update({name: e.sender.value});
+                        }
                     }
                 }
             })

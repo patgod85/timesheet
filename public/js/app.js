@@ -15,7 +15,7 @@ var pages;
 var modelUrl = 'http://localhost:8888/model';
 
 var Employee = new basis.entity.EntityType({
-    name: 'ruEmployee',
+    name: 'Employee',
     fields: {
         path: String,
         team_code: String,
@@ -25,15 +25,16 @@ var Employee = new basis.entity.EntityType({
         work_start: Date,
         work_end: Date,
         days: Object,
-        teamId: String
+        team_id: String
     }
 });
 
 var Team = new basis.entity.EntityType({
-    name: 'ruTeam',
+    name: 'Team',
     fields: {
         path: String,
         team_code: String,
+        code: String,
         id: basis.entity.IntId,
         name: String
     }
