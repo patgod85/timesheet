@@ -4,40 +4,41 @@ var ajax = require('basis.net.ajax');
 
 var Page = require('./page.js');
 var TeamsTree = require('../admin/index.js');
+var TeamForm = require('../team/form.js');
+var EmployeeForm = require('../employee/form.js');
 
 module.exports = Page.subclass({
     name: 'adminPage',
-    handler: {
+    satellite: {
+        teamForm: {
+            instanceOf: TeamForm.subclass({childNodes: [{}]}),
+            existsIf: function(owner){
+                return owner.data.adminEdit && !owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
+            },
+            delegate: function(owner){
+                return owner.delegate;
+            }
+        },
+        employeeForm: {
+            instanceOf: EmployeeForm.subclass({childNodes: [{}]}),
+            existsIf: function(owner){
+                return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
+            },
+            delegate: function(owner){
+                return owner.delegate;
+            }
+        }
+
+    },
+    binding: {
+        teamForm: "satellite:",
+        employeeForm: "satellite:"
     },
     init: function(){
         basis.ui.Node.prototype.init.call(this);
 
         this.setChildNodes([
-            TeamsTree(this.delegate.data.employeesByTeams),
-            new basis.ui.field.Text({
-                delegate: this.delegate,
-                title: "Name",
-                handler: {
-                    update: function(){
-
-                        //noinspection JSPotentiallyInvalidUsageOfThis
-                        var d = this.delegate.data;
-
-                        if(d.adminEdit) {
-                            this.setValue(d.adminEdit.delegate.data.name);
-                        }
-                    }
-                },
-                action: {
-                    keyup: function(e){
-                        //noinspection JSPotentiallyInvalidUsageOfThis
-                        if(this.delegate.data.adminEdit) {
-                            //noinspection JSPotentiallyInvalidUsageOfThis
-                            this.delegate.data.adminEdit.delegate.update({name: e.sender.value});
-                        }
-                    }
-                }
-            })
+            TeamsTree(this.delegate.data.employeesByTeams)
         ]);
 
         var self = this;
@@ -47,5 +48,48 @@ module.exports = Page.subclass({
                 self.select();
             }
         });
+
+        this.router.add('admin/employee/:id', {
+            match: function(id){
+                self.select();
+
+                selectItemInTree(self.getChildByName("TeamsTree"), 'employee', id);
+            }
+        });
+
+        this.router.add('admin/team/:id', {
+            match: function(id){
+                self.select();
+                selectItemInTree(self.getChildByName("TeamsTree"), 'team', id);
+            }
+        });
+    },
+    handler: {
+        select: function(node, type, id){
+            if(typeof type != 'undefined' && typeof id != 'undefined') {
+                this.router.navigate('admin/' + type + '/' + id);
+            }
+        }
     }
 });
+
+function selectItemInTree(tree, type, id){
+    var treeItems = tree.childNodes;
+    for(var i = 0; i < treeItems.length; i++){
+        if(type == 'team') {
+            if (treeItems[i].delegate.data.id == id) {
+                treeItems[i].select();
+                return;
+            }
+        }
+        else {
+            for (var j = 0; j < treeItems[i].childNodes.length; j++) {
+                if (treeItems[i].childNodes[j].delegate.data.id == id) {
+                    treeItems[i].childNodes[j].select();
+                    return;
+                }
+            }
+        }
+    }
+
+}

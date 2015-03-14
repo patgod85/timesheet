@@ -19,7 +19,7 @@ module.exports = function(dataSource) {
         },
         handler: {
             select: function(){
-                this.parentNode.parentNode.emit_select('user', this.delegate);
+                this.parentNode.parentNode.emit_select('employee', this.delegate);
             }
         }
     });
@@ -43,6 +43,7 @@ module.exports = function(dataSource) {
 
 
     var tree = basis.ui.tree.Tree.subclass({
+        name: "TeamsTree",
         selection: {multiple: false},
         grouping: {
             childClass: basis.ui.PartitionNode,
@@ -65,7 +66,10 @@ module.exports = function(dataSource) {
         },
         handler: {
             select: function (node, type, delegate) {
-                this.parentNode.delegate.update({adminEdit: {delegate: delegate}});
+                if(delegate) {
+                    this.parentNode.delegate.update({adminEdit: {delegate: delegate}});
+                    this.parentNode.emit_select(type, delegate.data.id);
+                }
             }
         }
     });
