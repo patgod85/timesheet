@@ -19,7 +19,7 @@ module.exports = function (request, response) {
             employee_ids.push(postData[i].id);
         }
 
-        require('../domain/team').isAllowedToChange(request.user, employee_ids, function(isSuccess){
+        require('../domain/team').areEmployeesAllowedToChange(request.user, employee_ids, function(isSuccess){
 
             if(!isSuccess){
                 response.writeHead(403, {});
@@ -48,12 +48,10 @@ module.exports = function (request, response) {
                         }
 
                         db.run("INSERT OR REPLACE INTO employee_day (employee_id, day_id, day_type_id) VALUES " + employeeDayQueryAmend.toString(), values, function () {
-                            var body = "OK";
-
-console.log('----');
+                            var body = JSON.stringify({success: true});
 
                             response.writeHead(200, {
-                                "content-type": "text",
+                                "content-type": "application/json",
                                 "content-length": body.length
                             });
 

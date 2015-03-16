@@ -11,21 +11,21 @@ module.exports = Page.subclass({
     name: 'adminPage',
     satellite: {
         teamForm: {
-            instanceOf: TeamForm.subclass({childNodes: [{}]}),
+            instanceOf: TeamForm,
             existsIf: function(owner){
                 return owner.data.adminEdit && !owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
             },
             delegate: function(owner){
-                return owner.delegate;
+                return owner.delegate.data.adminEdit.delegate;
             }
         },
         employeeForm: {
-            instanceOf: EmployeeForm.subclass({childNodes: [{}]}),
+            instanceOf: EmployeeForm,
             existsIf: function(owner){
                 return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
             },
             delegate: function(owner){
-                return owner.delegate;
+                return owner.delegate.data.adminEdit.delegate;
             }
         }
 

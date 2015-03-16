@@ -23,11 +23,13 @@ module.exports = function () {
     this.get('/b', controllers.render.build);
 
     // editor for create or update posts.
-    this.get('/teams', controllers.teams);
-    this.get('/team/', controllers.team({}));
-    this.get('/day-types', controllers.dayTypes({}));
+    //this.get('/teams', controllers.teams);
+    //this.get('/team/', controllers.team.index({}));
+    this.post('/team/update', controllers.team.update);
+    this.post('/employee/update', controllers.employee.update);
+    //this.get('/day-types', controllers.dayTypes({}));
     this.post('/set-type', controllers.setType);
-    this.get('/public-holidays', controllers.publicHolidays({}));
+    //this.get('/public-holidays', controllers.publicHolidays({}));
 
     this.get('/whoami', controllers.users.whoami);
     this.post('/login', controllers.users.login);

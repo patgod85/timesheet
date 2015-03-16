@@ -25,52 +25,10 @@ module.exports.getAll = function(user, done) {
     });
 };
 
-module.exports.getAll2 = function(user, done) {
-
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
-
-        var userCondition = '',
-            userConditionParams = [];
-
-        if(!user.is_super){
-            userCondition = ' WHERE id = ? ';
-            userConditionParams = [user.team_id];
-        }
-
-        db.serialize(function () {
-            db.all("SELECT * FROM team " + userCondition, userConditionParams, function (err, _teams) {
-
-                if (err) {
-                    done(null, 'Error');
-                }
-
-                var teams = {};
-
-                for(var i = 0; i < _teams.length; i++){
-                    teams[_teams[i].code] = _teams[i];
-                }
-
-                require('./employee').getAll(user, function(teamsByCode){
-                    if(teamsByCode === null){
-                        done(null, 'Error');
-                    }
-
-                    for(var i in teamsByCode){
-                        if(teamsByCode.hasOwnProperty(i)){
-                            teams[i].employees = teamsByCode[i].employees;
-                        }
-                    }
-
-                    done(teams);
-                });
-
-            });
-        });
-    });
+module.exports.isTeamAllowedToChange = function(user, teamId, done){
+    done(user.is_super || user.team_id == teamId);
 };
-
-module.exports.isAllowedToChange = function(user, employee_ids, done){
+module.exports.areEmployeesAllowedToChange = function(user, employee_ids, done){
 
     if(user.is_super){
         done(true);
@@ -99,4 +57,27 @@ module.exports.isAllowedToChange = function(user, employee_ids, done){
             });
         });
     }
+};
+
+module.exports.update = function(team, done){
+
+    var sqlite3 = require('sqlite3').verbose();
+    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+
+        var query =
+            ' UPDATE team '
+            + ' SET name = ? '
+            + ' WHERE id = ? ';
+
+        db.serialize(function () {
+            db.run(query, [team.name, team.id], function (err) {
+
+                if (err) {
+                    done(false);
+                }else{
+                    done(true);
+                }
+            });
+        });
+    });
 };

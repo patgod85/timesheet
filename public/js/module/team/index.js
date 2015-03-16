@@ -4,7 +4,7 @@ var Month = require('../month/index.js');
 
 var Employee = require('../employee/index.js');
 
-module.exports = new basis.ui.Node.subclass({
+module.exports = basis.ui.Node.subclass({
     name: 'Team',
     template: resource('./template/index.tmpl'),
     satellite: {
