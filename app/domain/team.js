@@ -64,14 +64,24 @@ module.exports.update = function(team, done){
     var sqlite3 = require('sqlite3').verbose();
     var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
 
-        var query =
-            ' UPDATE team '
-            + ' SET name = ? '
-            + ' WHERE id = ? ';
+        if(team.id) {
+            var query =
+                ' UPDATE team '
+                + ' SET name = ? '
+                + ' WHERE id = ? ';
+            var params = [team.name, team.id];
+        }
+        else{
+            query =
+                ' INSERT INTO team '
+                + ' (name, code) '
+                + ' VALUES (?, ?) ';
+            params = [team.name, team.code];
+
+        }
 
         db.serialize(function () {
-            db.run(query, [team.name, team.id], function (err) {
-
+            db.run(query, params, function (err) {
                 if (err) {
                     done(false);
                 }else{

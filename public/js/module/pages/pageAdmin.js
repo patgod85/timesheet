@@ -7,6 +7,7 @@ var TeamsTree = require('../admin/index.js');
 var TeamForm = require('../team/form.js');
 var EmployeeForm = require('../employee/form.js');
 
+
 module.exports = Page.subclass({
     name: 'adminPage',
     satellite: {
@@ -38,7 +39,19 @@ module.exports = Page.subclass({
         basis.ui.Node.prototype.init.call(this);
 
         this.setChildNodes([
-            TeamsTree(this.delegate.data.employeesByTeams)
+            TeamsTree(this.delegate.data.employeesByTeams),
+            new basis.ui.button.Button({
+                caption: 'Create new team',
+                click: function () {
+                    this.parentNode.delegate.data.Team({
+                        path: "/",
+                        team_code: "new",
+                        code: "new",
+                        id: 0,
+                        name: 'New team'
+                    });
+                }
+            })
         ]);
 
         var self = this;

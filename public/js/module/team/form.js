@@ -17,10 +17,31 @@ module.exports = basis.ui.form.Form.subclass({
                     this.owner.submit();
                 }
             })
+        },
+        addButton: {
+            instanceOf: basis.ui.button.Button.subclass({
+                caption: 'Add new employee',
+                click: function () {
+                    var d = this.owner.data;
+                    var newVar = {
+                        path: d.path + d.code + '/',
+                        team_code: d.code,
+                        id: 0,
+                        name: "New employee",
+                        surname: "New employee",
+                        work_start: new Date(),
+                        work_end: null,
+                        days: {},
+                        team_id: d.id
+                    };
+                    this.owner.owner.delegate.data.Employee(newVar);
+                }
+            })
         }
     },
     binding: {
-        submitButton: "satellite:"
+        submitButton: "satellite:",
+        addButton: "satellite:"
     },
     childFactory: function(config){
         return new FormInput(config);

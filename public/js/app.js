@@ -14,32 +14,6 @@ var pages;
 
 var modelUrl = 'http://localhost:8888/model';
 
-var Employee = new basis.entity.EntityType({
-    name: 'Employee',
-    fields: {
-        path: String,
-        team_code: String,
-        id: basis.entity.IntId,
-        name: String,
-        surname: String,
-        work_start: Date,
-        work_end: Date,
-        days: Object,
-        team_id: String
-    }
-});
-
-var Team = new basis.entity.EntityType({
-    name: 'Team',
-    fields: {
-        path: String,
-        team_code: String,
-        code: String,
-        id: basis.entity.IntId,
-        name: String
-    }
-});
-
 var model = new basis.data.Object({
     data: {
         month: 'March',
@@ -58,16 +32,17 @@ var model = new basis.data.Object({
             method: 'GET',
             handler: {
                 success: function(transport, request, response){
-//console.log(response);
-                    response.teams.forEach(Team);
-                    response.employees.forEach(Employee);
+                    response.Team = require("./module/team/entity.js");
+                    response.Employee = require("./module/employee/entity.js");
+                    response.Team.all.sync(response.teams);
+                    response.Employee.all.sync(response.employees);
 
                     response.employeesByTeams = new basis.data.dataset.Split({
                         source:
                             new basis.data.dataset.Merge({
                                 sources: [
-                                    Team.all,
-                                    Employee.all
+                                    response.Team.all,
+                                    response.Employee.all
                                 ]
                             }),
                         rule:
