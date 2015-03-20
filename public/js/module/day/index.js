@@ -16,10 +16,16 @@ module.exports = basis.ui.Node.subclass({
         type: 'data:type',
         checked: function(node){
             return node.data.checked ? 'checked_day' : '';
+        },
+        clickable: function(node){
+            return node.data.title != '-';
         }
     },
     action: {
         dayClick: function(){
+            if(this.data.title == '-'){
+                return;
+            }
             this.data.checked = !this.data.checked;
             this.updateBind('checked');
         }

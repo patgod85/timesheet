@@ -8,8 +8,8 @@ module.exports = new basis.entity.EntityType({
         id: basis.entity.IntId,
         name: String,
         surname: String,
-        work_start: Date,
-        work_end: Date,
+        work_start: String,
+        work_end: String,
         days: Object,
         team_id: String
     }

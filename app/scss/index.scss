@@ -81,13 +81,19 @@ table.month {
 
     td {
         border: 1px solid black;
-        background-color: white;
         width: $day-width;
         text-align: center;
 
-        &.weekend {
-            background-color: yellow;
+
+        &.clickable {
+            background-color: white;
+
+            &.weekend {
+                background-color: yellow;
+            }
+
         }
+
 
         @include day-types;
     }
@@ -153,7 +159,7 @@ table.month {
         }
 
         table.month {
-            td {
+            td.clickable {
                 cursor: pointer;
 
                 &.checked_day {

@@ -21,9 +21,12 @@ module.exports = basis.ui.Node.subclass({
         update: function(){
             var childNodes = [];
 
-            var month = moment(this.data.year + ":" + this.data.month, "YYYY:MMMM");
+            var month = moment().year(this.data.year).month(this.data.month);
             this.data.workingDays = 0;
             this.data.name = month.format('MMMM');
+
+            var isEntity = typeof this.data.entity !== 'undefined',
+                isEndSet = isEntity && typeof this.data.entity.work_end !== 'undefined' && this.data.entity.work_end !== 'null';
 
             for(var i = 0; i < month.daysInMonth(); i++){
                 var date = month.date(i + 1);
@@ -32,22 +35,31 @@ module.exports = basis.ui.Node.subclass({
                     this.data.workingDays++;
                 }
                 var name = i + 1;
-                var hasType = typeof this.data.entity !== 'undefined' && this.data.entity.days.hasOwnProperty(date.format("DD.MM.YYYY"));
+                var hasType = isEntity && this.data.entity.days.hasOwnProperty(date.format("YYYY-MM-DD"));
 
-                if(typeof this.data.entity !== 'undefined' && typeof this.data.entity.work_start !== 'undefined' && moment(this.data.entity.work_start, "DD.MM.YYYY") < date && (typeof this.data.entity.work_end !== 'undefined' || typeof this.data.entity.work_end !== 'undefined' && moment(this.data.entity.work_end) > date)){
-                    if(isWeekend || hasType){
-                        name = "";
-                    }else{
-                        name = "1";
+                if(isEntity){
+
+//console.log(date.format(), this.data.entity.work_start, this.data.entity.work_end, date.isSame(this.data.entity.work_end, 'day'));
+                    if( isEndSet && (date.isBetween(this.data.entity.work_start, this.data.entity.work_end) || date.isSame(this.data.entity.work_end, 'day')) || !isEndSet && date.isAfter(this.data.entity.work_start)){
+                        if(isWeekend || hasType){
+                            name = "";
+                        }else{
+                            name = "1";
+                        }
+                    }
+                    else{
+                        name = '-';
                     }
                 }
+
+
 
                 childNodes.push(new Day({data: {
                     day: i+1,
                     title: name,
                     weekend: isWeekend,
                     type: hasType
-                        ? this.data.entity.days[date.format("DD.MM.YYYY")].day_type_id
+                        ? this.data.entity.days[date.format("YYYY-MM-DD")].day_type_id
                         : ''
                 }}));
             }

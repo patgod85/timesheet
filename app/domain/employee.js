@@ -71,14 +71,16 @@ module.exports.update = function(employee, done){
                 ' UPDATE employee '
                 + ' SET name = ? '
                 + '    ,surname = ? '
+                + '    ,work_start = ? '
+                + '    ,work_end = ? '
                 + ' WHERE id = ? ';
-            var params = [employee.name, employee.surname, employee.id];
+            var params = [employee.name, employee.surname, employee.work_start, employee.work_end, employee.id];
         }else{
             query =
                 ' INSERT INTO employee '
-                + ' (name, surname, team_id) '
-                + ' VALUES (?, ?, ?) ';
-            params = [employee.name, employee.surname, employee.team_id];
+                + ' (name, surname, work_start, work_end, team_id) '
+                + ' VALUES (?, ?, ?, ?, ?) ';
+            params = [employee.name, employee.surname, employee.work_start, employee.work_end,  employee.team_id];
         }
 
         db.serialize(function () {

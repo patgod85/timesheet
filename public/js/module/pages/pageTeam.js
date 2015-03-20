@@ -62,7 +62,7 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
                             checkedDays.push(days[k]);
                             postModel.push({
                                 id: employee.data.id,
-                                date: moment().month(month.data.name).year(month.data.year).date(days[k].data.day).format('DD.MM.YYYY'),
+                                date: moment().month(month.data.name).year(month.data.year).date(days[k].data.day).format('YYYY-MM-DD'),
                                 type: typeId
                             });
                         }
