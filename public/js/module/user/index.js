@@ -61,7 +61,7 @@ var LoginForm = basis.ui.Node.subclass({
         signIn: function (self, data) {
             profileService
                 .signIn(function (data){
-                    self.owner.authCallback();
+                    self.owner.authCallback(data.user);
                     self.owner.update({loggedInAs: data.user.name});
                 })
                 .request({
@@ -123,7 +123,7 @@ module.exports = basis.ui.Node.subclass({
             .whoami(function (data){
                 self.update({loggedInAs: data.user.name});
 
-                self.authCallback();
+                self.authCallback(data.user);
             })
             .request();
     }

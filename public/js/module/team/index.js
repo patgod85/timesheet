@@ -33,6 +33,15 @@ module.exports = basis.ui.Node.subclass({
         }
     },
     childFactory: function(config){
-        return new Employee(basis.object.extend({ month: this.data.month, year: this.data.year}, config));
+        return new Employee(
+            basis.object.extend(
+                {
+                    month: this.data.month,
+                    year: this.data.year,
+                    publicHolidays: this.data.publicHolidays
+                },
+                config
+            )
+        );
     }
 });

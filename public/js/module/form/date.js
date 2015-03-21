@@ -44,7 +44,8 @@ module.exports = basis.ui.Node.subclass({
             update: function(){
                 //noinspection JSPotentiallyInvalidUsageOfThis
                 var d = this.delegate.data;
-                if(d && d[this.name]) {
+
+                if(d && d[this.name] && d[this.name] != 'null') {
                     this.setValue(moment(d[this.name]).format('YYYY-MM-DD'));
                 }else{
                     this.setValue('');

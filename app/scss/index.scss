@@ -92,10 +92,11 @@ table.month {
                 background-color: yellow;
             }
 
+            @include day-types;
         }
 
 
-        @include day-types;
+
     }
 }
 

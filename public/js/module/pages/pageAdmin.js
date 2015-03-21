@@ -38,21 +38,28 @@ module.exports = Page.subclass({
     init: function(){
         basis.ui.Node.prototype.init.call(this);
 
-        this.setChildNodes([
-            TeamsTree(this.delegate.data.employeesByTeams),
-            new basis.ui.button.Button({
-                caption: 'Create new team',
-                click: function () {
-                    this.parentNode.delegate.data.Team({
-                        path: "/",
-                        team_code: "new",
-                        code: "new",
-                        id: 0,
-                        name: 'New team'
-                    });
-                }
-            })
-        ]);
+        var nodes = [
+            TeamsTree(this.delegate.data.employeesByTeams)
+        ];
+
+        if(this.data.user.is_super){
+            nodes.push(
+                new basis.ui.button.Button({
+                    caption: 'Create new team',
+                    click: function () {
+                        this.parentNode.delegate.data.Team({
+                            path: "/",
+                            team_code: "new",
+                            code: "new",
+                            id: 0,
+                            name: 'New team'
+                        });
+                    }
+                })
+            );
+        }
+
+        this.setChildNodes(nodes);
 
         var self = this;
 

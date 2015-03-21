@@ -52,15 +52,23 @@ module.exports = basis.ui.Node.subclass({
                     }
                 }
 
+                var isPublicHoliday = this.data.publicHolidays.hasOwnProperty(date.format("YYYY-MM-DD"));
 
+                if(hasType){
+                    var type = this.data.entity.days[date.format("YYYY-MM-DD")].day_type_id;
+                }
+                else if(isPublicHoliday){
+                    type = 3;
+                }
+                else{
+                    type = '';
+                }
 
                 childNodes.push(new Day({data: {
                     day: i+1,
                     title: name,
                     weekend: isWeekend,
-                    type: hasType
-                        ? this.data.entity.days[date.format("YYYY-MM-DD")].day_type_id
-                        : ''
+                    type: type
                 }}));
             }
 

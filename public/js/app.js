@@ -22,7 +22,8 @@ var model = new basis.data.Object({
         teams: [],
         publicHolidays: {},
         dayTypes: {},
-        employeesByTeams: undefined
+        employeesByTeams: undefined,
+        user: {}
     },
     sync: function(done){
         var self = this;
@@ -65,7 +66,10 @@ var model = new basis.data.Object({
 });
 
 new User({
-    authCallback: function(){
+    authCallback: function(user){
+
+        model.update({user: user});
+
         model.sync(function(){
 
             router.start();

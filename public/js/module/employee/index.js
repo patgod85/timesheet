@@ -16,7 +16,7 @@ module.exports = basis.ui.Node.subclass({
 
         this.setChildNodes([
             new Month({
-                data: {month: this.month, year: this.year, entity: this.data}
+                data: {month: this.month, year: this.year, publicHolidays: this.publicHolidays, entity: this.data}
             })
         ]);
     }
