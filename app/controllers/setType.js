@@ -19,47 +19,32 @@ module.exports = function (request, response) {
             employee_ids.push(postData[i].id);
         }
 
-        require('../domain/team').areEmployeesAllowedToChange(request.user, employee_ids, function(isSuccess){
+        require('../domain/team').areEmployeesAllowedToChange(request.user, employee_ids, function(isSuccess) {
 
-            if(!isSuccess){
+            if (!isSuccess) {
                 response.writeHead(403, {});
                 response.write('ASafsdbdfs');
                 response.end();
             }
-            else{
+            else {
 
-                db.run("INSERT OR IGNORE INTO day (date) VALUES " + dayQueryAmend.toString(), dates, function () {
+                var values = [];
+                for (i = 0; i < postData.length; i++) {
+                    values.push(postData[i].id);
+                    values.push(postData[i].date);
+                    values.push(postData[i].type);
+                }
 
-                    var param = dates.map(function (date) {
-                        return "'" + date + "'"
-                    }).toString();
+                db.run("INSERT OR REPLACE INTO employee_day (employee_id, date, day_type_id) VALUES " + employeeDayQueryAmend.toString(), values, function () {
+                    var body = JSON.stringify({success: true});
 
-                    db.all("SELECT * FROM day WHERE date IN (" + param + ")", function (err, existingDates) {
-
-                        var datesIds = {};
-                        for (var i = 0; i < existingDates.length; i++) {
-                            datesIds[existingDates[i].date] = existingDates[i].id;
-                        }
-                        var values = [];
-                        for (i = 0; i < postData.length; i++) {
-                            values.push(postData[i].id);
-                            values.push(datesIds[postData[i].date]);
-                            values.push(postData[i].type);
-                        }
-
-                        db.run("INSERT OR REPLACE INTO employee_day (employee_id, day_id, day_type_id) VALUES " + employeeDayQueryAmend.toString(), values, function () {
-                            var body = JSON.stringify({success: true});
-
-                            response.writeHead(200, {
-                                "content-type": "application/json",
-                                "content-length": body.length
-                            });
-
-                            response.write(body);
-                            response.end();
-                        });
+                    response.writeHead(200, {
+                        "content-type": "application/json",
+                        "content-length": body.length
                     });
 
+                    response.write(body);
+                    response.end();
                 });
             }
         });

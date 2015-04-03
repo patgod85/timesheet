@@ -23,10 +23,9 @@ module.exports.getAll = function(user, done) {
                 if (err) {
                     done(null, 'Error');
                 }
-                var query = "SELECT e.*, ed.*, d.*, t.code AS team_code "
+                var query = "SELECT e.*, ed.*, t.code AS team_code "
                     + "FROM employee e "
                     + "JOIN employee_day ed ON e.id = ed.employee_id "
-                    + "JOIN day d ON d.id = ed.day_id "
                     + "JOIN team t ON e.team_id = t.id "
                     + userCondition;
 

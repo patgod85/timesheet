@@ -14,11 +14,6 @@ CREATE TABLE "employee" (
   FOREIGN KEY ("team_id") REFERENCES [team]("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE [day](
-  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-  "date" DATETIME NOT NULL UNIQUE
-);
-
 CREATE TABLE [day_type](
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
   "name" TEXT NOT NULL
@@ -26,7 +21,7 @@ CREATE TABLE [day_type](
 
 CREATE TABLE [employee_day](
   "employee_id" INTEGER NOT NULL REFERENCES  [employee]("id"),
-  "day_id" INTEGER NOT NULL REFERENCES  [day]("id"),
+  "date" DATETIME NOT NULL,
   "day_type_id" INTEGER NOT NULL REFERENCES  [day_type]("id")
 );
 
