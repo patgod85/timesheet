@@ -20,6 +20,7 @@ CREATE TABLE [day_type](
   );
 
 CREATE TABLE [employee_day](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
   "employee_id" INTEGER NOT NULL REFERENCES  [employee]("id"),
   "date" DATETIME NOT NULL,
   "day_type_id" INTEGER NOT NULL REFERENCES  [day_type]("id")
