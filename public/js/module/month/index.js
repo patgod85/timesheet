@@ -59,6 +59,9 @@ module.exports = basis.ui.Node.subclass({
                 }
                 else if(isPublicHoliday){
                     type = 3;
+                    if(isEntity) {
+                        name = "";
+                    }
                 }
                 else{
                     type = '';
