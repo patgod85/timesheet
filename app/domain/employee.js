@@ -1,7 +1,7 @@
 module.exports.getAll = function(user, done) {
 
     var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
         db.serialize(function () {
 
@@ -63,7 +63,7 @@ module.exports.getAll = function(user, done) {
 module.exports.update = function(employee, done){
 
     var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
         if(employee.id) {
             var query =

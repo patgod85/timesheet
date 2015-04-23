@@ -1,7 +1,7 @@
 module.exports.getAll = function(user, done) {
 
     var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
         var userCondition = '',
             userConditionParams = [];
@@ -35,7 +35,7 @@ module.exports.areEmployeesAllowedToChange = function(user, employee_ids, done){
     }else{
 
         var sqlite3 = require('sqlite3').verbose();
-        var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+        var db = new sqlite3.Database('db/example.sqlite3', function () {
 
             var query =
                 ' SELECT count(e.id) AS cnt '
@@ -62,7 +62,7 @@ module.exports.areEmployeesAllowedToChange = function(user, employee_ids, done){
 module.exports.update = function(team, done){
 
     var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
         if(team.id) {
             var query =

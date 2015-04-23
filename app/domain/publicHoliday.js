@@ -5,7 +5,7 @@ var sqlite = require('./sqlite');
 module.exports.getAll = function(done){
 
     var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/timesheet.sqlite3', function () {
+    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
         db.serialize(function () {
 
@@ -40,7 +40,7 @@ module.exports.toggleDates = function(dates){
         var newDates = [];
         var db;
 
-        sqlite.connect('db/timesheet.sqlite3')
+        sqlite.connect('db/example.sqlite3')
             .then(sqlite.serialize)
             .then(function(_db){
 
