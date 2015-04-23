@@ -23,7 +23,7 @@ module.exports = function (request, response) {
 
             if (!isSuccess) {
                 response.writeHead(403, {});
-                response.write('ASafsdbdfs');
+                response.write('Access denied');
                 response.end();
             }
             else {

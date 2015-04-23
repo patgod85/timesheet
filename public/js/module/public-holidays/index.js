@@ -1,6 +1,7 @@
 basis.require('basis.ui');
 basis.require('basis.entity');
 basis.require('basis.net.service');
+var ajax = require('basis.net.ajax');
 
 var moment = require('../../../components/moment/moment.js');
 
@@ -27,6 +28,22 @@ for (i = 0; i < daysInYear; i++) {
     });
 }
 
+function postChanges(dates, done){
+    ajax.request({
+        url: 'http://localhost:8888/public-holidays/update',
+        method: 'POST',
+        contentType: "application/json",
+        postBody: JSON.stringify(dates),
+        handler: {
+            success: function(){
+                done();
+            },
+            failure: function(){
+            }
+        }
+    });
+}
+
 var Month = basis.entity.createType({
     name: 'Month',
     fields: {
@@ -48,7 +65,9 @@ var Day = basis.entity.createType({
         group: 'Month',
         title: String,
         isHoliday: Boolean,
-        isWeekend: Boolean
+        isWeekend: Boolean,
+        isChecked: Boolean,
+        date: String
     },
     aliases: {
         monthId: 'group'
@@ -64,26 +83,59 @@ var Day = basis.entity.createType({
 
 module.exports = basis.ui.Node.subclass({
     name: 'PublicHolidaysYear',
-    template: '<div class="days-list"><div{childNodesElement}/><div class="clearfix"></div></div>',
+    template: '<div class="days-list"><div{childNodesElement}/><div class="clearfix"></div><!--{toggleButton}--></div>',
     dataSource: Day.all,
+    binding: {
+        toggleButton: new basis.ui.button.Button({
+            caption: 'Toggle selected items',
+            click: function () {
+                var selectedDates = [];
+                var self = this;
+
+                for(var i = 0; i < this.owner.childNodes.length; i++){
+                    if(this.owner.childNodes[i].name = 'Day' && this.owner.childNodes[i].data.isChecked){
+                        selectedDates.push(this.owner.childNodes[i].data.date);
+                    }
+                }
+
+                if(selectedDates.length){
+                    postChanges(
+                        selectedDates,
+                        function(){
+                            self.owner.parentNode.delegate.sync(
+                                function(){
+                                    self.owner.update({publicHolidays: self.owner.parentNode.delegate.data.publicHolidays});
+                                }
+                            );
+
+                        }
+                    );
+                }
+            }
+        })
+    },
     active: true,
     selection: {
         multiple: true
     },
     childClass: {
+        name: 'Day',
         template:
-            '<div class="day {selected} {isHoliday} {isWeekend}" event-click="select">' +
+            '<div class="day {selected} {isHoliday} {isWeekend} {isChecked}" event-click="select">' +
                 '{title}' +
             '</div>',
         action: {
             select: function(event){
+
+                this.update({isChecked: !this.delegate.data.isChecked});
                 this.select(event.ctrlKey || event.metaKey);
             }
         },
         binding: {
             title: 'data:',
             isHoliday: 'data:',
-            isWeekend: 'data:'
+            isWeekend: 'data:',
+            isChecked: 'data:'
         }
     },
     sorting: 'data.id',
@@ -95,15 +147,10 @@ module.exports = basis.ui.Node.subclass({
         childClass: {
             template:
                 '<div class="month">' +
-                    '<div class="month-Title" event-click="selectAll" title="Click to select all users in group">' +
+                    '<div class="month-Title">' +
                         '{title}' +
                     '</div>' +
                 '</div>',
-            action: {
-                selectAll: function(){
-                    this.parentNode.owner.selection.set(this.nodes);
-                }
-            },
             binding: {
                 title: 'data:'
             }
@@ -123,7 +170,9 @@ module.exports = basis.ui.Node.subclass({
                     monthId: parseInt(momentDate.format('M'), 10),
                     title: momentDate.format('DD'),
                     isHoliday: this.data.publicHolidays.hasOwnProperty(momentDate.format('YYYY-MM-DD')),
-                    isWeekend: [6,7].indexOf(parseInt(momentDate.format('E'), 10)) >= 0
+                    isWeekend: [6,7].indexOf(parseInt(momentDate.format('E'), 10)) >= 0,
+                    isChecked: false,
+                    date: momentDate.format('YYYY-MM-DD')
                 });
 
                 momentDate.add(1, 'd');

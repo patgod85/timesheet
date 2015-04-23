@@ -135,6 +135,12 @@ table.month {
     }
 }
 
+@mixin selectedDay {
+    border-color: red;
+    background-color: indianred;
+    color: wheat;
+}
+
 .team {
 
     //margin-top: 100px;
@@ -164,9 +170,7 @@ table.month {
                 cursor: pointer;
 
                 &.checked_day {
-                    border-color: red;
-                    background-color: indianred;
-                    color: wheat;
+                    @include selectedDay;
                 }
             }
         }
@@ -215,6 +219,7 @@ table.month {
             text-align: center;
             width: 25px;
             float: left;
+            cursor: pointer;
 
             &.isWeekend {
                 background-color: yellow;
@@ -223,6 +228,11 @@ table.month {
             &.isHoliday {
                 background-color: red;
                 color: white;
+            }
+
+            &.checked_day,
+            &.isChecked {
+                @include selectedDay;
             }
         }
 

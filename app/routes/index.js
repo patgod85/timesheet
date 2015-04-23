@@ -29,7 +29,7 @@ module.exports = function () {
     this.post('/employee/update', controllers.employee.update);
     //this.get('/day-types', controllers.dayTypes({}));
     this.post('/set-type', controllers.setType);
-    //this.get('/public-holidays', controllers.publicHolidays({}));
+    this.post('/public-holidays/update', controllers.publicHolidays.update);
 
     this.get('/whoami', controllers.users.whoami);
     this.post('/login', controllers.users.login);

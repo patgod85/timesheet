@@ -21,7 +21,8 @@
         "bootable": "*",
         "bootable-environment": "*",
         "up-express-logger": "*",
-        "process-pwd": "*"
+        "process-pwd": "*",
+        "vow": "0.4.*"
     },
     "devDependencies" : {
 
