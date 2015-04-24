@@ -13,5 +13,9 @@
         }
     },
 
-    "credentials": ["admin","password"]
+    "credentials": ["admin","password"],
+
+    "database": {
+        "path": "db/example.sqlite3"
+    }
 }

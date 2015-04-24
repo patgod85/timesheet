@@ -2,27 +2,25 @@
 var Vow = require("vow");
 var sqlite = require('./sqlite');
 
-module.exports.getAll = function(done){
+module.exports.getAll = function(){
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+    return new Vow.Promise(function(resolve, reject){
 
-        db.serialize(function () {
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(db){
 
-            db.all("SELECT * FROM public_holiday", function (err, holidays) {
+                sqlite.all(db, "SELECT * FROM public_holiday")
+                    .then(function (holidays) {
+                        var viewModel = {};
 
-                if (err) {
-                    done(null, 'Error');
-                }
+                        for(var i = 0; i < holidays.length; i++){
+                            viewModel[holidays[i].date.trim()] = holidays[i];
+                        }
 
-                var viewModel = {};
-
-                for(var i = 0; i < holidays.length; i++){
-                    viewModel[holidays[i].date.trim()] = holidays[i];
-                }
-
-                done(viewModel);
-            });
+                        resolve(viewModel);
+                    })
+                    .catch(reject);
         });
     });
 };
@@ -40,7 +38,7 @@ module.exports.toggleDates = function(dates){
         var newDates = [];
         var db;
 
-        sqlite.connect('db/example.sqlite3')
+        sqlite.connect()
             .then(sqlite.serialize)
             .then(function(_db){
 

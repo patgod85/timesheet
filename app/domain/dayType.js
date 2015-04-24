@@ -1,15 +1,16 @@
-module.exports.getAll = function(done){
+var Vow = require("vow");
+var sqlite = require('./sqlite');
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+module.exports.getAll = function(){
 
-        db.serialize(function () {
+    return new Vow.Promise(function(resolve, reject){
 
-            db.all("SELECT * FROM day_type", function (err, _types) {
-
-                if (err) {
-                    done(null, err);
-                }
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(db) {
+                return sqlite.all(db, "SELECT * FROM day_type");
+            })
+            .then(function(_types) {
 
                 var types = {};
 
@@ -17,8 +18,21 @@ module.exports.getAll = function(done){
                     types[_types[i].id] = _types[i];
                 }
 
-                done(types);
-            });
-        });
+                resolve(types);
+            })
+            .catch(reject);
+    });
+};
+
+module.exports.setTypes = function(employeeDayQueryAmend, values){
+    return new Vow.Promise(function(resolve, reject) {
+
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function (db) {
+                return sqlite.run(db, "INSERT OR REPLACE INTO employee_day (employee_id, date, day_type_id) VALUES " + employeeDayQueryAmend.toString(), values);
+            })
+            .then(resolve)
+            .catch(reject);
     });
 };

@@ -1,11 +1,11 @@
 var url = require('url');
-var publicHolidaysRepository = require('../domain/publicHoliday');
+var publicHolidayRepository = require('../domain/publicHoliday');
 
 module.exports.update = function(request, response){
 
     var dates = request.body;
 
-    publicHolidaysRepository.toggleDates(dates)
+    publicHolidayRepository.toggleDates(dates)
         .then(function(){
 
             var body = JSON.stringify({success: true});

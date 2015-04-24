@@ -1,53 +1,51 @@
 var url = require('url');
 
+var teamRepository = require('../domain/team');
+var dayTypeRepository = require('../domain/dayType');
+
 module.exports = function (request, response) {
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+    var postData = request.body;
 
-        var postData = request.body;
+    var dates = [];
+    var dayQueryAmend = [];
+    var employeeDayQueryAmend = [];
+    var employee_ids = [];
 
-        var dates = [];
-        var dayQueryAmend = [];
-        var employeeDayQueryAmend = [];
-        var employee_ids = [];
+    for(var i = 0; i < postData.length; i++){
+        dates.push(postData[i].date);
+        dayQueryAmend.push('(?)');
+        employeeDayQueryAmend.push("(?,?,?)");
+        employee_ids.push(postData[i].id);
+    }
 
-        for(var i = 0; i < postData.length; i++){
-            dates.push(postData[i].date);
-            dayQueryAmend.push('(?)');
-            employeeDayQueryAmend.push("(?,?,?)");
-            employee_ids.push(postData[i].id);
-        }
+    teamRepository.areEmployeesAllowedToChange(request.user, employee_ids)
+        .then(function() {
 
-        require('../domain/team').areEmployeesAllowedToChange(request.user, employee_ids, function(isSuccess) {
-
-            if (!isSuccess) {
-                response.writeHead(403, {});
-                response.write('Access denied');
-                response.end();
+            var values = [];
+            for (i = 0; i < postData.length; i++) {
+                values.push(postData[i].id);
+                values.push(postData[i].date);
+                values.push(postData[i].type);
             }
-            else {
 
-                var values = [];
-                for (i = 0; i < postData.length; i++) {
-                    values.push(postData[i].id);
-                    values.push(postData[i].date);
-                    values.push(postData[i].type);
-                }
+            return dayTypeRepository.setTypes(employeeDayQueryAmend, values);
+        })
+        .then(function () {
+            var body = JSON.stringify({success: true});
 
-                db.run("INSERT OR REPLACE INTO employee_day (employee_id, date, day_type_id) VALUES " + employeeDayQueryAmend.toString(), values, function () {
-                    var body = JSON.stringify({success: true});
+            response.writeHead(200, {
+                "content-type": "application/json",
+                "content-length": body.length
+            });
 
-                    response.writeHead(200, {
-                        "content-type": "application/json",
-                        "content-length": body.length
-                    });
+            response.write(body);
+            response.end();
+        })
+        .catch(function(){
+            response.writeHead(403, {});
+            response.write('Access denied');
+            response.end();
+        })
 
-                    response.write(body);
-                    response.end();
-                });
-            }
-        });
-
-    });
 };

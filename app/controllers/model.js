@@ -1,14 +1,49 @@
 var url = require('url');
+var Vow = require("vow");
+
+var dayTypeRepository = require('../domain/dayType');
+var publicHolidayRepository = require('../domain/publicHoliday');
+var employeeRepository = require('../domain/employee');
+var teamRepository = require('../domain/team');
 
 module.exports = function (request, response) {
 
-        function showError(message){
-            response.writeHead(500, {"Content-Type": "text/html"});
-            response.write(message);
-            response.end();
-        }
 
-        function showSuccess(){
+    var promise = new Vow.Promise(function(resolve, reject) {
+
+        var model = {};
+
+        teamRepository.getAll(request.user)
+            .then(function (teams) {
+                model.teams = teams;
+
+                return employeeRepository.getAll(request.user);
+            })
+            .then(function (employees) {
+                model.employees = employees;
+
+                return publicHolidayRepository.getAll();
+            })
+            .then(function (publicHolidays) {
+
+                model.publicHolidays = publicHolidays;
+
+                return dayTypeRepository.getAll()
+            })
+            .then(function (types) {
+
+                model.dayTypes = types;
+
+                resolve(model);
+            })
+            .catch(function () {
+                reject('Fail on fetching of model');
+            });
+    });
+
+
+    promise
+        .then(function(model){
             var body = JSON.stringify(model);
 
             response.writeHead(200, {
@@ -18,40 +53,11 @@ module.exports = function (request, response) {
 
             response.write(body);
             response.end();
-        }
-
-        var model = {};
-
-        require('../domain/team').getAll(request.user, function(teams){
-            if(teams === null){
-                showError('Fail on fetching of teams');
-            }
-            model.teams = teams;
-
-            require('../domain/employee').getAll(request.user, function(employees) {
-                if (employees === null) {
-                    showError('Fail on fetching of employees');
-                }
-                model.employees = employees;
-
-                require('../domain/publicHoliday').getAll(function (publicHolidays) {
-
-                    if (publicHolidays === null) {
-                        showError('Fail on fetching of public holidays');
-                    }
-                    model.publicHolidays = publicHolidays;
-
-                    require('../domain/dayType').getAll(function (types) {
-
-                        if (types === null) {
-                            showError('Fail on fetching of days types');
-                        }
-                        model.dayTypes = types;
-
-                        showSuccess();
-                    })
-                })
-            })
-        });
+        })
+        .catch(function(message){
+            response.writeHead(500, {"Content-Type": "text/html"});
+            response.write(message);
+            response.end();
+        })
 
 };

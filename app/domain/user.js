@@ -1,27 +1,32 @@
-var sqlite3 = require('sqlite3').verbose();
+var sqlite = require('./sqlite');
 
 
 module.exports.findById = function(id, done) {
 
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
-        db.get("SELECT * FROM user WHERE id = ?", id, function (userErr, user) {
-            if (userErr) {
-                done(null, false, {message: 'Incorrect password.'});
-            } else {
-                done(null, user);
-            }
-        })
-    });
+    sqlite.connect()
+        .then(sqlite.serialize)
+        .then(function(db) {
+
+            sqlite.get(db, "SELECT * FROM user WHERE id = ?", id)
+                .then(function(user) {
+                    done(null, user);
+                })
+                .catch(function(){
+                    done(null, false, {message: 'Incorrect password.'});
+                })
+        });
 };
 module.exports.findByNameAndPassword = function(username, password, done) {
 
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
-        db.get("SELECT * FROM user WHERE name = ? AND password = ?", username, password, function (userErr, user) {
-            if (userErr) {
-                done(null, false, {message: 'Incorrect password.'});
-            } else {
-                done(null, user);
-            }
-        })
-    });
+    sqlite.connect()
+        .then(sqlite.serialize)
+        .then(function(db) {
+            sqlite.get(db, "SELECT * FROM user WHERE name = ? AND password = ?", [username, password])
+                .then(function (user) {
+                    done(null, user);
+                })
+                .catch(function(){
+                    done(null, false, {message: 'Incorrect password.'});
+                });
+        });
 };

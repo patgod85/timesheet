@@ -1,93 +1,104 @@
-module.exports.getAll = function(user, done) {
+var Vow = require("vow");
+var sqlite = require('./sqlite');
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+module.exports.getAll = function(user) {
 
-        var userCondition = '',
-            userConditionParams = [];
+    return new Vow.Promise(function(resolve, reject) {
 
-        if(!user.is_super){
-            userCondition = ' WHERE id = ? ';
-            userConditionParams = [user.team_id];
-        }
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(db) {
 
-        db.serialize(function () {
-            db.all("SELECT *, code AS team_code, '/' AS path FROM team " + userCondition, userConditionParams, function (err, teams) {
+                var userCondition = '',
+                    userConditionParams = [];
 
-                if (err) {
-                    done(null, 'Error');
+                if (!user.is_super) {
+                    userCondition = ' WHERE id = ? ';
+                    userConditionParams = [user.team_id];
                 }
 
-                done(teams);
-
-            });
-        });
+                return sqlite.all(db, "SELECT *, code AS team_code, '/' AS path FROM team " + userCondition, userConditionParams);
+            })
+            .then(resolve)
+            .catch(reject);
     });
 };
 
-module.exports.isTeamAllowedToChange = function(user, teamId, done){
-    done(user.is_super || user.team_id == teamId);
-};
-module.exports.areEmployeesAllowedToChange = function(user, employee_ids, done){
-
-    if(user.is_super){
-        done(true);
-    }else{
-
-        var sqlite3 = require('sqlite3').verbose();
-        var db = new sqlite3.Database('db/example.sqlite3', function () {
-
-            var query =
-                ' SELECT count(e.id) AS cnt '
-                + ' FROM user u '
-                + ' JOIN employee e ON e.team_id = u.team_id '
-                + ' WHERE '
-                + ' e.id IN (' + employee_ids.map(function(e){return parseInt(e, 10)}).join(',') + ') '
-                + ' AND u.id = ? ';
-
-            db.serialize(function () {
-                db.get(query, [user.id], function (err, result) {
-
-                    if (err || result['cnt'] != employee_ids.length) {
-                        done(false);
-                    }else{
-                        done(true);
-                    }
-                });
-            });
-        });
-    }
-};
-
-module.exports.update = function(team, done){
-
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
-
-        if(team.id) {
-            var query =
-                ' UPDATE team '
-                + ' SET name = ? '
-                + ' WHERE id = ? ';
-            var params = [team.name, team.id];
+module.exports.isTeamAllowedToChange = function(user, teamId){
+    return new Vow.Promise(function(resolve, reject) {
+        if(user.is_super || user.team_id == teamId){
+            resolve();
         }
         else{
-            query =
-                ' INSERT INTO team '
-                + ' (name, code) '
-                + ' VALUES (?, ?) ';
-            params = [team.name, team.code];
-
+            reject();
         }
+    });
+};
 
-        db.serialize(function () {
-            db.run(query, params, function (err) {
-                if (err) {
-                    done(false);
-                }else{
-                    done(true);
+module.exports.areEmployeesAllowedToChange = function(user, employee_ids){
+
+    return new Vow.Promise(function(resolve, reject) {
+
+        if(user.is_super){
+            resolve();
+        }
+        else{
+
+            sqlite.connect()
+                .then(sqlite.serialize)
+                .then(function(db) {
+
+                    var query =
+                        ' SELECT count(e.id) AS cnt '
+                        + ' FROM user u '
+                        + ' JOIN employee e ON e.team_id = u.team_id '
+                        + ' WHERE '
+                        + ' e.id IN (' + employee_ids.map(function (e) {
+                            return parseInt(e, 10)
+                        }).join(',') + ') '
+                        + ' AND u.id = ? ';
+
+                    return sqlite.get(db, query, [user.id]);
+                })
+                .then(function(result){
+
+                    if (result['cnt'] == employee_ids.length) {
+                        resolve();
+                    } else {
+                        reject('Count is not correct');
+                    }
+                })
+                .catch(reject);
+        }
+    });
+};
+
+module.exports.update = function(team){
+
+    return new Vow.Promise(function(resolve, reject) {
+
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(db) {
+
+                if (team.id) {
+                    var query =
+                        ' UPDATE team '
+                        + ' SET name = ? '
+                        + ' WHERE id = ? ';
+                    var params = [team.name, team.id];
                 }
-            });
-        });
+                else {
+                    query =
+                        ' INSERT INTO team '
+                        + ' (name, code) '
+                        + ' VALUES (?, ?) ';
+                    params = [team.name, team.code];
+                }
+
+                return sqlite.run(db, query, params);
+            })
+            .then(resolve)
+            .catch(reject);
     });
 };

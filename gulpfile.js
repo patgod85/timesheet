@@ -18,7 +18,7 @@ gulp.task('templates', function() {
         user: "%username%"
     };
 
-    gulp.src('./app/views/index.jade')
+    gulp.src('./app/views/basis.jade')
         .pipe(jade(LOCALS))
         .pipe(gulp.dest('./public/'))
 });

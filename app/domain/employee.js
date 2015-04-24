@@ -1,95 +1,99 @@
-module.exports.getAll = function(user, done) {
+var Vow = require("vow");
+var sqlite = require('./sqlite');
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+module.exports.getAll = function(user) {
 
-        db.serialize(function () {
+    return new Vow.Promise(function(resolve, reject){
 
-            var userCondition = '',
-                userConditionParams = [];
+        var userCondition = '',
+            userConditionParams = [],
+            _employees,
+            db;
 
-            if(!user.is_super){
-                userCondition = ' WHERE t.id = ? ';
-                userConditionParams = [user.team_id];
-            }
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(_db) {
 
-            var query = "SELECT e.*, t.code AS team_code "
-                + "FROM employee e "
-                + "JOIN team t ON e.team_id = t.id "
-                + userCondition;
+                db = _db;
 
-            db.all(query, userConditionParams, function (err, _employees) {
-
-                if (err) {
-                    done(null, 'Error');
+                if(!user.is_super){
+                    userCondition = ' WHERE t.id = ? ';
+                    userConditionParams = [user.team_id];
                 }
+
+                var query = "SELECT e.*, t.code AS team_code "
+                    + "FROM employee e "
+                    + "JOIN team t ON e.team_id = t.id "
+                    + userCondition;
+
+                return sqlite.all(db, query, userConditionParams);
+            })
+            .then(function (employees) {
+
+                _employees = employees;
+
                 var query = "SELECT e.*, ed.*, t.code AS team_code "
                     + "FROM employee e "
                     + "JOIN employee_day ed ON e.id = ed.employee_id "
                     + "JOIN team t ON e.team_id = t.id "
                     + userCondition;
 
-                db.all(query, userConditionParams, function (err, days) {
+                return sqlite.all(db, query, userConditionParams);
+            })
+            .then(function (days) {
 
-                    if (err) {
-                        done(null, 'Error');
-                    }
+                var employees = {};
 
-                    var employees = {};
+                for (var i = 0; i < _employees.length; i++) {
+                    employees[_employees[i].id] = _employees[i];
+                    employees[_employees[i].id].days = {};
+                    employees[_employees[i].id].path = '/' + employees[_employees[i].id].team_code + '/';
+                }
 
-                    for (var i = 0; i < _employees.length; i++) {
-                        employees[_employees[i].id] = _employees[i];
-                        employees[_employees[i].id].days = {};
-                        employees[_employees[i].id].path = '/' + employees[_employees[i].id].team_code + '/';
-                    }
+                for (i = 0; i < days.length; i++) {
+                    employees[days[i].employee_id].days[days[i].date] = (days[i]);
+                }
 
-                    for (i = 0; i < days.length; i++) {
-                        employees[days[i].employee_id].days[days[i].date] = (days[i]);
-                    }
-
-                    done(
-                        Object.keys(employees)
-                            .map(function (key) {
-                                return employees[key]
-                            })
-                    );
-                });
-
-            });
-        })
+                resolve(
+                    Object.keys(employees)
+                        .map(function (key) {
+                            return employees[key]
+                        })
+                );
+            })
+            .catch(reject)
     });
 };
 
-module.exports.update = function(employee, done){
+module.exports.update = function(employee){
 
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
+    return new Vow.Promise(function(resolve, reject){
 
-        if(employee.id) {
-            var query =
-                ' UPDATE employee '
-                + ' SET name = ? '
-                + '    ,surname = ? '
-                + '    ,work_start = ? '
-                + '    ,work_end = ? '
-                + ' WHERE id = ? ';
-            var params = [employee.name, employee.surname, employee.work_start, employee.work_end, employee.id];
-        }else{
-            query =
-                ' INSERT INTO employee '
-                + ' (name, surname, work_start, work_end, team_id) '
-                + ' VALUES (?, ?, ?, ?, ?) ';
-            params = [employee.name, employee.surname, employee.work_start, employee.work_end,  employee.team_id];
-        }
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function(db) {
 
-        db.serialize(function () {
-            db.run(query, params, function (err) {
-                if (err) {
-                    done(false);
-                }else{
-                    done(true);
+                if(employee.id){
+                    var query =
+                        ' UPDATE employee '
+                        + ' SET name = ? '
+                        + '    ,surname = ? '
+                        + '    ,work_start = ? '
+                        + '    ,work_end = ? '
+                        + ' WHERE id = ? ';
+                    var params = [employee.name, employee.surname, employee.work_start, employee.work_end, employee.id];
                 }
-            });
-        });
+                else{
+                    query =
+                        ' INSERT INTO employee '
+                        + ' (name, surname, work_start, work_end, team_id) '
+                        + ' VALUES (?, ?, ?, ?, ?) ';
+                    params = [employee.name, employee.surname, employee.work_start, employee.work_end, employee.team_id];
+                }
+
+                return sqlite.run(db, query, params);
+            })
+            .then(resolve)
+            .catch(reject);
     });
 };

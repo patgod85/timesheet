@@ -16,4 +16,4 @@ User should be able to fill timesheet of employees of his team.
 
 Demo:
 
-<https://patgod85-timesheet.herokuapp.com/b>
+<https://patgod85-timesheet.herokuapp.com/>

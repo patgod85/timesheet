@@ -3,23 +3,15 @@ var teamRepository = require('../domain/team');
 var employeeRepository = require('../domain/employee');
 
 module.exports.update = function(request, response){
-    var sqlite3 = require('sqlite3').verbose();
-    var db = new sqlite3.Database('db/example.sqlite3', function () {
 
-        var employee = request.body;
+    var employee = request.body;
 
-        teamRepository.areEmployeesAllowedToChange(request.user, [employee.id], function(isSuccess){
+    teamRepository.areEmployeesAllowedToChange(request.user, [employee.id])
+        .then(function(){
 
-            if(!isSuccess){
-                response.writeHead(403, {});
-                response.write('ASafsdbdfs');
-                response.end();
-            }
-            else{
-
-                employeeRepository.update(employee, function(success){
-
-                    var body = JSON.stringify({success: success});
+            employeeRepository.update(employee)
+                .then(function(){
+                    var body = JSON.stringify({success: true});
 
                     response.writeHead(200, {
                         "content-type": "application/json",
@@ -28,9 +20,19 @@ module.exports.update = function(request, response){
 
                     response.write(body);
                     response.end();
-                });
-            }
-        });
+                })
+                .catch(function(){
+                    response.writeHead(400);
+                    response.write('Error');
+                    response.end();
+                })
 
-    });
+        })
+        .catch(function(){
+            response.writeHead(403, {});
+            response.write('Access denied');
+            response.end();
+        })
+
+
 };
