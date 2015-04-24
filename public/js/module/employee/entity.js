@@ -1,6 +1,6 @@
-require('basis');
+var entity = require('basis.entity');
 
-module.exports = new basis.entity.EntityType({
+module.exports = new entity.EntityType({
     name: 'EmployeeEntity',
     fields: {
         path: String,

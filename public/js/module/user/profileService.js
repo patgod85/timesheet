@@ -3,7 +3,7 @@ var ajax = require('basis.net.ajax');
 module.exports = {
     whoami: function(done){
         return new ajax.Transport({
-            url: 'http://localhost:8888/whoami',
+            url: '/whoami',
             method: 'GET',
             handler: {
                 success: function (transport, request, response) {
@@ -16,7 +16,7 @@ module.exports = {
     },
     signIn: function(done) {
         return new ajax.Transport({
-            url: 'http://localhost:8888/login',
+            url: '/login',
             method: 'POST',
             contentType: "application/json",
             handler: {

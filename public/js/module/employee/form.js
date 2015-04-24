@@ -37,7 +37,7 @@ module.exports = basis.ui.Node.subclass({
     submit: function(){
         var self = this;
         ajax.request({
-            url: 'http://localhost:8888/employee/update',
+            url: '/employee/update',
             method: 'POST',
             contentType: "application/json",
             postBody: JSON.stringify(self.data),

@@ -74,7 +74,7 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
 
     if(postModel.length) {
         ajax.request({
-            url: 'http://localhost:8888/set-type',
+            url: '/set-type',
             method: 'POST',
             contentType: "application/json",
             postBody: JSON.stringify(postModel),

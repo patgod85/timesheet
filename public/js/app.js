@@ -1,5 +1,3 @@
-require('basis.ui');
-
 var ajax = require('basis.net.ajax');
 var router = basis.require('basis.router');
 
@@ -12,7 +10,7 @@ var Page3 = require('./module/pages/pageAdmin.js');
 
 var pages;
 
-var modelUrl = 'http://localhost:8888/model';
+var modelUrl = '/model';
 
 var model = new basis.data.Object({
     data: {
@@ -51,8 +49,6 @@ var model = new basis.data.Object({
                                 return object.data.path;
                             }
                     });
-
-                    //response.team =
 
                     self.update(response);
 

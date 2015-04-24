@@ -53,7 +53,7 @@ module.exports = basis.ui.form.Form.subclass({
     onSubmit: function(){
         var self = this;
         ajax.request({
-            url: 'http://localhost:8888/team/update',
+            url: '/team/update',
             method: 'POST',
             contentType: "application/json",
             postBody: JSON.stringify(self.data),

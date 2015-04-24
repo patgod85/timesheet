@@ -30,7 +30,7 @@ for (i = 0; i < daysInYear; i++) {
 
 function postChanges(dates, done){
     ajax.request({
-        url: 'http://localhost:8888/public-holidays/update',
+        url: '/public-holidays/update',
         method: 'POST',
         contentType: "application/json",
         postBody: JSON.stringify(dates),
