@@ -13,3 +13,7 @@ Functionality
 User should be able to fill timesheet of employees of his team. 
 
 ![Preview](public/images/timesheet-preview.png)
+
+Demo:
+
+<https://patgod85-timesheet.herokuapp.com/b>
