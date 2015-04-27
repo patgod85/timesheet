@@ -35,7 +35,7 @@ module.exports = basis.ui.Node.subclass({
                     this.data.workingDays++;
                 }
                 var name = i + 1;
-                var hasType = isEntity && this.data.entity.days && this.data.entity.days.hasOwnProperty(date.format("YYYY-MM-DD"));
+                var hasType = isEntity && this.data.entity.days.hasOwnProperty(date.format("YYYY-MM-DD"));
 
                 if(isEntity){
 

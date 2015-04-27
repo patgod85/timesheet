@@ -21,6 +21,7 @@ var model = new basis.data.Object({
         publicHolidays: {},
         dayTypes: {},
         employeesByTeams: undefined,
+        employeesAndUsersByTeams: undefined,
         user: {}
     },
     sync: function(done){
@@ -39,6 +40,20 @@ var model = new basis.data.Object({
                     response.User.all.sync(response.users || []);
 
                     response.employeesByTeams = new basis.data.dataset.Split({
+                        source:
+                            new basis.data.dataset.Merge({
+                                sources: [
+                                    response.Team.all,
+                                    response.Employee.all
+                                ]
+                            }),
+                        rule:
+                            function(object){
+                                return object.data.path;
+                            }
+                    });
+
+                    response.employeesAndUsersByTeams = new basis.data.dataset.Split({
                         source:
                             new basis.data.dataset.Merge({
                                 sources: [
