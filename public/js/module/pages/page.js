@@ -9,6 +9,6 @@ module.exports = basis.ui.Node.subclass({
             '<!--{employeeForm}-->' +
         '</div>',
     binding: {
-        name: 'name'
+        name: 'title'
     }
 });

@@ -10,6 +10,7 @@ var EmployeeForm = require('../employee/form.js');
 
 module.exports = Page.subclass({
     name: 'adminPage',
+    title: 'Admin area',
     satellite: {
         teamForm: {
             instanceOf: TeamForm,

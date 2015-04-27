@@ -35,7 +35,7 @@ module.exports.login = function(req, res, next) {
 
 module.exports.logout = function(req, res) {
     req.logout();
-    result(res, jade.renderFile('app/views/logout.jade', {  }), "text/html");
+    res.redirect('/');
 };
 
 module.exports.register = function(req, res, next) {

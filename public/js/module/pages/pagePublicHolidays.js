@@ -3,6 +3,7 @@ var PublicHolidays = require('../public-holidays/index.js');
 
 module.exports = Page.subclass({
     name: 'publicHolidaysPage',
+    title: 'Public holidays',
     childNodes: [
         new PublicHolidays()
     ],

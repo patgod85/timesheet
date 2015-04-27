@@ -15,7 +15,10 @@ module.exports = basis.ui.Node.subclass({
             delegate: function(owner){
                 return owner.delegate;
             },
-            instanceOf: Calendar
+            instanceOf: Calendar,
+            existsIf: function(owner){
+                return owner.data.isCalendarShown;
+            }
         },
         teamsList: {
             instanceOf: Teams,
@@ -26,6 +29,10 @@ module.exports = basis.ui.Node.subclass({
     },
     binding: {
         calendar: "satellite:calendar",
+        date: function(node){
+            return node.data.month + ' ' + node.data.year;
+        },
+        isCalendarShown: "data:",
         buttonPublicHolidays: new basis.ui.button.Button({
             caption: 'Public holidays',
             click: function () {
@@ -49,6 +56,12 @@ module.exports = basis.ui.Node.subclass({
         },
         navigateToPublicHolidays: function(data){
             router.navigate("public-holidays/" + data.month + '/' + data.year);
+        },
+        showCalendar: function(){
+            this.update({isCalendarShown: true});
+        },
+        hideCalendar: function(){
+            this.update({isCalendarShown: false});
         }
     },
     emit_teamChange: basis.event.create('teamChange', 'team'),
@@ -67,6 +80,8 @@ module.exports = basis.ui.Node.subclass({
             }else{
                 this.action.navigateToTeam(this.data);
             }
+            this.updateBind('date');
+            this.update({isCalendarShown: false});
         }
     }
 });

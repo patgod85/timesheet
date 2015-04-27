@@ -1,11 +1,19 @@
 <div>
-    <div id="sidebar">
+    <input class="float_left acenter" type="text" value="{date}" event-click="showCalendar" readonly/>
+
+    <div class="calendar-wrapper">
+        &nbsp;
         <!--{calendar}-->
+        <div class="aright">
+            <button class="calendar-close-button {isCalendarShown}" event-click="hideCalendar">Close</button>
+        </div>
     </div>
     <div class="float_left">
+        &nbsp;
         <!--{buttonPublicHolidays}-->
     </div>
     <div class="float_left">
+        &nbsp;
         <!--{buttonAdmin}-->
     </div>
     <div id="content">

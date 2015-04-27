@@ -8,6 +8,7 @@ var Agenda = require('../agenda/index.js');
 
 module.exports = Page.subclass({
     name: 'teamPage',
+    title: 'Team schedule',
     emit_applyDayType: basis.event.create('applyDayType', 'typeId'),
     handler: {
         applyDayType: function (sender, typeId) {
