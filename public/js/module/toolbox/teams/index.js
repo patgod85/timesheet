@@ -21,6 +21,7 @@ module.exports = basis.ui.Node.subclass({
     }),
     handler: {
         update: function(){
+
             var teams = this.data.teams;
             var arr = [];
 

@@ -6,6 +6,7 @@ var Page = require('./page.js');
 var TeamsTree = require('../admin/index.js');
 var TeamForm = require('../team/form.js');
 var EmployeeForm = require('../employee/form.js');
+var UserForm = require('../user/form.js');
 
 
 module.exports = Page.subclass({
@@ -24,7 +25,16 @@ module.exports = Page.subclass({
         employeeForm: {
             instanceOf: EmployeeForm,
             existsIf: function(owner){
-                return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
+                return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname') && !owner.data.adminEdit.delegate.data.hasOwnProperty('is_super');
+            },
+            delegate: function(owner){
+                return owner.delegate.data.adminEdit.delegate;
+            }
+        },
+        userForm: {
+            instanceOf: UserForm,
+            existsIf: function(owner){
+                return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname') && owner.data.adminEdit.delegate.data.hasOwnProperty('is_super');
             },
             delegate: function(owner){
                 return owner.delegate.data.adminEdit.delegate;
@@ -34,6 +44,7 @@ module.exports = Page.subclass({
     },
     binding: {
         teamForm: "satellite:",
+        userForm: "satellite:",
         employeeForm: "satellite:"
     },
     init: function(){
@@ -84,6 +95,13 @@ module.exports = Page.subclass({
                 selectItemInTree(self.getChildByName("TeamsTree"), 'team', id);
             }
         });
+
+        this.router.add('admin/user/:id', {
+            match: function(id){
+                self.select();
+                selectItemInTree(self.getChildByName("TeamsTree"), 'user', id);
+            }
+        });
     },
     handler: {
         select: function(node, type, id){
@@ -105,7 +123,7 @@ function selectItemInTree(tree, type, id){
         }
         else {
             for (var j = 0; j < treeItems[i].childNodes.length; j++) {
-                if (treeItems[i].childNodes[j].delegate.data.id == id) {
+                if (treeItems[i].childNodes[j].delegate.data.id == id && treeItems[i].childNodes[j].name == type) {
                     treeItems[i].childNodes[j].select();
                     return;
                 }

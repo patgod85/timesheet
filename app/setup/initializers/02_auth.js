@@ -26,11 +26,16 @@ module.exports = function (done) {
             password,
             function(err,user){
 
+                function sanitizeAndDone(user){
+                    delete user.password;
+                    done(null, user);
+                }
+
                 return err
                     ? done(err)
                     : user
                     ? password === user.password
-                    ? done(null, user)
+                    ? sanitizeAndDone(user)
                     : done(null, false, { message: 'Incorrect password.' })
                     : done(null, false, { message: 'Incorrect username.' });
             }

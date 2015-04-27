@@ -13,9 +13,11 @@ module.exports = function(dataSource) {
         sorting: basis.getter('data.id')
     };
 
-    var FileNode = basis.ui.tree.Node.subclass({
+    var EmployeeNode = basis.ui.tree.Node.subclass({
+        name: "employee",
         binding: {
-            title: 'data:name'
+            title: 'data:name',
+            type: 'employee'
         },
         handler: {
             select: function(){
@@ -24,7 +26,24 @@ module.exports = function(dataSource) {
         }
     });
 
-    var FolderNode = basis.ui.tree.Folder.subclass({
+    var UserNode = basis.ui.tree.Node.subclass({
+        template:
+            '<b:include src="basis.ui.tree.Node" class="selection-red">' +
+            '</b:include>',
+        name: "user",
+        binding: {
+            title: 'data:name',
+            type: 'user'
+        },
+        handler: {
+            select: function(){
+                this.parentNode.parentNode.emit_select('user', this.delegate);
+            }
+        }
+    });
+
+    var TeamNode = basis.ui.tree.Folder.subclass({
+        name: "team",
         binding: {
             title: 'data:name'
         },
@@ -55,10 +74,15 @@ module.exports = function(dataSource) {
         dataSource: dataSource.getSubset('/'),
         childFactory: function(config){
             if(config.delegate.data.hasOwnProperty('surname')) {
-                return new FileNode(config);
+                if(config.delegate.data.hasOwnProperty('is_super')) {
+                    return new UserNode(config);
+                }
+                else{
+                    return new EmployeeNode(config);
+                }
             }
             else {
-                return new FolderNode(basis.object.extend({childFactory: this.childFactory}, config));
+                return new TeamNode(basis.object.extend({childFactory: this.childFactory}, config));
             }
         },
         init: function () {

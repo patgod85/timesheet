@@ -33,15 +33,18 @@ var model = new basis.data.Object({
                 success: function(transport, request, response){
                     response.Team = require("./module/team/entity.js");
                     response.Employee = require("./module/employee/entity.js");
+                    response.User = require("./module/user/entity.js");
                     response.Team.all.sync(response.teams);
                     response.Employee.all.sync(response.employees);
+                    response.User.all.sync(response.users || []);
 
                     response.employeesByTeams = new basis.data.dataset.Split({
                         source:
                             new basis.data.dataset.Merge({
                                 sources: [
                                     response.Team.all,
-                                    response.Employee.all
+                                    response.Employee.all,
+                                    response.User.all
                                 ]
                             }),
                         rule:
@@ -61,6 +64,8 @@ var model = new basis.data.Object({
     }
 });
 
+new Toolbox({delegate: model});
+
 new User({
     authCallback: function(user){
 
@@ -69,8 +74,6 @@ new User({
         model.sync(function(){
 
             router.start();
-
-            new Toolbox({delegate: model});
 
             pages = new Pages({
                 delegate: model,

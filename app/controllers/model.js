@@ -5,6 +5,7 @@ var dayTypeRepository = require('../domain/dayType');
 var publicHolidayRepository = require('../domain/publicHoliday');
 var employeeRepository = require('../domain/employee');
 var teamRepository = require('../domain/team');
+var userRepository = require('../domain/user');
 
 module.exports = function (request, response) {
 
@@ -34,9 +35,20 @@ module.exports = function (request, response) {
 
                 model.dayTypes = types;
 
+                if(request.user.is_super) {
+                    return userRepository.getAll();
+                }
+                else{
+                    resolve(model);
+                }
+            })
+            .then(function (users) {
+                model.users = users;
+
                 resolve(model);
             })
             .catch(function () {
+console.log(arguments);
                 reject('Fail on fetching of model');
             });
     });

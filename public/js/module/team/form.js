@@ -18,7 +18,7 @@ module.exports = basis.ui.form.Form.subclass({
                 }
             })
         },
-        addButton: {
+        addEmployeeButton: {
             instanceOf: basis.ui.button.Button.subclass({
                 caption: 'Add new employee',
                 click: function () {
@@ -37,11 +37,30 @@ module.exports = basis.ui.form.Form.subclass({
                     this.owner.owner.delegate.data.Employee(newVar);
                 }
             })
+        },
+        addUserButton: {
+            instanceOf: basis.ui.button.Button.subclass({
+                caption: 'Add new user',
+                click: function () {
+                    var d = this.owner.data;
+                    var newVar = {
+                        path: d.path + d.code + '/',
+                        team_code: d.code,
+                        id: 0,
+                        name: "New user",
+                        surname: "New user",
+                        is_super: false,
+                        team_id: d.id
+                    };
+                    this.owner.owner.delegate.data.User(newVar);
+                }
+            })
         }
     },
     binding: {
         submitButton: "satellite:",
-        addButton: "satellite:"
+        addEmployeeButton: "satellite:",
+        addUserButton: "satellite:"
     },
     childFactory: function(config){
         return new FormInput(config);

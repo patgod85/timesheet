@@ -226,6 +226,21 @@ table.month {
     background-color: #f4eee3;
     border: 1px solid #debdad;
     padding: 5px 10px;
+
+    .form {
+        margin: 5px auto;
+        background-color: #faf4e9;
+        border: 1px solid #ede7dc;
+        padding: 5px 10px;
+
+        div {
+            margin: 5px 0;
+        }
+
+        input[type=text] {
+            width: 100%;
+        }
+    }
 }
 
 .page-unselected {
@@ -288,3 +303,11 @@ table.month {
 .acenter {text-align: center;}
 
 #username {font-weight: bold;}
+
+.Basis-Tree {
+    li.selection-red {
+        span{
+            color: red;
+        }
+    }
+}

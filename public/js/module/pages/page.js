@@ -7,6 +7,7 @@ module.exports = basis.ui.Node.subclass({
             '<div{childNodesElement}/>' +
             '<!--{teamForm}-->' +
             '<!--{employeeForm}-->' +
+            '<!--{userForm}-->' +
         '</div>',
     binding: {
         name: 'title'

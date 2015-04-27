@@ -1,5 +1,6 @@
 var passport = require("passport");
 var jade = require('jade');
+var userRepository = require('../domain/user');
 
 function result(res, body, contentType){
 
@@ -58,5 +59,32 @@ module.exports.whoami = function(req, res) {
     }else{
         result(res, JSON.stringify({success: false}));
     }
+};
 
+module.exports.update = function(request, response){
+
+    var user = request.body;
+
+    userRepository
+        .isSuper(request.user)
+        .then(function(){
+            return userRepository.update(user);
+        })
+        .then(function(){
+
+            var body = JSON.stringify({success: true});
+
+            response.writeHead(200, {
+                "content-type": "application/json",
+                "content-length": body.length
+            });
+
+            response.write(body);
+            response.end();
+        })
+        .catch(function(){
+            response.writeHead(400, {});
+            response.write('Action failed');
+            response.end();
+        });
 };

@@ -30,6 +30,7 @@ module.exports = function () {
     //this.get('/day-types', controllers.dayTypes({}));
     this.post('/set-type', controllers.setType);
     this.post('/public-holidays/update', controllers.publicHolidays.update);
+    this.post('/user/update', controllers.users.update);
 
     this.get('/whoami', controllers.users.whoami);
     this.post('/login', controllers.users.login);
