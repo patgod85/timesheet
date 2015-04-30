@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var jade = require('gulp-jade');
 var sass = require('gulp-sass');
+var rename = require('gulp-rename');
 var minifyCSS = require('gulp-minify-css');
 
 gulp.task('sass', function () {
@@ -14,11 +15,12 @@ gulp.task('default', ['templates', "sass"]);
 
 gulp.task('templates', function() {
     var LOCALS = {
-        title: "Timesheet page",
+        title: "Timesheet",
         user: "%username%"
     };
 
-    gulp.src('./app/views/basis.jade')
+    gulp.src('./app/views/dev.jade')
         .pipe(jade(LOCALS))
+        .pipe(rename('basis.html'))
         .pipe(gulp.dest('./public/'))
 });

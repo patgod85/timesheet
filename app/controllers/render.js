@@ -11,7 +11,7 @@ var jade = require('jade');
 
 
 
-module.exports.index = function(req, response) {
+module.exports.login = function(req, response) {
 
     var body = jade.renderFile('app/views/login.jade', { user : req.user });
     response.writeHead(200, {"Content-Type": "text/html"});

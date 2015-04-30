@@ -45,6 +45,12 @@ module.exports = basis.ui.Node.subclass({
                 this.owner.action.navigateToAdmin(this.owner.data);
             }
         }),
+        buttonReports: new basis.ui.button.Button({
+            caption: 'Reports',
+            click: function () {
+                router.navigate('reports');
+            }
+        }),
         teamsList: "satellite:teamsList"
     },
     action: {

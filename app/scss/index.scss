@@ -311,3 +311,19 @@ table.month {
         }
     }
 }
+
+.report {
+    width: 100%;
+    border-collapse: collapse;
+
+    td {
+        border: 1px solid #747357;
+        padding: 1px 3px;
+    }
+}
+
+.agenda {
+    ul {
+        list-style-type: none;
+    }
+}

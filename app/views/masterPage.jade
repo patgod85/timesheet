@@ -2,19 +2,23 @@ doctype html
 html(lang="en")
     head
         meta(charset="utf-8")
-        title My Site - #{title}
-        block scripts
+        title Timesheet - #{title}
+
 
         link(href='/css/index.css', rel="stylesheet")
         script.
             var NODE_ENV = 'production';
     body
 
-        div#auth You authenticated as <strong>!{user}</strong>
+        div#auth
 
         block content
+            #toolbox
+            #placeHolder
+            #page
+
         block foot
             #footer
                 p patgod85.timesheet
 
-        script(src='/components/basis/src/basis.js', basis-config="autoload: './js/app'")
+        block scripts

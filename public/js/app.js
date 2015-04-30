@@ -7,6 +7,7 @@ var Pages = require('./module/pages/index.js');
 var Page1 = require('./module/pages/pagePublicHolidays.js');
 var Page2 = require('./module/pages/pageTeam.js');
 var Page3 = require('./module/pages/pageAdmin.js');
+var Page4 = require('./module/pages/pageReports.js');
 
 var pages;
 
@@ -96,7 +97,8 @@ new User({
                 childNodes: [
                     Page1,
                     Page2,
-                    Page3
+                    Page3,
+                    Page4
                 ]
             });
         });

@@ -12,6 +12,7 @@ var UserForm = require('../user/form.js');
 module.exports = Page.subclass({
     name: 'adminPage',
     title: 'Admin area',
+    template: resource('./template/admin.tmpl'),
     satellite: {
         teamForm: {
             instanceOf: TeamForm,
