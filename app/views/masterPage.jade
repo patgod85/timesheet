@@ -4,8 +4,9 @@ html(lang="en")
         meta(charset="utf-8")
         title Timesheet - #{title}
 
+        block styles
+            link(href='/css/index.css', rel="stylesheet")
 
-        link(href='/css/index.css', rel="stylesheet")
         script.
             var NODE_ENV = 'production';
     body
