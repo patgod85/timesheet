@@ -17,5 +17,15 @@ module.exports = basis.ui.calendar.Calendar.subclass({
 
             this.selectedDate.set(date.toDate());
         }
+    },
+    init: function(){
+        basis.ui.calendar.Calendar.prototype.init.call(this);
+
+        var date = moment()
+            .year(parseInt(this.data.year))
+            .month(this.data.month);
+
+        this.selectedDate.set(date.toDate());
+
     }
 });

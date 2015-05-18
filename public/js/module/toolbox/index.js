@@ -33,6 +33,32 @@ module.exports = basis.ui.Node.subclass({
             return node.data.month + ' ' + node.data.year;
         },
         isCalendarShown: "data:",
+        buttonPrevMonth: new basis.ui.button.Button({
+            caption: '<<',
+            template: resource('../form/template/float-left-button.tmpl'),
+            click: function () {
+                var date = moment()
+                    .year(parseInt(this.owner.data.year))
+                    .month(this.owner.data.month);
+
+                date.subtract(1, 'month');
+
+                this.owner.emit_monthChange(date);
+            }
+        }),
+        buttonNextMonth: new basis.ui.button.Button({
+            caption: '>>',
+            template: resource('../form/template/float-left-button.tmpl'),
+            click: function () {
+                var date = moment()
+                    .year(parseInt(this.owner.data.year))
+                    .month(this.owner.data.month);
+
+                date.add(1, 'month');
+
+                this.owner.emit_monthChange(date);
+            }
+        }),
         buttonPublicHolidays: new basis.ui.button.Button({
             caption: 'Public holidays',
             click: function () {
@@ -88,6 +114,9 @@ module.exports = basis.ui.Node.subclass({
             }
             this.updateBind('date');
             this.update({isCalendarShown: false});
+        },
+        update: function(){
+            this.updateBind('date');
         }
     }
 });

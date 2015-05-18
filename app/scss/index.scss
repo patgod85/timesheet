@@ -147,14 +147,20 @@ table.month {
     }
 
     .calendar-wrapper {
+
+        padding: 3px 5px;
+        background-color: #f4df84;
+        border: 1px solid #f4c068;
+
         position: absolute;
         z-index: 2;
+        top: 30px;
 
         .calendar-close-button {
             display: none;
 
             &.isCalendarShown {
-                display: block;
+                display: inline;
             }
         }
     }
