@@ -40,7 +40,7 @@ module.exports = basis.ui.Node.subclass({
                 if(isEntity){
 
 //console.log(date.format(), this.data.entity.work_start, this.data.entity.work_end, date.isSame(this.data.entity.work_end, 'day'));
-                    if( isEndSet && (date.isBetween(this.data.entity.work_start, this.data.entity.work_end) || date.isSame(this.data.entity.work_end, 'day')) || !isEndSet && date.isAfter(this.data.entity.work_start)){
+                    if( isEndSet && (date.isBetween(this.data.entity.work_start, this.data.entity.work_end) || date.isSame(this.data.entity.work_end, 'day')) || !isEndSet && date.isAfter(this.data.entity.work_start) && date.isBefore(moment())){
                         if(isWeekend || hasType){
                             name = "";
                         }else{
