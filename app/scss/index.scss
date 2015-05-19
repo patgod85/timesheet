@@ -66,6 +66,16 @@ body {
     position: relative;
 }
 
+#github {
+    position: absolute;
+    left: 0;
+    top:0;
+
+    img {
+        width: 32px;
+    }
+}
+
 .auth_info {
     text-align: right;
     color: #005200;

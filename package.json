@@ -9,11 +9,6 @@
         "express" : "3.x",
         "http-auth": "*",
         "cors": "*",
-        "gulp": "*",
-        "gulp-jade": "*",
-        "gulp-rename": "*",
-        "gulp-sass": "*",
-        "gulp-minify-css": "*",
         "passport": "*",
         "passport-local": "*",
         "require-tree": "*",
@@ -25,7 +20,11 @@
         "vow": "0.4.*"
     },
     "devDependencies" : {
-
+        "gulp": "*",
+        "gulp-jade": "*",
+        "gulp-rename": "*",
+        "gulp-sass": "*",
+        "gulp-minify-css": "*"
     },
     "scripts": { "start": "set NODE_ENV=production && node app"}
 }
