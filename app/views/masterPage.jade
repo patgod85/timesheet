@@ -10,9 +10,7 @@ html(lang="en")
         script.
             var NODE_ENV = 'production';
     body
-        div#github
-            a(href="https://github.com/patgod85/timesheet" target="_blank")
-                img(src="/images/github.png")
+
         div#auth
 
         block content
@@ -22,6 +20,9 @@ html(lang="en")
 
         block foot
             #footer
-                p patgod85.timesheet
+                p
+                    a(href="https://github.com/patgod85/timesheet" target="_blank")
+                        img(src="/images/github.png" align="absmiddle")
+                        |&nbsp;patgod85.timesheet
 
         block scripts

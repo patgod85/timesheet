@@ -66,16 +66,6 @@ body {
     position: relative;
 }
 
-#github {
-    position: absolute;
-    left: 0;
-    top:0;
-
-    img {
-        width: 32px;
-    }
-}
-
 .auth_info {
     text-align: right;
     color: #005200;
@@ -84,6 +74,18 @@ body {
 #footer {
     text-align: center;
     color: firebrick;
+
+    a{
+        text-decoration: none;
+
+        &:hover {
+            color: black;
+        }
+
+        img {
+            width: 32px;
+        }
+    }
 }
 
 table.month {
