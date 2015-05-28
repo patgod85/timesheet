@@ -17,7 +17,8 @@
         "bootable-environment": "*",
         "up-express-logger": "*",
         "process-pwd": "*",
-        "vow": "0.4.*"
+        "vow": "0.4.*",
+        "moment": "*"
     },
     "devDependencies" : {
         "gulp": "*",

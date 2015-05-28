@@ -26,11 +26,11 @@ module.exports = basis.ui.Node.subclass({
             for(var i in item.data.days){
 
                 if(item.data.days.hasOwnProperty(i)){
-                    if(item.data.days[i].day_type_id == 1){
+                    if(item.data.days[i] == 1){
                         count--;
                     }
 
-                    if(item.data.days[i].day_type_id == 8){
+                    if(item.data.days[i] == 8){
                         count++;
                     }
 

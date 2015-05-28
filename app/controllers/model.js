@@ -18,16 +18,16 @@ module.exports = function (request, response) {
             .then(function (teams) {
                 model.teams = teams;
 
-                return employeeRepository.getAll(request.user);
-            })
-            .then(function (employees) {
-                model.employees = employees;
-
                 return publicHolidayRepository.getAll();
             })
             .then(function (publicHolidays) {
 
                 model.publicHolidays = publicHolidays;
+
+                return employeeRepository.getAll(request.user, publicHolidays);
+            })
+            .then(function (employees) {
+                model.employees = employees;
 
                 return dayTypeRepository.getAll()
             })
@@ -48,7 +48,6 @@ module.exports = function (request, response) {
                 resolve(model);
             })
             .catch(function () {
-console.log(arguments);
                 reject('Fail on fetching of model');
             });
     });

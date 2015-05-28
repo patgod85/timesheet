@@ -1,3 +1,4 @@
+var moment = require('../../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
 var router = basis.require('basis.router');
 
@@ -15,8 +16,8 @@ var modelUrl = '/model';
 
 var model = new basis.data.Object({
     data: {
-        month: 'March',
-        year: 2015,
+        month: moment().format('MMMM'),
+        year: moment().format('YYYY'),
         team: '',
         teams: [],
         publicHolidays: {},

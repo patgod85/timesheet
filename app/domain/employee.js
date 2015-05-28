@@ -1,7 +1,8 @@
 var Vow = require("vow");
 var sqlite = require('./sqlite');
+var moment = require('moment');
 
-module.exports.getAll = function(user) {
+module.exports.getAll = function(user, publicHolidays) {
 
     return new Vow.Promise(function(resolve, reject){
 
@@ -42,16 +43,49 @@ module.exports.getAll = function(user) {
             })
             .then(function (days) {
 
-                var employees = {};
+                var employees = {},
+                    employeesDays = {};
 
-                for (var i = 0; i < _employees.length; i++) {
-                    employees[_employees[i].id] = _employees[i];
-                    employees[_employees[i].id].days = {};
-                    employees[_employees[i].id].path = '/' + employees[_employees[i].id].team_code + '/';
+                for (var i = 0; i < days.length; i++) {
+
+                    if(!employeesDays.hasOwnProperty(days[i].employee_id)){
+                        employeesDays[days[i].employee_id] = {};
+                    }
+
+                    employeesDays[days[i].employee_id][days[i].date] = days[i];
                 }
 
-                for (i = 0; i < days.length; i++) {
-                    employees[days[i].employee_id].days[days[i].date] = (days[i]);
+                for (i = 0; i < _employees.length; i++) {
+                    var e = _employees[i];
+
+                    e.days = {};
+                    e.path = '/' + e.team_code + '/';
+
+                    var iterationDate = moment(e.work_start, "YYYY-MM-DD"),
+                        lastWorkingDate = e.work_end ? moment(e.work_end, "YYYY-MM-DD") : moment(),
+                        daysWithTypes = employeesDays.hasOwnProperty(e.id) ? employeesDays[e.id] : {};
+
+                    do  {
+
+                        var format = iterationDate.format("YYYY-MM-DD"),
+                            isWeekend = [6, 7].indexOf(iterationDate.isoWeekday()) != -1,
+                            isPublicHoliday = publicHolidays.hasOwnProperty(format),
+                            hasType = daysWithTypes.hasOwnProperty(format);
+
+                        if(hasType){
+
+                            e.days[format] = daysWithTypes[format].day_type_id;
+                        }
+                        else if(!isWeekend && !isPublicHoliday){
+                            e.days[format] = 4;
+                        }
+
+                        iterationDate.add(1, 'd');
+                    }
+                    while (iterationDate.isBefore(lastWorkingDate));
+
+
+                    employees[_employees[i].id] = e;
                 }
 
                 resolve(

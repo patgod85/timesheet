@@ -19,59 +19,29 @@ module.exports = basis.ui.Node.subclass({
     },
     handler: {
         update: function(){
-            var childNodes = [];
 
-            var month = moment().year(this.data.year).month(this.data.month);
+            var childNodes = [],
+                month = moment().year(this.data.year).month(this.data.month);
+
             this.data.workingDays = 0;
             this.data.name = month.format('MMMM');
 
-            var isEntity = typeof this.data.entity !== 'undefined',
-                isEndSet = isEntity && typeof this.data.entity.work_end !== 'undefined' && this.data.entity.work_end !== 'null';
+            var isEntity = typeof this.data.entity !== 'undefined';
 
             for(var i = 0; i < month.daysInMonth(); i++){
-                var date = month.date(i + 1);
-                var isWeekend = [6, 7].indexOf(date.isoWeekday()) != -1;
+
+                var date = month.date(i + 1),
+                    isWeekend = [6, 7].indexOf(date.isoWeekday()) != -1;
+
                 if(!isWeekend){
                     this.data.workingDays++;
-                }
-                var name = i + 1;
-                var hasType = isEntity && this.data.entity.days.hasOwnProperty(date.format("YYYY-MM-DD"));
-
-                if(isEntity){
-
-//console.log(date.format(), this.data.entity.work_start, this.data.entity.work_end, date.isSame(this.data.entity.work_end, 'day'));
-                    if( isEndSet && (date.isBetween(this.data.entity.work_start, this.data.entity.work_end) || date.isSame(this.data.entity.work_end, 'day')) || !isEndSet && date.isAfter(this.data.entity.work_start) && date.isBefore(moment())){
-                        if(isWeekend || hasType){
-                            name = "";
-                        }else{
-                            name = "1";
-                        }
-                    }
-                    else{
-                        name = '-';
-                    }
-                }
-
-                var isPublicHoliday = this.data.publicHolidays.hasOwnProperty(date.format("YYYY-MM-DD"));
-
-                if(hasType){
-                    var type = this.data.entity.days[date.format("YYYY-MM-DD")].day_type_id;
-                }
-                else if(isPublicHoliday){
-                    type = 3;
-                    if(isEntity) {
-                        name = "";
-                    }
-                }
-                else{
-                    type = '';
                 }
 
                 childNodes.push(new Day({data: {
                     day: i+1,
-                    title: name,
+                    title: !isEntity ? i + 1 : getName(date.format("YYYY-MM-DD"), this.data.entity.days, isWeekend),
                     weekend: isWeekend,
-                    type: type
+                    type: !isEntity ? '' : getType(date.format("YYYY-MM-DD"), this.data.entity.days, this.data.publicHolidays)
                 }}));
             }
 
@@ -81,3 +51,32 @@ module.exports = basis.ui.Node.subclass({
         }
     }
 });
+
+
+function getType(dateInString, daysWithType, publicHolidays){
+
+    var isPublicHoliday = publicHolidays.hasOwnProperty(dateInString);
+
+    if(daysWithType.hasOwnProperty(dateInString)){
+        var type = daysWithType[dateInString];
+    }
+    else if(isPublicHoliday){
+        type = 3;
+    }
+    else{
+        type = '';
+    }
+
+    return type;
+}
+
+function getName(dateInString, daysWithType, isWeekend){
+    if(daysWithType.hasOwnProperty(dateInString) || isWeekend){
+        var name = "";
+    }
+    else{
+        name = '-';
+    }
+
+    return name;
+}
