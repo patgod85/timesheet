@@ -1,4 +1,4 @@
-var moment = require('../../components/moment/moment.js');
+var moment = require('../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
 var router = basis.require('basis.router');
 
