@@ -4,7 +4,7 @@
     },
 
     "session": {
-        "secret": "secret_key",
+        "secret": "demo_omed_secret_key",
         "key": "cid",
         "cookie": {
             "path": "/",
@@ -12,8 +12,6 @@
             "maxAge": null
         }
     },
-
-    "credentials": ["admin","password"],
 
     "database": {
         "path": "db/example.sqlite3"
