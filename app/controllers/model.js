@@ -9,6 +9,11 @@ var userRepository = require('../domain/user');
 
 module.exports = function (request, response) {
 
+    var query = url.parse(request.url, true).query;
+
+    if(query.hasOwnProperty('downgrade-permissions')){
+        request.user.is_super = 0;
+    }
 
     var promise = new Vow.Promise(function(resolve, reject) {
 
