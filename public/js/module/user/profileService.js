@@ -1,7 +1,7 @@
 var ajax = require('basis.net.ajax');
 
 module.exports = {
-    whoami: function(done){
+    whoami: function(done, fail){
         return new ajax.Transport({
             url: '/whoami',
             method: 'GET',
@@ -10,6 +10,10 @@ module.exports = {
                     if (response.success) {
                         done(response);
                     }
+                    else{
+                        fail(response);
+                    }
+
                 }
             }
         })

@@ -1,77 +1,66 @@
 require("basis.ui");
+require('basis.ui.form');
 require('basis.ui.button');
 require('basis.ui.field');
 
 var profileService = require('./profileService.js');
 
-var LoginForm = basis.ui.Node.subclass({
-    data: {
-        username: 'victor',
-        password: 'victor1'
-    },
+var loginForm = new basis.ui.form.FormContent({
     name: 'LoginForm',
-    template: resource('./template/loginForm.tmpl'),
-    satellite: {
-        username: {
-            instanceOf: basis.ui.field.Text.subclass({
-                title: 'Login',
-                action: {
-                    keyup: function (event) {
-                        this.owner.update({
-                            username: event.sender.value
-                        });
-                    }
-                }
-            }),
-            config: function (owner) {
-                return {
-                    value: owner.data.username
+    childNodes: [
+        {
+            type: 'text',
+            title: 'Login',
+            name: 'username',
+            action: {
+                keyup: function (event) {
+                    this.parentNode.update({
+                        username: event.sender.value
+                    });
                 }
             }
         },
-        password: {
-            instanceOf: basis.ui.field.Password.subclass({
-                title: 'Password',
-                action: {
-                    keyup: function (event) {
-                        this.owner.update({
-                            password: event.sender.value
-                        });
-                    }
-                }
-            }),
-            config: function (owner) {
-                return {
-                    value: owner.data.password
+        {
+            type: 'password',
+            title: 'Password',
+            name: 'password',
+            action: {
+                keyup: function (event) {
+                    this.parentNode.update({
+                        password: event.sender.value
+                    });
                 }
             }
         }
-    },
-    binding: {
-        button: new basis.ui.button.Button({
+    ],
+    onSubmit: function(data){
+        var self = this;
+        profileService
+            .signIn(function (data){
+                self.parentNode.owner.authCallback(data.user);
+                self.parentNode.owner.update({loggedInAs: data.user.name});
+            })
+            .request({
+                postBody: JSON.stringify({
+                    username: data.username,
+                    password: data.password
+                })
+            });
+    }
+});
+
+var LoginFormWrapper = basis.ui.Node.subclass({
+    name: 'LoginFormWrapper',
+    template: resource('./template/loginForm.tmpl'),
+    childNodes: [
+        loginForm,
+        new basis.ui.button.Button({
             caption: 'Sign in',
             click: function () {
-                this.owner.action.signIn(this.owner, this.owner.data);
+                loginForm.submit();
             }
-        }),
-        username: "satellite:username",
-        password: "satellite:password"
-    },
-    action: {
-        signIn: function (self, data) {
-            profileService
-                .signIn(function (data){
-                    self.owner.authCallback(data.user);
-                    self.owner.update({loggedInAs: data.user.name});
-                })
-                .request({
-                    postBody: JSON.stringify({
-                        username: data.username,
-                        password: data.password
-                    })
-                });
-        }
-    }
+        })
+    ]
 });
 
 var LoginStatus = basis.ui.Node.subclass({
@@ -99,9 +88,9 @@ module.exports = basis.ui.Node.subclass({
     },
     satellite: {
         loginForm: {
-            instanceOf: LoginForm,
+            instanceOf: LoginFormWrapper,
             existsIf: function(owner){
-                return owner.data.loggedInAs == ''
+                return owner.data.loggedInAs == '';
             }
         },
         loginStatus: {
@@ -119,12 +108,32 @@ module.exports = basis.ui.Node.subclass({
     init: function(){
         var self = this;
         basis.ui.Node.prototype.init.call(this);
-        profileService
-            .whoami(function (data){
-                self.update({loggedInAs: data.user.name});
 
-                self.authCallback(data.user);
-            })
+        profileService
+            .whoami(
+                function (data){
+
+                    self.update({loggedInAs: data.user.name});
+                    self.authCallback(data.user);
+
+                },
+                function(data){
+
+                    if(data) {
+                        var loginForm = self.satellite.loginForm.getChildByName('LoginForm');
+
+                        var usernameField = loginForm.getChildByName('username');
+
+                        usernameField.value = data.username;
+                        usernameField.updateBind('value');
+
+                        var passwordField = loginForm.getChildByName('password');
+
+                        passwordField.value = data.password;
+                        passwordField.updateBind('value');
+                    }
+                }
+            )
             .request();
     }
 });

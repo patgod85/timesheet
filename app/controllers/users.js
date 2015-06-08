@@ -57,7 +57,16 @@ module.exports.whoami = function(req, res) {
     if(req.user){
         result(res, JSON.stringify({success: true, user: req.user}));
     }else{
-        result(res, JSON.stringify({success: false}));
+
+        var model = {success: false, username: '', password: ''};
+        var node_env = process.env.NODE_ENV || 'demo';
+
+        if(node_env != 'production'){
+            model.username = 'victor';
+            model.password = 'victor1';
+        }
+
+        result(res, JSON.stringify(model));
     }
 };
 
