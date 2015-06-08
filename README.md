@@ -17,3 +17,9 @@ User should be able to fill timesheet of employees of his team.
 Demo:
 
 <https://patgod85-timesheet.herokuapp.com/>
+
+Relative projects
+-----
+
+- [Parser for XLS-files with data](/patgod85/timesheet-xls-parser)
+- [Windows Form Client for quick updating of today's data](/patgod85/timesheet-win-client)
