@@ -1,5 +1,25 @@
+var bcrypt = require('bcrypt-nodejs');
 var Vow = require("vow");
 var sqlite = require('./sqlite');
+
+/**
+ * SECRET BEGIN
+ */
+/*
+bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash('bacon', salt, null, function(err, hash) {
+        console.log(
+            hash,
+            bcrypt.compareSync("bacon", hash),
+            bcrypt.compareSync("veggies", hash)
+        );
+    });
+});
+*/
+/**
+ * SECRET END
+ */
+
 
 var publicFields = [
     'id',
@@ -36,19 +56,30 @@ module.exports.findById = function(id, done) {
         });
 };
 
-module.exports.findByNameAndPassword = function(username, password, done) {
+module.exports.findByNameAndPassword = function(username, password) {
 
-    sqlite.connect()
-        .then(sqlite.serialize)
-        .then(function(db) {
-            sqlite.get(db, "SELECT " + publicFields.join(",") + ", password FROM user WHERE name = ? AND password = ?", [username, password])
-                .then(function (user) {
-                    done(null, user);
-                })
-                .catch(function(){
-                    done(null, false, {message: 'Incorrect password.'});
-                });
-        });
+    return new Vow.Promise(function(resolve, reject) {
+
+        sqlite.connect()
+            .then(sqlite.serialize)
+            .then(function (db) {
+                sqlite.get(db, "SELECT " + publicFields.join(",") + ", password FROM user WHERE name = ?", [username])
+                    .then(function (user) {
+
+                        bcrypt.compare(password, user.password, function (err, res) {
+                            if (res) {
+                                delete user.password;
+                                resolve(user);
+                            } else {
+                                reject('Incorrect password');
+                            }
+                        });
+                    })
+                    .catch(function () {
+                        reject('Incorrect username');
+                    });
+            });
+    });
 };
 
 module.exports.getAll = function() {

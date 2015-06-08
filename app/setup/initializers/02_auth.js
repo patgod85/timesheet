@@ -14,32 +14,20 @@ var LocalStrategy  = require('passport-local').Strategy;
 // Setup variables for jade
 module.exports = function (done) {
 
-    var User = require('../../domain/user');
+    var UserRepository = require('../../domain/user');
 
     passport.use(new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'
     }, function (username, password, done) {
 
-        User.findByNameAndPassword(
-            username,
-            password,
-            function(err,user){
-
-                function sanitizeAndDone(user){
-                    delete user.password;
-                    done(null, user);
-                }
-
-                return err
-                    ? done(err)
-                    : user
-                    ? password === user.password
-                    ? sanitizeAndDone(user)
-                    : done(null, false, { message: 'Incorrect password.' })
-                    : done(null, false, { message: 'Incorrect username.' });
-            }
-        );
+        UserRepository.findByNameAndPassword(username, password)
+            .then(function(user){
+                done(null, user);
+            })
+            .catch(function(){
+                done(null, false, { message: 'Incorrect username or password' });
+            })
     }));
 
     passport.serializeUser(function(user, done) {
@@ -48,7 +36,7 @@ module.exports = function (done) {
 
 
     passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err,user){
+        UserRepository.findById(id, function(err,user){
             err
                 ? done(err)
                 : done(null,user);

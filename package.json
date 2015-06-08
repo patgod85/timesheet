@@ -18,7 +18,8 @@
         "up-express-logger": "*",
         "process-pwd": "*",
         "vow": "0.4.*",
-        "moment": "*"
+        "moment": "*",
+        "bcrypt-nodejs": "*"
     },
     "devDependencies" : {
         "gulp": "*",
