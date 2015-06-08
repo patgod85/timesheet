@@ -28,11 +28,13 @@ CREATE TABLE [employee_day](
 
 CREATE TABLE [user](
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "email" TEXT NOT NULL UNIQUE,
+  "password" TEXT,
   "name" TEXT NOT NULL,
   "surname" TEXT NOT NULL,
-  "password" TEXT,
   "team_id" INTEGER NOT NULL REFERENCES  [team]("id"),
-  "is_super" BOOLEAN NOT NULL DEFAULT 0 CHECK (is_super IN (0,1))
+  "is_super" BOOLEAN NOT NULL DEFAULT 0 CHECK (is_super IN (0,1)),
+  "is_enabled" BOOLEAN NOT NULL DEFAULT 0 CHECK (is_enabled IN (0,1))
 );
 
 CREATE TABLE [public_holiday](

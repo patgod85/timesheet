@@ -256,7 +256,7 @@ table.month {
             margin: 5px 0;
         }
 
-        input[type=text] {
+        input[type=text], input[type=password] {
             width: 100%;
         }
     }
@@ -320,8 +320,6 @@ table.month {
 
 .aright {text-align: right;}
 .acenter {text-align: center;}
-
-#username {font-weight: bold;}
 
 .Basis-Tree {
     li.selection-red {

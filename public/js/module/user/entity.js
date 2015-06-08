@@ -6,9 +6,12 @@ module.exports = new entity.EntityType({
         path: String,
         team_code: String,
         id: basis.entity.IntId,
+        email: String,
         name: String,
         surname: String,
         team_id: String,
-        is_super: Boolean
+        is_super: Boolean,
+        is_enabled: Boolean,
+        new_password: String
     }
 });

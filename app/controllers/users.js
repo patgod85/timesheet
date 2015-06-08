@@ -62,7 +62,7 @@ module.exports.whoami = function(req, res) {
         var node_env = process.env.NODE_ENV || 'demo';
 
         if(node_env != 'production'){
-            model.username = 'victor';
+            model.username = 'victor@local';
             model.password = 'victor1';
         }
 
@@ -70,15 +70,40 @@ module.exports.whoami = function(req, res) {
     }
 };
 
-module.exports.update = function(request, response){
+module.exports.updateBySuperUser = function(request, response){
 
     var user = request.body;
 
     userRepository
         .isSuper(request.user)
         .then(function(){
-            return userRepository.update(user);
+            return userRepository.updateBySuperUser(user);
         })
+        .then(function(){
+
+            var body = JSON.stringify({success: true});
+
+            response.writeHead(200, {
+                "content-type": "application/json",
+                "content-length": body.length
+            });
+
+            response.write(body);
+            response.end();
+        })
+        .catch(function(){
+            response.writeHead(400, {});
+            response.write('Action failed');
+            response.end();
+        });
+};
+
+module.exports.updateProfile = function(request, response){
+
+    var user = request.body;
+
+    userRepository
+        .update(request.user, user)
         .then(function(){
 
             var body = JSON.stringify({success: true});

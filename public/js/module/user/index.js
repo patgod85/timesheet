@@ -10,7 +10,7 @@ var loginForm = new basis.ui.form.FormContent({
     childNodes: [
         {
             type: 'text',
-            title: 'Login',
+            title: 'Email',
             name: 'username',
             action: {
                 keyup: function (event) {
