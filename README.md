@@ -21,5 +21,5 @@ Demo:
 Relative projects
 -----
 
-- [Parser for XLS-files with data](/patgod85/timesheet-xls-parser)
-- [Windows Form Client for quick updating of today's data](/patgod85/timesheet-win-client)
+- [Parser for XLS-files with data](https://github.com/patgod85/timesheet-xls-parser)
+- [Windows Form Client for quick updating of today's data](https://github.com//patgod85/timesheet-win-client)
