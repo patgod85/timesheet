@@ -147,9 +147,9 @@ module.exports.updateBySuperUser = function(user){
                 else{
                     query =
                         ' INSERT INTO user '
-                        + ' (name, surname, is_super, team_id, password) '
-                        + ' VALUES (?, ?, ?, ?, ?) ';
-                    params = [user.name, user.surname, user.is_super, user.team_id, hash];
+                        + ' (email, name, surname, is_super, team_id, password) '
+                        + ' VALUES (?, ?, ?, ?, ?, ?) ';
+                    params = [user.email, user.name, user.surname, user.is_super, user.team_id, hash];
                 }
 
                 return sqlite.run(
