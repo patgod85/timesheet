@@ -17,6 +17,10 @@ module.exports = basis.ui.Node.subclass({
                     change: function(){
                         this.owner.changeDate(this.selectedDate.value);
                     }
+                },
+                init: function(){
+                    basis.ui.calendar.Calendar.prototype.init.call(this);
+                    this.selectedDate.set(moment(this.owner.delegate.data[this.owner.name]).toDate());
                 }
             }),
             existsIf: function(owner){

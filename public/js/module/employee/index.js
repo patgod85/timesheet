@@ -9,7 +9,8 @@ module.exports = basis.ui.Node.subclass({
     className: 'Employee',
     template: resource('./template/index.tmpl'),
     binding: {
-        name: "data.name"
+        name: "data.name",
+        surname: "data.surname"
     },
     init: function(){
         basis.ui.Node.prototype.init.call(this);

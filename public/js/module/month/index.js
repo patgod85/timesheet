@@ -31,31 +31,32 @@ module.exports = basis.ui.Node.subclass({
             for(var i = 0; i < month.daysInMonth(); i++){
 
                 var date = month.date(i + 1),
-                    isWeekend = [6, 7].indexOf(date.isoWeekday()) != -1;
+                    isWeekend = [6, 7].indexOf(date.isoWeekday()) != -1,
+                    dateInString = date.format("YYYY-MM-DD"),
+                    isPublicHoliday = this.data.publicHolidays.hasOwnProperty(dateInString);
 
-                if(!isWeekend){
+                if(!isWeekend && !isPublicHoliday){
                     this.data.workingDays++;
                 }
 
                 childNodes.push(new Day({data: {
                     day: i+1,
-                    title: !isEntity ? i + 1 : getName(date.format("YYYY-MM-DD"), this.data.entity.days, isWeekend),
+                    title: !isEntity ? i + 1 : getName(dateInString, this.data.entity.days, isWeekend, isPublicHoliday),
                     weekend: isWeekend,
-                    type: !isEntity ? '' : getType(date.format("YYYY-MM-DD"), this.data.entity.days, this.data.publicHolidays)
+                    type: !isEntity ? '' : getType(dateInString, this.data.entity.days, isPublicHoliday)
                 }}));
             }
 
             this.setChildNodes(childNodes);
 
             this.updateBind('name');
+            this.updateBind('workingDays');
         }
     }
 });
 
 
-function getType(dateInString, daysWithType, publicHolidays){
-
-    var isPublicHoliday = publicHolidays.hasOwnProperty(dateInString);
+function getType(dateInString, daysWithType, isPublicHoliday){
 
     if(daysWithType.hasOwnProperty(dateInString)){
         var type = daysWithType[dateInString];
@@ -70,8 +71,8 @@ function getType(dateInString, daysWithType, publicHolidays){
     return type;
 }
 
-function getName(dateInString, daysWithType, isWeekend){
-    if(daysWithType.hasOwnProperty(dateInString) || isWeekend){
+function getName(dateInString, daysWithType, isWeekend, isPublicHoliday){
+    if(daysWithType.hasOwnProperty(dateInString) || isWeekend || isPublicHoliday){
         var name = "";
     }
     else{
