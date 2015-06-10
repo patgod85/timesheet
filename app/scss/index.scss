@@ -1,59 +1,10 @@
 $day-width: 25px;
 
 @mixin day-types {
-    &.type_1 {
-        background-color: #349a67;
-        color: white;
-        span:before{
-            content: "OT";
-        };
-    }
-    &.type_2 {
-        background-color: #ffff02;
-    }
-    &.type_3 {
-        background-color: #ff0202;
-        color: white;
-    }
-    &.type_4 {
-        background-color: #ffffff;
-        span:before{
-            content: "1";
-        };
-    }
-    &.type_5 {
-        background-color: #979797;
-        color: white;
-        span:before{
-            content: "O";
-        };
-    }
-    &.type_6 {
-        background-color: #02ccff;
-        color: white;
-    }
-    &.type_7 {
-        background-color: #ff6702;
-        color: white;
-        span:before{
-            content: "2";
-        };
-    }
     &.type_8 {
-        background-color: #ff6702;
-        color: white;
         span:before{
-            content: "1/ot";
             font-size: 8pt;
         };
-    }
-    &.type_9 {
-        background-color: #810281;
-        color: white;
-    }
-    &.type_10 {
-        background-color: #ff8181;
-        color: white;
     }
 }
 

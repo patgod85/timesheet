@@ -16,7 +16,10 @@ CREATE TABLE "employee" (
 
 CREATE TABLE [day_type](
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-  "name" TEXT NOT NULL
+  "name" TEXT NOT NULL,
+  "title" TEXT,
+  "background_color" TEXT NOT NULL DEFAULT "ffffff",
+  "color" TEXT NOT NULL DEFAULT "000000"
   );
 
 CREATE TABLE [employee_day](
