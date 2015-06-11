@@ -6,10 +6,27 @@ var ajax = require('basis.net.ajax');
 var FormInput = require('../form/text.js');
 var FormDate = require('../form/date.js');
 
+var DataSet = basis.require('basis.data').Dataset;
+
+var MaternityLeave = require('../maternity-leave/index.js');
+
 module.exports = basis.ui.Node.subclass({
     name: 'EmployeeForm',
     template: resource('./template/form.tmpl'),
     satellite: {
+        maternityLeaves: {
+            instanceOf: MaternityLeave,
+            dataSource: function(owner){
+
+                var items = owner.data.maternity_leaves.map(function(item){
+                    return new basis.data.Object({
+                        data: item
+                    });
+                });
+
+                return new DataSet({items: items});
+            }
+        },
         submitButton: {
             instanceOf: basis.ui.button.Button.subclass({
                 caption: 'Save',
@@ -20,6 +37,7 @@ module.exports = basis.ui.Node.subclass({
         }
     },
     binding: {
+        maternityLeaves: "satellite:",
         submitButton: "satellite:"
     },
     childFactory: function(config){

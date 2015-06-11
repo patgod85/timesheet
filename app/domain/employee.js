@@ -1,6 +1,7 @@
 var Vow = require("vow");
 var sqlite = require('./sqlite');
 var moment = require('moment');
+var maternityLeaveRepository = require('./maternityLeave');
 
 module.exports.getAll = function(user, publicHolidays) {
 
@@ -9,13 +10,18 @@ module.exports.getAll = function(user, publicHolidays) {
         var userCondition = '',
             userConditionParams = [],
             _employees,
-            db;
+            db,
+            maternityLeave;
 
         sqlite.connect()
             .then(sqlite.serialize)
-            .then(function(_db) {
-
+            .then(function(_db){
                 db = _db;
+
+                return maternityLeaveRepository.getAll();
+            })
+            .then(function(_maternityLeave) {
+                maternityLeave = _maternityLeave;
 
                 if(!user.is_super){
                     userCondition = ' WHERE t.id = ? ';
@@ -60,20 +66,38 @@ module.exports.getAll = function(user, publicHolidays) {
 
                     e.days = {};
                     e.path = '/' + e.team_code + '/';
+                    e.maternity_leaves = [];
 
                     var iterationDate = moment(e.work_start, "YYYY-MM-DD"),
                         lastWorkingDate = e.work_end ? moment(e.work_end, "YYYY-MM-DD") : moment(),
-                        daysWithTypes = employeesDays.hasOwnProperty(e.id) ? employeesDays[e.id] : {};
+                        daysWithTypes = employeesDays.hasOwnProperty(e.id) ? employeesDays[e.id] : {},
+                        hasMaternityLeave = maternityLeave.hasOwnProperty(e.id);
+
+                    if(hasMaternityLeave){
+                        e.maternity_leaves = maternityLeave[e.id];
+                    }
 
                     do  {
 
                         var format = iterationDate.format("YYYY-MM-DD"),
                             isWeekend = [6, 7].indexOf(iterationDate.isoWeekday()) != -1,
                             isPublicHoliday = publicHolidays.hasOwnProperty(format),
-                            hasType = daysWithTypes.hasOwnProperty(format);
+                            hasType = daysWithTypes.hasOwnProperty(format),
+                            isMaternityLeave = false;
 
-                        if(hasType){
+                        if(hasMaternityLeave){
+                            for(var j = 0; j < e.maternity_leaves.length; j++){
+                                if(iterationDate.isBetween(moment(e.maternity_leaves[j].date_start, "YYYY-MM-DD"), moment(e.maternity_leaves[j].date_end_or_today, "YYYY-MM-DD")) || format == e.maternity_leaves[j].date_end_or_today || format == e.maternity_leaves[j].date_start){
+                                    isMaternityLeave = true;
+                                    break;
+                                }
+                            }
+                        }
 
+                        if(isMaternityLeave){
+                            e.days[format] = 11;
+                        }
+                        else if(hasType){
                             e.days[format] = daysWithTypes[format].day_type_id;
                         }
                         else if(!isWeekend && !isPublicHoliday){
@@ -82,7 +106,7 @@ module.exports.getAll = function(user, publicHolidays) {
 
                         iterationDate.add(1, 'd');
                     }
-                    while (iterationDate.isBefore(lastWorkingDate));
+                    while (iterationDate.isBefore(lastWorkingDate) || iterationDate.isSame(lastWorkingDate, 'day'));
 
 
                     employees[_employees[i].id] = e;
@@ -126,6 +150,16 @@ module.exports.update = function(employee){
                 }
 
                 return sqlite.run(db, query, params);
+            })
+            .then(function(){
+
+                var promises = [];
+
+                for(var i = 0; i < employee.maternity_leaves.length; i++){
+                    promises.push(maternityLeaveRepository.update(employee.maternity_leaves[i]));
+                }
+
+                return Vow.all(promises);
             })
             .then(resolve)
             .catch(reject);

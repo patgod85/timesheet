@@ -44,3 +44,11 @@ CREATE TABLE [public_holiday](
   "date" DATETIME NOT NULL PRIMARY KEY UNIQUE,
   "description" TEXT
 );
+
+CREATE TABLE [maternity_leave](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "employee_id" INTEGER NOT NULL,
+  "date_start" DATETIME NOT NULL,
+  "date_end" DATETIME,
+  FOREIGN KEY ("employee_id") REFERENCES [employee]("id") ON DELETE CASCADE ON UPDATE CASCADE
+);

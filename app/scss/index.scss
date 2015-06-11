@@ -8,6 +8,17 @@ $day-width: 25px;
     }
 }
 
+@mixin table {
+    border-collapse: collapse;
+
+    td {
+        border: 1px solid black;
+        width: $day-width;
+        text-align: center;
+
+    }
+}
+
 body {
     color: #004e4e;
     width: 900px;
@@ -39,27 +50,39 @@ body {
     }
 }
 
-table.month {
-    border-collapse: collapse;
+table.maternity-leaves {
+    @include table;
 
-    td {
-        border: 1px solid black;
-        width: $day-width;
+    margin: 10px auto;
+
+    caption {
+        color: lightcoral;
+    }
+
+    td.input-container {
+        width: 200px;
         text-align: center;
 
+        input[type="text"],
+        input[type="password"] {
+            width: 95%;
+        }
+    }
+}
 
-        &.clickable {
-            background-color: white;
 
-            &.weekend {
-                background-color: yellow;
-            }
+table.month {
 
-            @include day-types;
+    @include table;
+
+    td.clickable {
+        background-color: white;
+
+        &.weekend {
+            background-color: yellow;
         }
 
-
-
+        @include day-types;
     }
 }
 
@@ -189,7 +212,7 @@ table.month {
 //    }
 //}
 
-#page {
+.page {
     margin-top: 100px;
 
     background-color: #f4eee3;
