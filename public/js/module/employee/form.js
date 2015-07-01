@@ -49,6 +49,7 @@ module.exports = basis.ui.Node.subclass({
     childNodes: [
         {title: 'Name', name: 'name'},
         {title: 'Surname', name: 'surname'},
+        {title: 'Position', name: 'position'},
         {title: 'Work start', name: 'work_start', type: 'date'},
         {title: 'Work end', name: 'work_end', type: 'date'}
     ],

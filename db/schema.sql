@@ -8,6 +8,7 @@ CREATE TABLE "employee" (
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
   "name" TEXT NOT NULL,
   "surname" TEXT NOT NULL,
+  "position" TEXT,
   "work_start" DATETIME,
   "work_end" DATETIME,
   "team_id" INTEGER NOT NULL,

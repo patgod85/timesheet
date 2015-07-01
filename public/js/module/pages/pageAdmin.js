@@ -52,7 +52,7 @@ module.exports = Page.subclass({
         basis.ui.Node.prototype.init.call(this);
 
         var nodes = [
-            TeamsTree(this.delegate.data.employeesAndUsersByTeams)
+            TeamsTree(this.data.employeesAndUsersByTeams)
         ];
 
         if(this.data.user.is_super){

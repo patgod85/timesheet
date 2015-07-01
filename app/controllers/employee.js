@@ -21,7 +21,8 @@ module.exports.update = function(request, response){
                     response.write(body);
                     response.end();
                 })
-                .catch(function(){
+                .catch(function(reason){
+                    console.log(reason);
                     response.writeHead(400);
                     response.write('Error');
                     response.end();

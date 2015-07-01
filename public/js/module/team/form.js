@@ -4,7 +4,11 @@ require('basis.dom');
 require('basis.ui.form');
 
 var ajax = require('basis.net.ajax');
+var moment = require('../../../components/moment/moment.js');
+
 var FormInput = require('../form/text.js');
+
+var TeamsTree = require('../admin/index.js');
 
 module.exports = basis.ui.form.Form.subclass({
     name: 'TeamForm',
@@ -29,12 +33,18 @@ module.exports = basis.ui.form.Form.subclass({
                         id: 0,
                         name: "New employee",
                         surname: "New employee",
-                        work_start: new Date(),
+                        work_start: moment().format('YYYY-MM-DD'),
                         work_end: null,
                         days: {},
-                        team_id: d.id
+                        team_id: d.id,
+                        maternity_leaves: [],
+                        position: ""
                     };
-                    this.owner.owner.delegate.data.Employee(newVar);
+                    this.owner.owner.data.Employee(newVar);
+
+                    // This is a "Kostil" because for empty team dataSourceChanged event doesn't emit
+                    this.owner.owner.getChildByName('TeamsTree').setDataSource([]);
+                    this.owner.owner.getChildByName('TeamsTree').setDataSource(this.owner.owner.data.employeesAndUsersByTeams.getSubset('/'));
                 }
             })
         },
@@ -52,7 +62,11 @@ module.exports = basis.ui.form.Form.subclass({
                         is_super: false,
                         team_id: d.id
                     };
-                    this.owner.owner.delegate.data.User(newVar);
+                    this.owner.owner.data.User(newVar);
+
+                    // This is a "Kostil" because for empty team dataSourceChanged event doesn't emit
+                    this.owner.owner.getChildByName('TeamsTree').setDataSource([]);
+                    this.owner.owner.getChildByName('TeamsTree').setDataSource(this.owner.owner.data.employeesAndUsersByTeams.getSubset('/'));
                 }
             })
         }
