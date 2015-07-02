@@ -2,6 +2,9 @@ var passport = require("passport");
 var jade = require('jade');
 var userRepository = require('../domain/user');
 
+var requireTree = require('require-tree');
+var controllers = requireTree('.');
+
 function result(res, body, contentType){
 
     if(!contentType){
@@ -21,22 +24,24 @@ module.exports.login = function(req, res, next) {
     passport.authenticate('local',
         function(err, user) {
 
+            res.authenticationWasFail = true;
+
             return err
                 ? next(err)
                 : user
                 ? req.logIn(user, function(err) {
                     return err
                         ? next(err)
-                        : result(res, JSON.stringify({"success": true, user: user}));
+                        : res.redirect('/');
                 })
-                : result(res, JSON.stringify({"success": false}));
+                : controllers.render.login(req, res);
         }
     )(req, res, next);
 };
 
 module.exports.logout = function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/login');
 };
 
 module.exports.register = function(req, res, next) {
@@ -57,16 +62,7 @@ module.exports.whoami = function(req, res) {
     if(req.user){
         result(res, JSON.stringify({success: true, user: req.user}));
     }else{
-
-        var model = {success: false, username: '', password: ''};
-        var node_env = process.env.NODE_ENV || 'demo';
-
-        if(node_env != 'production'){
-            model.username = 'victor@local';
-            model.password = 'victor1';
-        }
-
-        result(res, JSON.stringify(model));
+        result(res, JSON.stringify({success: false}));
     }
 };
 

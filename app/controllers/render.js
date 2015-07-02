@@ -13,7 +13,20 @@ var jade = require('jade');
 
 module.exports.login = function(req, response) {
 
-    var body = jade.renderFile('app/views/login.jade', { user : req.user });
+    var model = {success: false, username: '', password: ''};
+    var node_env = process.env.NODE_ENV || 'demo';
+
+    if(node_env != 'production'){
+        model.username = 'victor@local';
+        model.password = 'victor1';
+    }
+
+    var body = jade.renderFile('app/views/login.jade', {
+        user : req.user,
+        username: 'victor@local',
+        password: 'victor1',
+        authenticationWasFail: response.hasOwnProperty('authenticationWasFail') && response.authenticationWasFail
+    });
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(body);
     response.end();

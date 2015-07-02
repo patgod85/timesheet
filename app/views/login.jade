@@ -1,25 +1,29 @@
-doctype html
-html
-    head
-        title= title
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+extends ./masterPage
 
-    body
-
+block content
     if (!user)
-        .container
-            h1 Login Page
-            p.lead Say something worthwhile here.
-            br
-            form(role='form', action="/login",method="post", style='max-width: 300px;')
-                .form-group
-                    input.form-control(type='text', name="username", placeholder='Enter Username')
-                .form-group
-                    input.form-control(type='password', name="password", placeholder='Password')
-                button.btn.btn-default(type='submit') Submit
-        a(href='/')
-            button.btn.btn-primary(type="button") Cancel
+
+        h1 Login Page
+        p.lead Say something worthwhile here.
+
+        if(authenticationWasFail)
+            h2.auth_fail Authentication failed. Try one more time
+
+        br
+        form(role='form', action="/login",method="post", class="login-form")
+            .form-group
+                input.form-control(type='text', name="username", placeholder='Enter Username', value="#{username}")
+            .form-group
+                input.form-control(type='password', name="password", placeholder='Password', value="#{password}")
+            button.btn.btn-default(type='submit') Log in
+
     if (user)
         p You are currently logged in as #{user.name}
+        a(href="/") Home
+
+        br
+
         a(href="/logout") Logout
+
+block scripts
 

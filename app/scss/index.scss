@@ -205,6 +205,10 @@ table.month {
     }
 }
 
+#placeHolder {
+    min-height: 50px;
+}
+
 //#placeHolder {
 //    .Basis-Calendar-ButtonPrevPeriod,
 //    .Basis-Calendar-ButtonNextPeriod {
@@ -317,4 +321,9 @@ table.month {
     ul {
         list-style-type: none;
     }
+}
+
+.auth_fail {
+    background-color: red;
+    color: white;
 }

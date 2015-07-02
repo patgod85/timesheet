@@ -17,7 +17,6 @@ module.exports = function () {
     // Get user credentials if exists, and provide some data to views.
 
     // Render index page
-    this.get('/login', controllers.render.login);
     this.get('/dev', controllers.render.dev);
     this.get('/', controllers.render.build);
 
@@ -32,9 +31,10 @@ module.exports = function () {
     this.post('/user/update', controllers.users.updateBySuperUser);
     this.post('/profile/update', controllers.users.updateProfile);
 
-    this.get('/whoami', controllers.users.whoami);
+    this.get('/login', controllers.render.login);
     this.post('/login', controllers.users.login);
-    this.get('/register', controllers.users.register);
+    this.get('/whoami', controllers.users.whoami);
+    //this.get('/register', controllers.users.register);
     this.get('/logout', controllers.users.logout);
 
     this.get('/model', controllers.model);
