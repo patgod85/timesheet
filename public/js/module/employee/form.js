@@ -8,12 +8,26 @@ var FormDate = require('../form/date.js');
 
 var DataSet = basis.require('basis.data').Dataset;
 
+var CompensatoryLeave = require('../compensatory-leave/index.js');
 var MaternityLeave = require('../maternity-leave/index.js');
 
 module.exports = basis.ui.Node.subclass({
     name: 'EmployeeForm',
     template: resource('./template/form.tmpl'),
     satellite: {
+        compensatoryLeaves: {
+            instanceOf: CompensatoryLeave,
+            dataSource: function(owner){
+
+                var items = owner.data.compensatory_leaves.map(function(item){
+                    return new basis.data.Object({
+                        data: item
+                    });
+                });
+
+                return new DataSet({items: items});
+            }
+        },
         maternityLeaves: {
             instanceOf: MaternityLeave,
             dataSource: function(owner){
@@ -37,6 +51,7 @@ module.exports = basis.ui.Node.subclass({
         }
     },
     binding: {
+        compensatoryLeaves: "satellite:",
         maternityLeaves: "satellite:",
         submitButton: "satellite:"
     },

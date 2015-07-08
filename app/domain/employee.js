@@ -2,6 +2,7 @@ var Vow = require("vow");
 var sqlite = require('./sqlite');
 var moment = require('moment');
 var maternityLeaveRepository = require('./maternityLeave');
+var compensatoryLeaveRepository = require('./compensatoryLeave');
 
 module.exports.getAll = function(user, publicHolidays) {
 
@@ -11,12 +12,18 @@ module.exports.getAll = function(user, publicHolidays) {
             userConditionParams = [],
             _employees,
             db,
-            maternityLeave;
+            maternityLeave,
+            compensatoryLeave;
 
         sqlite.connect()
             .then(sqlite.serialize)
             .then(function(_db){
                 db = _db;
+
+                return compensatoryLeaveRepository.getAll();
+            })
+            .then(function(_compensatoryLeave) {
+                compensatoryLeave = _compensatoryLeave;
 
                 return maternityLeaveRepository.getAll();
             })
@@ -67,14 +74,20 @@ module.exports.getAll = function(user, publicHolidays) {
                     e.days = {};
                     e.path = '/' + e.team_code + '/';
                     e.maternity_leaves = [];
+                    e.compensatory_leaves = [];
 
                     var iterationDate = moment(e.work_start, "YYYY-MM-DD"),
                         lastWorkingDate = e.work_end ? moment(e.work_end, "YYYY-MM-DD") : moment(),
                         daysWithTypes = employeesDays.hasOwnProperty(e.id) ? employeesDays[e.id] : {},
-                        hasMaternityLeave = maternityLeave.hasOwnProperty(e.id);
+                        hasMaternityLeave = maternityLeave.hasOwnProperty(e.id),
+                        hasCompensatoryLeave = compensatoryLeave.hasOwnProperty(e.id);
 
                     if(hasMaternityLeave){
                         e.maternity_leaves = maternityLeave[e.id];
+                    }
+
+                    if(hasCompensatoryLeave){
+                        e.compensatory_leaves = compensatoryLeave[e.id];
                     }
 
                     do  {
@@ -158,6 +171,10 @@ module.exports.update = function(employee){
 
                 for(var i = 0; i < employee.maternity_leaves.length; i++){
                     promises.push(maternityLeaveRepository.update(employee.maternity_leaves[i]));
+                }
+
+                for(i = 0; i < employee.compensatory_leaves.length; i++){
+                    promises.push(compensatoryLeaveRepository.update(employee.compensatory_leaves[i]));
                 }
 
                 return Vow.all(promises);

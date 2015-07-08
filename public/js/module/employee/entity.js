@@ -12,6 +12,7 @@ module.exports = new entity.EntityType({
         work_end: String,
         days: Object,
         maternity_leaves: Object,
+        compensatory_leaves: Object,
         team_id: String,
         position: String
     }

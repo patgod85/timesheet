@@ -53,3 +53,13 @@ CREATE TABLE [maternity_leave](
   "date_end" DATETIME,
   FOREIGN KEY ("employee_id") REFERENCES [employee]("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+CREATE TABLE [compensatory_leave](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "employee_id" INTEGER NOT NULL,
+  "date" DATETIME NOT NULL,
+  "description" TEXT,
+  "value" REAL NOT NULL,
+  FOREIGN KEY ("employee_id") REFERENCES [employee]("id") ON DELETE CASCADE ON UPDATE CASCADE
+);

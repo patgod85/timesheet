@@ -37,6 +37,10 @@ module.exports = basis.ui.Node.subclass({
                 }
             }
 
+            for(i = 0; i < item.data.compensatory_leaves.length; i++){
+                count += item.data.compensatory_leaves[i].value;
+            }
+
             item.data.otguls = count;
 
             return item;
