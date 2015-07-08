@@ -16,15 +16,15 @@ module.exports.login = function(req, response) {
     var model = {success: false, username: '', password: ''};
     var node_env = process.env.NODE_ENV || 'demo';
 
-    if(node_env != 'production'){
+    if(node_env == 'demo'){
         model.username = 'victor@local';
         model.password = 'victor1';
     }
 
     var body = jade.renderFile('app/views/login.jade', {
         user : req.user,
-        username: 'victor@local',
-        password: 'victor1',
+        username: model.username,
+        password: model.password,
         authenticationWasFail: response.hasOwnProperty('authenticationWasFail') && response.authenticationWasFail
     });
     response.writeHead(200, {"Content-Type": "text/html"});
