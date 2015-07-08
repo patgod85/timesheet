@@ -121,6 +121,11 @@ module.exports.getAll = function(user, publicHolidays) {
                     }
                     while (iterationDate.isBefore(lastWorkingDate) || iterationDate.isSame(lastWorkingDate, 'day'));
 
+                    for(j in daysWithTypes){
+                        if(daysWithTypes.hasOwnProperty(j) && !e.days.hasOwnProperty(j)){
+                            e.days[j] = daysWithTypes[j].day_type_id;
+                        }
+                    }
 
                     employees[_employees[i].id] = e;
                 }

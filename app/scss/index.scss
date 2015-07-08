@@ -76,7 +76,7 @@ table.month {
     @include table;
 
     td.clickable {
-        background-color: white;
+        /*background-color: white;*/
 
         &.weekend {
             background-color: yellow;
