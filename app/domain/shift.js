@@ -55,7 +55,7 @@ module.exports.getTeamShifts = function(){
                         shifts[_shifts[i].team_id] = {};
                     }
 
-                    shifts[_shifts[i].team_id][_shifts[i].id] = _shifts[i];
+                    shifts[_shifts[i].team_id][_shifts[i].shift_id] = _shifts[i];
                 }
 
                 resolve(shifts);
