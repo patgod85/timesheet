@@ -1,5 +1,6 @@
 require('basis.dom');
 require('basis.ui');
+var router = require('basis.router');
 var Month = require('../month/index.js');
 
 var Employee = require('../employee/index.js');
@@ -16,12 +17,31 @@ module.exports = basis.ui.Node.subclass({
             existsIf: function(owner){
                 return owner.data.month;
             }
+        },
+        modeSwitcher: {
+            instanceOf: basis.ui.Node.subclass({
+                template: '<button type="button" event-click="onClick">{title}</button>',
+                binding: {
+                    title: function(node){
+                        return 'Switch to ' + (node.data.mode == 'days' ? 'Shifts' : 'Days');
+                    }
+                },
+                autoDelegate: true,
+                action: {
+                    onClick: function(){
+                        var mode = this.data.mode.trim() == 'days' ? 'shifts' : 'days';
+                        router.navigate('team/' + this.data.team + '/' + this.data.month + '/' + this.data.year + '/' + mode);
+                        this.updateBind('title');
+                    }
+                }
+            })
         }
     },
     binding: {
         name: 'name',
         code: 'data:team',
-        month: 'satellite:'
+        month: 'satellite:',
+        modeSwitcher: 'satellite:'
     },
     handler: {
         update: function(){
@@ -38,6 +58,7 @@ module.exports = basis.ui.Node.subclass({
                 {
                     month: this.data.month,
                     year: this.data.year,
+                    mode: this.data.mode,
                     publicHolidays: this.data.publicHolidays
                 },
                 config

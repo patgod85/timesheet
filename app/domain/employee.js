@@ -56,8 +56,7 @@ module.exports.getAll = function(user, publicHolidays) {
             })
             .then(function (days) {
 
-                var employees = {},
-                    employeesDays = {};
+                var employeesDays = {};
 
                 for (var i = 0; i < days.length; i++) {
 
@@ -124,6 +123,74 @@ module.exports.getAll = function(user, publicHolidays) {
                     for(j in daysWithTypes){
                         if(daysWithTypes.hasOwnProperty(j) && !e.days.hasOwnProperty(j)){
                             e.days[j] = daysWithTypes[j].day_type_id;
+                        }
+                    }
+
+                    //employees[_employees[i].id] = e;
+                }
+
+                var query = "SELECT e.*, es.*, t.code AS team_code "
+                    + "FROM employee e "
+                    + "JOIN employee_shift es ON e.id = es.employee_id "
+                    + "JOIN team t ON e.team_id = t.id "
+                    + userCondition;
+
+                return sqlite.all(db, query, userConditionParams);
+            })
+            .then(function(shifts){
+
+                var employees = {},
+                    employeesShifts = {};
+
+                for (var i = 0; i < shifts.length; i++) {
+
+                    if(!employeesShifts.hasOwnProperty(shifts[i].employee_id)){
+                        employeesShifts[shifts[i].employee_id] = {};
+                    }
+
+                    employeesShifts[shifts[i].employee_id][shifts[i].date] = shifts[i];
+                }
+
+                for (i = 0; i < _employees.length; i++) {
+                    var e = _employees[i];
+
+                    e.shifts = {};
+
+                    var lastDate = moment(),
+                        firstDate = moment(),
+                        firstWorkingDay = moment(e.work_start, "YYYY-MM-DD");
+
+                    firstDate.subtract(2, 'M');
+                    lastDate.add(2, 'M');
+
+                    var iterationDate = firstWorkingDay.isBefore(firstDate) ? firstDate : firstWorkingDay,
+                        lastWorkingDate = (e.work_end && e.work_end != 'null') ? moment(e.work_end, "YYYY-MM-DD") : lastDate,
+                        daysWithShifts = employeesShifts.hasOwnProperty(e.id) ? employeesShifts[e.id] : {};
+
+                    do  {
+
+                        var format = iterationDate.format("YYYY-MM-DD"),
+                            isWeekend = [6, 7].indexOf(iterationDate.isoWeekday()) != -1,
+                            isPublicHoliday = publicHolidays.hasOwnProperty(format),
+                            hasType = daysWithShifts.hasOwnProperty(format);
+
+                        if(hasType){
+                            e.shifts[format] = daysWithShifts[format].shift_id;
+                        }
+                        else if(isWeekend || isPublicHoliday){
+                            e.shifts[format] = 4;
+                        }
+                        else {
+                            e.shifts[format] = 1;
+                        }
+
+                        iterationDate.add(1, 'd');
+                    }
+                    while (iterationDate.isBefore(lastWorkingDate) || iterationDate.isSame(lastWorkingDate, 'day'));
+
+                    for(var j in daysWithShifts){
+                        if(daysWithShifts.hasOwnProperty(j) && !e.shifts.hasOwnProperty(j)){
+                            e.shifts[j] = daysWithShifts[j].shift_id;
                         }
                     }
 

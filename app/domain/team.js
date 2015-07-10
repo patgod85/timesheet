@@ -1,9 +1,13 @@
 var Vow = require("vow");
 var sqlite = require('./sqlite');
 
+var shiftRepository = require('./shift');
+
 module.exports.getAll = function(user) {
 
     return new Vow.Promise(function(resolve, reject) {
+
+        var teams;
 
         sqlite.connect()
             .then(sqlite.serialize)
@@ -19,7 +23,23 @@ module.exports.getAll = function(user) {
 
                 return sqlite.all(db, "SELECT *, code AS team_code, '/' AS path FROM team " + userCondition, userConditionParams);
             })
-            .then(resolve)
+            .then(function(_teams){
+                teams = _teams;
+
+                return shiftRepository.getTeamShifts();
+            })
+            .then(function(shifts){
+
+                for(var i = 0; i < teams.length; i++){
+                    if(shifts.hasOwnProperty(teams[i].id)){
+                        teams[i].shifts = shifts[teams[i].id];
+                    }else{
+                        teams[i].shifts = {};
+                    }
+                }
+
+                resolve(teams);
+            })
             .catch(reject);
     });
 };

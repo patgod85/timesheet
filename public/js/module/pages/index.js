@@ -20,13 +20,30 @@ module.exports = basis.ui.Node.subclass({
                 if(node.data.dayTypes.hasOwnProperty(i)){
                     var type = node.data.dayTypes[i];
 
-                    style += " .type_" + type.id + "{"
+                    style += " .isType.type_" + type.id + "{"
                         + "background-color: #" + type.background_color + " !important;"
                         + "color: #" + type.color + " !important;"
                         + "}";
 
                     if(type.title){
-                        style += " .type_" + type.id + " span:before {"
+                        style += " .isType.type_" + type.id + " span:before {"
+                            + "content: \"" + type.title + "\" !important;"
+                            + "}";
+                    }
+                }
+            }
+
+            for(i in node.data.shifts){
+                if(node.data.shifts.hasOwnProperty(i)){
+                    type = node.data.shifts[i];
+
+                    style += " .isShift.type_" + type.id + "{"
+                        + "background-color: #" + type.background_color + " !important;"
+                        + "color: #" + type.color + " !important;"
+                        + "}";
+
+                    if(type.title){
+                        style += " .isShift.type_" + type.id + " span:before {"
                             + "content: \"" + type.title + "\" !important;"
                             + "}";
                     }

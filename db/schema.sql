@@ -63,3 +63,24 @@ CREATE TABLE [compensatory_leave](
   "value" REAL NOT NULL,
   FOREIGN KEY ("employee_id") REFERENCES [employee]("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE [shift](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "title" TEXT NOT NULL,
+  "background_color" TEXT NOT NULL DEFAULT "ffffff",
+  "color" TEXT NOT NULL DEFAULT "000000"
+);
+
+CREATE TABLE [employee_shift](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "employee_id" INTEGER NOT NULL REFERENCES  [employee]("id"),
+  "date" DATETIME NOT NULL,
+  "shift_id" INTEGER NOT NULL REFERENCES  [shift]("id")
+);
+
+CREATE TABLE [team_shift](
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  "team_id" INTEGER NOT NULL REFERENCES  [team]("id"),
+  "shift_id" INTEGER NOT NULL REFERENCES  [shift]("id"),
+  "description" TEXT NOT NULL
+);

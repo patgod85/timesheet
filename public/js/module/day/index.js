@@ -6,7 +6,8 @@ module.exports = basis.ui.Node.subclass({
         title: '',
         weekend: false,
         type: '',
-        checked: false
+        checked: false,
+        isShift: false
     },
     template: resource('./template/index.tmpl'),
     binding: {
@@ -14,6 +15,10 @@ module.exports = basis.ui.Node.subclass({
         title: 'data:title',
         weekend: 'data:weekend',
         type: 'data:type',
+        isType: function(node){
+            return !node.data.isShift;
+        },
+        isShift: 'data:isShift',
         checked: function(node){
             return node.data.checked ? 'checked_day' : '';
         },

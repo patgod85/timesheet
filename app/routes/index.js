@@ -26,7 +26,8 @@ module.exports = function () {
     this.post('/team/update', controllers.team.update);
     this.post('/employee/update', controllers.employee.update);
     //this.get('/day-types', controllers.dayTypes({}));
-    this.post('/set-type', controllers.setType);
+    this.post('/set-type', controllers.setter.setType);
+    this.post('/set-shift', controllers.setter.setShift);
     this.post('/public-holidays/update', controllers.publicHolidays.update);
     this.post('/user/update', controllers.users.updateBySuperUser);
     this.post('/profile/update', controllers.users.updateProfile);

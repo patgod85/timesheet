@@ -84,7 +84,7 @@ module.exports = basis.ui.Node.subclass({
             router.navigate('admin');
         },
         navigateToTeam: function(data) {
-            router.navigate('team/' + data.team + '/' + data.month + '/' + data.year);
+            router.navigate('team/' + data.team + '/' + data.month + '/' + data.year + '/' + data.mode);
         },
         navigateToPublicHolidays: function(data){
             router.navigate("public-holidays/" + data.month + '/' + data.year);

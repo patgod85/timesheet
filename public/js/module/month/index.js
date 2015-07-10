@@ -39,12 +39,26 @@ module.exports = basis.ui.Node.subclass({
                     this.data.workingDays++;
                 }
 
-                childNodes.push(new Day({data: {
-                    day: i+1,
-                    title: !isEntity ? i + 1 : getName(dateInString, this.data.entity.days, isWeekend, isPublicHoliday),
-                    weekend: isWeekend,
-                    type: !isEntity ? '' : getType(dateInString, this.data.entity.days, isPublicHoliday)
-                }}));
+                if(this.data.mode == 'shifts' && isEntity){
+
+                    if(this.data.entity.shifts[dateInString]){
+                        childNodes.push(new Day({data: {
+                            day: i+1,
+                            title: '',
+                            weekend: false,
+                            type: this.data.entity.shifts[dateInString],
+                            isShift: true
+                        }}));
+                    }
+                }
+                else {
+                    childNodes.push(new Day({data: {
+                        day: i+1,
+                        title: !isEntity ? i + 1 : getName(dateInString, this.data.entity.days, isWeekend, isPublicHoliday),
+                        weekend: isWeekend,
+                        type: !isEntity ? '' : getType(dateInString, this.data.entity.days, isPublicHoliday)
+                    }}));
+                }
             }
 
             this.setChildNodes(childNodes);

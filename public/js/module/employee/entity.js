@@ -14,6 +14,7 @@ module.exports = new entity.EntityType({
         maternity_leaves: Object,
         compensatory_leaves: Object,
         team_id: String,
-        position: String
+        position: String,
+        shifts: Object
     }
 });

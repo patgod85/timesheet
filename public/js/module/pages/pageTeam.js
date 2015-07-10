@@ -20,17 +20,18 @@ module.exports = Page.subclass({
 
         this.setChildNodes([
             new Team({delegate: this.delegate}),
-            new Agenda({ dayTypes: this.data.dayTypes })
+            new Agenda({delegate: this.delegate})
         ]);
 
         var self = this;
 
-        this.router.add('team/:team/:month/:year', {
-            match: function(teamCode, month, year){
+        this.router.add('team/:team/:month/:year/:mode', {
+            match: function(teamCode, month, year, mode){
                 var data = {
                     team: teamCode,
                     month: month,
-                    year: year + ' ' // Very strange bug. Without this space delegate does not change
+                    year: year,
+                    mode: mode
                 };
 
                 self.update(data);
@@ -73,9 +74,11 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
         }
     }
 
+    var url = model.data.mode == 'days' ? '/set-type' : '/set-shift';
+
     if(postModel.length) {
         ajax.request({
-            url: '/set-type',
+            url: url,
             method: 'POST',
             contentType: "application/json",
             postBody: JSON.stringify(postModel),
@@ -88,7 +91,7 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
                     model.sync();
                 },
                 failure: function(){
-                    alert("Setting of day type failed");
+                    alert("Setting of shift failed");
                 }
             }
         });

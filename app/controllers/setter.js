@@ -2,9 +2,20 @@ var url = require('url');
 
 var teamRepository = require('../domain/team');
 var dayTypeRepository = require('../domain/dayType');
+var shiftRepository = require('../domain/shift');
 
-module.exports = function (request, response) {
+module.exports.setType = function (request, response) {
 
+    setDay(dayTypeRepository.setTypes, request, response);
+};
+
+
+module.exports.setShift = function (request, response) {
+
+    setDay(shiftRepository.setShifts, request, response);
+};
+
+function setDay(repositoryMethod, request, response){
     var postData = request.body;
 
     var dates = [];
@@ -29,7 +40,7 @@ module.exports = function (request, response) {
                 values.push(postData[i].type);
             }
 
-            return dayTypeRepository.setTypes(employeeDayQueryAmend, values);
+            return repositoryMethod(employeeDayQueryAmend, values);
         })
         .then(function () {
             var body = JSON.stringify({success: true});
@@ -47,5 +58,4 @@ module.exports = function (request, response) {
             response.write('Access denied');
             response.end();
         })
-
-};
+}

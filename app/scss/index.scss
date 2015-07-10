@@ -270,6 +270,12 @@ table.month {
             &.isChecked {
                 @include selectedDay;
             }
+
+            &.isShift {
+                span:before {
+                    content: "" !important;
+                }
+            }
         }
 
     }

@@ -19,6 +19,7 @@ var model = new basis.data.Object({
     data: {
         month: moment().format('MMMM'),
         year: moment().format('YYYY'),
+        mode: 'days',
         team: '',
         teams: [],
         publicHolidays: {},

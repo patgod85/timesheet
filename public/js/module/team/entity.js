@@ -7,6 +7,7 @@ module.exports = new entity.EntityType({
         team_code: String,
         code: String,
         id: basis.entity.IntId,
-        name: String
+        name: String,
+        shifts: Object
     }
 });

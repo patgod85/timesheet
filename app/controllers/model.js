@@ -1,6 +1,7 @@
 var url = require('url');
 var Vow = require("vow");
 
+var shiftRepository = require('../domain/shift');
 var dayTypeRepository = require('../domain/dayType');
 var publicHolidayRepository = require('../domain/publicHoliday');
 var employeeRepository = require('../domain/employee');
@@ -31,6 +32,12 @@ module.exports = function (request, response) {
             })
             .then(function (employees) {
                 model.employees = employees;
+
+                return shiftRepository.getAll()
+            })
+            .then(function (shifts) {
+
+                model.shifts = shifts;
 
                 return dayTypeRepository.getAll()
             })
