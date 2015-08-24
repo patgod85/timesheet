@@ -2,6 +2,7 @@ var ui = require('basis.ui');
 
 module.exports = ui.Node.subclass({
     name: 'Agenda',
+    autoDelegate: true,
     template: resource('./template/index.tmpl'),
     childClass: {
         template: resource('./template/item.tmpl'),

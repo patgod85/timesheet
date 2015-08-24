@@ -17,13 +17,12 @@ module.exports = Page.subclass({
             applyTypeForSelectedDays(this.getChildByName('Team'), typeId, this.delegate);
         }
     },
+    childNodes: [
+        new Team(),
+        new Agenda()
+    ],
     init: function(){
         ui.Node.prototype.init.call(this);
-
-        this.setChildNodes([
-            new Team({delegate: this.delegate}),
-            new Agenda({delegate: this.delegate})
-        ]);
 
         var self = this;
 

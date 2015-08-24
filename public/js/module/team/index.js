@@ -6,6 +6,7 @@ var Employee = require('../employee/index.js');
 
 module.exports = ui.Node.subclass({
     name: 'Team',
+    autoDelegate: true,
     template: resource('./template/index.tmpl'),
     satellite: {
         month: {
@@ -49,7 +50,13 @@ module.exports = ui.Node.subclass({
                 this.setDataSource([]);
                 this.setDataSource(tmp);
             }
+        },
+        dataSourceChanged: function(){
+
+            this.updateBind('code');
+
         }
+
     },
     childFactory: function(config){
         return new Employee(
