@@ -15,7 +15,7 @@ var Page5 = require('./module/pages/pageProfile.js');
 
 var pages;
 
-var modelUrl = '/model';
+var modelUrl = '/app/model';
 
 var model = new data.Object({
     data: {

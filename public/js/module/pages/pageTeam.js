@@ -76,7 +76,7 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
         }
     }
 
-    var url = model.data.mode == 'days' ? '/set-type' : '/set-shift';
+    var url = model.data.mode == 'days' ? '/app/set-type' : '/app/set-shift';
 
     if(postModel.length) {
         ajax.request({

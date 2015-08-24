@@ -15,7 +15,7 @@ var LoginStatus = ui.Node.subclass({
         logoutButton: new button.Button({
             caption: 'Logout',
             click: function() {
-                window.location = "/logout";
+                window.location = "/app/logout";
             }
         })
     }
@@ -52,7 +52,7 @@ module.exports = ui.Node.subclass({
 
                 },
                 function(){
-                    window.location = "/login";
+                    window.location = "/app/login";
                 }
             )
             .request();

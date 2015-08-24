@@ -55,7 +55,7 @@ module.exports = form.FormContent.subclass({
         }
 
         ajax.request({
-            url: '/profile/update',
+            url: '/app/profile/update',
             method: 'POST',
             contentType: "application/json",
             body: JSON.stringify(data),
@@ -65,7 +65,7 @@ module.exports = form.FormContent.subclass({
 
                     if(data.new_password){
                         alert("Password was changed. You have to relogin");
-                        document.location = '/logout';
+                        document.location = '/app/logout';
                     }
                 },
                 failure: function(){

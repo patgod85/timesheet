@@ -86,7 +86,7 @@ module.exports = form.Form.subclass({
     onSubmit: function(){
         var self = this;
         ajax.request({
-            url: '/team/update',
+            url: '/app/team/update',
             method: 'POST',
             contentType: "application/json",
             body: JSON.stringify(self.data),

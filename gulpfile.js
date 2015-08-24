@@ -21,6 +21,6 @@ gulp.task('templates', function() {
 
     gulp.src('./app/views/dev.jade')
         .pipe(jade(LOCALS))
-        .pipe(rename('basis.html'))
+        .pipe(rename('index.html'))
         .pipe(gulp.dest('./public/'))
 });

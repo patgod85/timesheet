@@ -42,7 +42,7 @@ module.exports = ui.Node.subclass({
     submit: function(){
         var self = this;
         ajax.request({
-            url: '/user/update',
+            url: '/app/user/update',
             method: 'POST',
             contentType: "application/json",
             body: JSON.stringify(self.data),

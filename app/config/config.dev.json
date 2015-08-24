@@ -1,6 +1,6 @@
 {
     "express": {
-        "port": 8888
+        "port": 8889
     },
 
     "session": {

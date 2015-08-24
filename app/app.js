@@ -28,9 +28,8 @@ app.phase(bootable.routes('app/routes', app));
 
 
 app.boot(function (err) {
-  if (err) throw err;
-  app.listen(config.get('express:port'), function () {
-      console.log('Express listen port', config.get('express:port'));
-    //log.info('Express listen port', config.get('express:port'));
-  });
+    if (err) throw err;
+    app.listen(config.get('express:port'), function () {
+        console.log('Express listen port', config.get('express:port'));
+    });
 });

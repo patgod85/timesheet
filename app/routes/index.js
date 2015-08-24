@@ -21,22 +21,18 @@ module.exports = function () {
     this.get('/', controllers.render.build);
 
     // editor for create or update posts.
-    //this.get('/teams', controllers.teams);
-    //this.get('/team/', controllers.team.index({}));
-    this.post('/team/update', controllers.team.update);
-    this.post('/employee/update', controllers.employee.update);
-    //this.get('/day-types', controllers.dayTypes({}));
-    this.post('/set-type', controllers.setter.setType);
-    this.post('/set-shift', controllers.setter.setShift);
-    this.post('/public-holidays/update', controllers.publicHolidays.update);
-    this.post('/user/update', controllers.users.updateBySuperUser);
-    this.post('/profile/update', controllers.users.updateProfile);
+    this.post('/app/team/update', controllers.team.update);
+    this.post('/app/employee/update', controllers.employee.update);
+    this.post('/app/set-type', controllers.setter.setType);
+    this.post('/app/set-shift', controllers.setter.setShift);
+    this.post('/app/public-holidays/update', controllers.publicHolidays.update);
+    this.post('/app/user/update', controllers.users.updateBySuperUser);
+    this.post('/app/profile/update', controllers.users.updateProfile);
 
-    this.get('/login', controllers.render.login);
-    this.post('/login', controllers.users.login);
-    this.get('/whoami', controllers.users.whoami);
-    //this.get('/register', controllers.users.register);
-    this.get('/logout', controllers.users.logout);
+    this.get('/app/login', controllers.render.login);
+    this.post('/app/login', controllers.users.login);
+    this.get('/app/whoami', controllers.users.whoami);
+    this.get('/app/logout', controllers.users.logout);
 
-    this.get('/model', controllers.model);
+    this.get('/app/model', controllers.model);
 };

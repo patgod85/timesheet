@@ -8,7 +8,6 @@
         "jade": "*",
         "express" : "3.x",
         "http-auth": "*",
-        "cors": "*",
         "passport": "*",
         "passport-local": "*",
         "require-tree": "*",
@@ -19,7 +18,8 @@
         "process-pwd": "*",
         "vow": "0.4.*",
         "moment": "*",
-        "bcrypt-nodejs": "*"
+        "bcrypt-nodejs": "*",
+        "express-rewrite": "*"
     },
     "devDependencies" : {
         "gulp": "*",
@@ -27,6 +27,5 @@
         "gulp-rename": "*",
         "gulp-sass": "*",
         "gulp-minify-css": "*"
-    },
-    "scripts": { "start": "set NODE_ENV=production && node app"}
+    }
 }

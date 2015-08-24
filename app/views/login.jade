@@ -10,7 +10,7 @@ block content
             h2.auth_fail Authentication failed. Try one more time
 
         br
-        form(role='form', action="/login",method="post", class="login-form")
+        form(role='form', action="/app/login",method="post", class="login-form")
             .form-group
                 input.form-control(type='text', name="username", placeholder='Enter Username', value="#{username}")
             .form-group
@@ -23,7 +23,7 @@ block content
 
         br
 
-        a(href="/logout") Logout
+        a(href="/app/logout") Logout
 
 block scripts
 

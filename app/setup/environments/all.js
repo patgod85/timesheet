@@ -9,9 +9,6 @@ var express             = require('express');
 var pwd                 = require('process-pwd');
 var loggerformat        = require('up-express-logger');
 
-var cors = require('cors');
-// End of dependencies.
-//var bodyParser = require('body-parser');
 var passport = require('passport');
 // End of dependencies.
 
@@ -36,13 +33,9 @@ module.exports = function () {
     this.use(passport.initialize());
     this.use(passport.session());
 
-    this.use(cors({
-        credentials: true,
-        origin: 'http://localhost:8000'
-    }));
+    this.use(this.router);
 
     this.use(express.static('public/components', {maxAge: '1d'}));
     this.use(express.static('public'));
 
-    this.use(this.router);
 };
