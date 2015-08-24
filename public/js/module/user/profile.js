@@ -1,4 +1,3 @@
-var ui = require('basis.ui');
 var form = require('basis.ui.form');
 var button = require('basis.ui.button');
 var field = require('basis.ui.field');

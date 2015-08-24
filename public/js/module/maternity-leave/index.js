@@ -50,7 +50,7 @@ module.exports = ui.Node.subclass({
             };
 
             return new ui.Node({
-                template: '<td class="input-container"></td>',
+                template: resource('./template/td.tmpl'),
                 childNodes: [
                     new field.Text(config)
                 ]

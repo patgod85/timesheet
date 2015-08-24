@@ -1,5 +1,4 @@
 var ui = require('basis.ui');
-var field = require('basis.ui.field');
 var calendar = require('basis.ui.calendar');
 var button = require("basis.ui.button");
 var Popup = require('basis.ui.popup').Popup;

@@ -1,4 +1,3 @@
-var ui = require('basis.ui');
 var field = require('basis.ui.field');
 
 module.exports = field.Text.subclass({

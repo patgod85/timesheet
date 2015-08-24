@@ -83,7 +83,7 @@ var Day = entity.createType({
 
 module.exports = ui.Node.subclass({
     name: 'PublicHolidaysYear',
-    template: '<div class="days-list"><div{childNodesElement}/><div class="clearfix"></div><!--{toggleButton}--></div>',
+    template: resource('./template/index.tmpl'),
     dataSource: Day.all,
     binding: {
         toggleButton: new button.Button({
@@ -120,10 +120,7 @@ module.exports = ui.Node.subclass({
     },
     childClass: {
         name: 'Day',
-        template:
-            '<div class="day {selected} {isHoliday} {isWeekend} {isChecked}" event-click="select">' +
-                '{title}' +
-            '</div>',
+        template: resource('./template/day.tmpl'),
         action: {
             select: function(event){
 

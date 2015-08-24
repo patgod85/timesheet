@@ -1,4 +1,3 @@
-var ui = require('basis.ui');
 var button = require('basis.ui.button');
 var form = require('basis.ui.form');
 
@@ -7,8 +6,6 @@ var ajax = require('basis.net.ajax');
 var moment = require('../../../components/moment/moment.js');
 
 var FormInput = require('../form/text.js');
-
-var TeamsTree = require('../admin/index.js');
 
 module.exports = form.Form.subclass({
     name: 'TeamForm',

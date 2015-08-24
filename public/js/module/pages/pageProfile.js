@@ -1,6 +1,5 @@
 var ui = require('basis.ui');
 
-var ajax = require('basis.net.ajax');
 
 var Page = require('./page.js');
 var ProfileForm = require('../user/profile.js');

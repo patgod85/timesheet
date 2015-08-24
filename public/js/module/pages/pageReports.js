@@ -1,8 +1,5 @@
 var ui = require("basis.ui");
 
-var ajax = require('basis.net.ajax');
-var moment = require('../../../components/moment/moment.js');
-
 var Page = require('./page.js');
 var Statistic = require('../reports/statistic.js');
 

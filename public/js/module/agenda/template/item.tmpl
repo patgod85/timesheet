@@ -1,4 +1,8 @@
 <li class="agenda_li">
+    <b:define name="isType" type="bool"/>
+    <b:define name="isShift" type="bool"/>
+
+
     <span class="agenda_box {isType} {isShift} type_{id}"><span></span></span> - {name}
     &nbsp;<button event-click="applyType">apply for selected days</button>
 </li>

@@ -1,11 +1,7 @@
 var ui = require('basis.ui');
 var Month = require('../month/index.js');
-var Day = require('../day/index.js');
 
 module.exports = ui.Node.subclass({
-    //data: {
-    //    entity: null
-    //},
     className: 'Employee',
     template: resource('./template/index.tmpl'),
     binding: {

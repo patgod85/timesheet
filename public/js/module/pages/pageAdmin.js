@@ -1,8 +1,6 @@
 var ui = require('basis.ui');
 var button = require("basis.ui.button");
 
-var ajax = require('basis.net.ajax');
-
 var Page = require('./page.js');
 var TeamsTree = require('../admin/index.js');
 var TeamForm = require('../team/form.js');

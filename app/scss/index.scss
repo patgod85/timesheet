@@ -28,6 +28,10 @@ body {
     position: relative;
 }
 
+#auth, #page, #content {
+    font-size: 100%;
+}
+
 .auth_info {
     text-align: right;
     color: #005200;
@@ -160,15 +164,6 @@ table.month {
 
 .team {
 
-    //margin-top: 100px;
-
-    .header_month {
-        td {
-            color: #000000;
-            opacity: 0.5;
-        }
-    }
-
     .employee {
         margin: 10px 0;
 
@@ -242,6 +237,10 @@ table.month {
 
 .page-unselected {
     display: none;
+}
+
+.isType {
+    font-size: 100%;
 }
 
 .days-list {

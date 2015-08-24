@@ -24,9 +24,7 @@ module.exports = function(dataSource) {
     });
 
     var UserNode = tree.Node.subclass({
-        template:
-            '<b:include src="basis.ui.tree.Node" class="selection-red">' +
-            '</b:include>',
+        template: resource("./template/user-node.tmpl"),
         name: "user",
         binding: {
             title: 'data:name',

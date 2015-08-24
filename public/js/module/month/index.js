@@ -9,7 +9,6 @@ module.exports = ui.Node.subclass({
     binding: {
         name: "data:name",
         year: "data:year",
-        isActive: "data:isActive",
         workingDays: "data:workingDays"
     },
     init: function(){
