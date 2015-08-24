@@ -9,9 +9,7 @@ var LoginStatus = ui.Node.subclass({
     autoDelegate: true,
     template: resource('./template/loginStatus.tmpl'),
     binding: {
-        loggedInAs: function(node){
-            return node.owner ? node.owner.data.loggedInAs : "";
-        },
+        loggedInAs: "data:",
         logoutButton: new button.Button({
             caption: 'Logout',
             click: function() {
@@ -25,7 +23,7 @@ module.exports = ui.Node.subclass({
     container: dom.get('auth'),
     template: resource('./template/index.tmpl'),
     data: {
-        loggedInAs: ''
+        loggedInAs: ""
     },
     satellite: {
         loginStatus: {

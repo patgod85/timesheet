@@ -1,3 +1,6 @@
+
+/** @cut */ require('basis.devpanel');
+
 var moment = require('../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
 var router = require('basis.router');
