@@ -1,17 +1,18 @@
-require("basis.ui");
-require('basis.ui.button');
+var ui = require('basis.ui');
+var button = require('basis.ui.button');
+var dom = require('basis.dom');
 
 var profileService = require('./profileService.js');
 
-var LoginStatus = basis.ui.Node.subclass({
+var LoginStatus = ui.Node.subclass({
     name: 'LoginStatus',
     autoDelegate: true,
     template: resource('./template/loginStatus.tmpl'),
     binding: {
         loggedInAs: function(node){
-            return node.owner.data.loggedInAs;
+            return node.owner ? node.owner.data.loggedInAs : "";
         },
-        logoutButton: new basis.ui.button.Button({
+        logoutButton: new button.Button({
             caption: 'Logout',
             click: function() {
                 window.location = "/logout";
@@ -20,15 +21,15 @@ var LoginStatus = basis.ui.Node.subclass({
     }
 });
 
-module.exports = basis.ui.Node.subclass({
-    container: basis.dom.get('auth'),
+module.exports = ui.Node.subclass({
+    container: dom.get('auth'),
     template: resource('./template/index.tmpl'),
     data: {
         loggedInAs: ''
     },
     satellite: {
         loginStatus: {
-            instanceOf: LoginStatus,
+            instance: LoginStatus,
             existsIf: function(owner){
                 return owner.data.loggedInAs != ''
             }
@@ -40,7 +41,7 @@ module.exports = basis.ui.Node.subclass({
 
     init: function(){
         var self = this;
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         profileService
             .whoami(

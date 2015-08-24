@@ -1,6 +1,6 @@
-require('basis.ui');
+var ui = require('basis.ui');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     name: 'Agenda',
     template: resource('./template/index.tmpl'),
     childClass: {

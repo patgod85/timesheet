@@ -1,7 +1,7 @@
-require('basis.ui.calendar');
+var calendar = require('basis.ui.calendar');
 var moment = require('../../../../components/moment/moment.js');
 
-module.exports = basis.ui.calendar.Calendar.subclass({
+module.exports = calendar.Calendar.subclass({
     childNodes: ['Year', 'YearDecade'],
     action: {
         click: function () {}
@@ -19,7 +19,7 @@ module.exports = basis.ui.calendar.Calendar.subclass({
         }
     },
     init: function(){
-        basis.ui.calendar.Calendar.prototype.init.call(this);
+        calendar.Calendar.prototype.init.call(this);
 
         var date = moment()
             .year(parseInt(this.data.year))

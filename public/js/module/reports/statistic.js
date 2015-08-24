@@ -1,8 +1,10 @@
+var ui = require("basis.ui");
+var data = require("basis.data");
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     name: 'Statistic',
     template: resource('./template/statistic.tmpl'),
-    childClass: basis.ui.Node.subclass({
+    childClass: ui.Node.subclass({
         template: '<tr><td>{team_code}</td><td>{name} {surname}</td><td class="aright">{otguls}</td></tr>',
         binding: {
             name: "data:",
@@ -13,10 +15,10 @@ module.exports = basis.ui.Node.subclass({
     }),
     init: function(){
 
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
-        var dataSource = new basis.data.Dataset({
-            items: basis.data.wrap(this.data.employees, true)
+        var dataSource = new data.Dataset({
+            items: data.wrap(this.data.employees, true)
         });
 
         var nodeDataSource = dataSource.getItems().map(function(item){

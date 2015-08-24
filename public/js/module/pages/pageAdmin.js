@@ -1,4 +1,5 @@
-basis.require('basis.ui');
+var ui = require('basis.ui');
+var button = require("basis.ui.button");
 
 var ajax = require('basis.net.ajax');
 
@@ -15,7 +16,7 @@ module.exports = Page.subclass({
     template: resource('./template/admin.tmpl'),
     satellite: {
         teamForm: {
-            instanceOf: TeamForm,
+            instance: TeamForm,
             existsIf: function(owner){
                 return owner.data.adminEdit && !owner.data.adminEdit.delegate.data.hasOwnProperty('surname');
             },
@@ -24,7 +25,7 @@ module.exports = Page.subclass({
             }
         },
         employeeForm: {
-            instanceOf: EmployeeForm,
+            instance: EmployeeForm,
             existsIf: function(owner){
                 return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname') && !owner.data.adminEdit.delegate.data.hasOwnProperty('is_super');
             },
@@ -33,7 +34,7 @@ module.exports = Page.subclass({
             }
         },
         userForm: {
-            instanceOf: UserForm,
+            instance: UserForm,
             existsIf: function(owner){
                 return owner.data.adminEdit && owner.data.adminEdit.delegate.data.hasOwnProperty('surname') && owner.data.adminEdit.delegate.data.hasOwnProperty('is_super');
             },
@@ -49,7 +50,7 @@ module.exports = Page.subclass({
         employeeForm: "satellite:"
     },
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         var nodes = [
             TeamsTree(this.data.employeesAndUsersByTeams)
@@ -57,7 +58,7 @@ module.exports = Page.subclass({
 
         if(this.data.user.is_super){
             nodes.push(
-                new basis.ui.button.Button({
+                new button.Button({
                     caption: 'Create new team',
                     click: function () {
                         this.parentNode.delegate.data.Team({

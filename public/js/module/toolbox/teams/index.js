@@ -1,9 +1,8 @@
-require('basis.dom');
-require('basis.ui');
+var ui = require('basis.ui');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     template: resource('./template/list.tmpl'),
-    childClass: basis.ui.Node.subclass({
+    childClass: ui.Node.subclass({
         template: resource('./template/item.tmpl'),
         data: {
             name: 'default',

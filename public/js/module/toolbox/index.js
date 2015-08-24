@@ -1,27 +1,29 @@
-require('basis.ui');
-require('basis.ui.button');
+var ui = require('basis.ui');
+var dom = require('basis.dom');
+var button = require('basis.ui.button');
 var router = require('basis.router');
+var event = require('basis.event');
 var moment = require('../../../components/moment/moment.js');
 
 var Teams = require('./teams/index.js');
 var Calendar = require('./calendar/index.js');
 
 
-module.exports = basis.ui.Node.subclass({
-    container: basis.dom.get('toolbox'),
+module.exports = ui.Node.subclass({
+    container: dom.get('toolbox'),
     template: resource('./template/index.tmpl'),
     satellite: {
         calendar: {
             delegate: function(owner){
                 return owner.delegate;
             },
-            instanceOf: Calendar,
+            instance: Calendar,
             existsIf: function(owner){
                 return owner.data.isCalendarShown;
             }
         },
         teamsList: {
-            instanceOf: Teams,
+            instance: Teams,
             delegate: function(owner){
                 return owner.delegate;
             }
@@ -33,7 +35,7 @@ module.exports = basis.ui.Node.subclass({
             return node.data.month + ' ' + node.data.year;
         },
         isCalendarShown: "data:",
-        buttonPrevMonth: new basis.ui.button.Button({
+        buttonPrevMonth: new button.Button({
             caption: '<<',
             template: resource('../form/template/float-left-button.tmpl'),
             click: function () {
@@ -46,7 +48,7 @@ module.exports = basis.ui.Node.subclass({
                 this.owner.emit_monthChange(date);
             }
         }),
-        buttonNextMonth: new basis.ui.button.Button({
+        buttonNextMonth: new button.Button({
             caption: '>>',
             template: resource('../form/template/float-left-button.tmpl'),
             click: function () {
@@ -59,19 +61,19 @@ module.exports = basis.ui.Node.subclass({
                 this.owner.emit_monthChange(date);
             }
         }),
-        buttonPublicHolidays: new basis.ui.button.Button({
+        buttonPublicHolidays: new button.Button({
             caption: 'Public holidays',
             click: function () {
                 this.owner.action.navigateToPublicHolidays(this.owner.data);
             }
         }),
-        buttonAdmin: new basis.ui.button.Button({
+        buttonAdmin: new button.Button({
             caption: 'Admin area',
             click: function () {
                 this.owner.action.navigateToAdmin(this.owner.data);
             }
         }),
-        buttonReports: new basis.ui.button.Button({
+        buttonReports: new button.Button({
             caption: 'Reports',
             click: function () {
                 router.navigate('reports');
@@ -96,8 +98,8 @@ module.exports = basis.ui.Node.subclass({
             this.update({isCalendarShown: false});
         }
     },
-    emit_teamChange: basis.event.create('teamChange', 'team'),
-    emit_monthChange: basis.event.create('monthChange', 'date'),
+    emit_teamChange: event.create('teamChange', 'team'),
+    emit_monthChange: event.create('monthChange', 'date'),
     handler: {
         teamChange: function(sender, team){
             this.data.team = team;

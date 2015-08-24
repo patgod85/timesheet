@@ -1,9 +1,9 @@
-require('basis.ui');
+var ui = require('basis.ui');
 
 var moment = require('../../../components/moment/moment.js');
 var Day = require('../day/index.js');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     template: resource('./template/index.tmpl'),
     className: "Month",
     binding: {
@@ -13,7 +13,7 @@ module.exports = basis.ui.Node.subclass({
         workingDays: "data:workingDays"
     },
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         this.handler.callbacks.update.call(this);
     },

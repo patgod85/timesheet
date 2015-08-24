@@ -1,19 +1,16 @@
-basis.require('basis.dom');
-basis.require('basis.data.dataset');
-basis.require('basis.ui.tree');
-basis.require('basis.ui.button');
-
+var ui = require('basis.ui');
+var tree = require('basis.ui.tree');
 
 module.exports = function(dataSource) {
     var grouping = {
-        childClass: basis.ui.PartitionNode,
+        childClass: ui.PartitionNode,
         rule: function (node) {
-            return node instanceof basis.ui.tree.Folder == false;
+            return node instanceof tree.Folder == false;
         },
         sorting: basis.getter('data.id')
     };
 
-    var EmployeeNode = basis.ui.tree.Node.subclass({
+    var EmployeeNode = tree.Node.subclass({
         name: "employee",
         binding: {
             title: 'data:name',
@@ -26,7 +23,7 @@ module.exports = function(dataSource) {
         }
     });
 
-    var UserNode = basis.ui.tree.Node.subclass({
+    var UserNode = tree.Node.subclass({
         template:
             '<b:include src="basis.ui.tree.Node" class="selection-red">' +
             '</b:include>',
@@ -42,7 +39,7 @@ module.exports = function(dataSource) {
         }
     });
 
-    var TeamNode = basis.ui.tree.Folder.subclass({
+    var TeamNode = tree.Folder.subclass({
         name: "team",
         binding: {
             title: 'data:name'
@@ -50,7 +47,7 @@ module.exports = function(dataSource) {
         sorting: basis.getter('data.name'),
         grouping: grouping,
         init: function () {
-            basis.ui.tree.Node.prototype.init.call(this);
+            tree.Node.prototype.init.call(this);
             this.setDataSource(dataSource.getSubset(this.data.path + '' + this.data.team_code + '/'));
         },
         handler: {
@@ -61,13 +58,13 @@ module.exports = function(dataSource) {
     });
 
 
-    var tree = basis.ui.tree.Tree.subclass({
+    var TreeNode = tree.Tree.subclass({
         name: "TeamsTree",
         selection: {multiple: false},
         grouping: {
-            childClass: basis.ui.PartitionNode,
+            childClass: ui.PartitionNode,
             rule: function (node) {
-                return node instanceof basis.ui.tree.Folder == false;
+                return node instanceof tree.Folder == false;
             },
             sorting: basis.getter('data.id')
         },
@@ -86,7 +83,7 @@ module.exports = function(dataSource) {
             }
         },
         init: function () {
-            basis.ui.tree.Node.prototype.init.call(this);
+            tree.Node.prototype.init.call(this);
         },
         handler: {
             select: function (node, type, delegate) {
@@ -98,5 +95,5 @@ module.exports = function(dataSource) {
         }
     });
 
-    return new tree;
+    return new TreeNode;
 };

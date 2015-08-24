@@ -1,7 +1,7 @@
-basis.require('basis.ui');
+var ui = require('basis.ui');
 
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     container: document.getElementById('page'),
     template: resource('./template/pages.tmpl'),
     selection: true,

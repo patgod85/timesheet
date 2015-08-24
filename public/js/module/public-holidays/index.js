@@ -1,6 +1,6 @@
-basis.require('basis.ui');
-basis.require('basis.entity');
-basis.require('basis.net.service');
+var ui = require('basis.ui');
+var button = require('basis.ui.button');
+var entity = require('basis.entity');
 var ajax = require('basis.net.ajax');
 
 var moment = require('../../../components/moment/moment.js');
@@ -33,7 +33,7 @@ function postChanges(dates, done){
         url: '/public-holidays/update',
         method: 'POST',
         contentType: "application/json",
-        postBody: JSON.stringify(dates),
+        body: JSON.stringify(dates),
         handler: {
             success: function(){
                 done();
@@ -44,24 +44,24 @@ function postChanges(dates, done){
     });
 }
 
-var Month = basis.entity.createType({
+var Month = entity.createType({
     name: 'Month',
     fields: {
-        monthId: basis.entity.IntId,
+        monthId: entity.IntId,
         title: String
     },
     all: {
         syncAction: function(){
-            this.sync(monthsSource && monthsSource.map(this.wrapper.reader));
+            this.setAndDestroyRemoved(monthsSource && monthsSource.map(this.wrapper.reader));
         }
     }
 });
 
-var Day = basis.entity.createType({
+var Day = entity.createType({
     name: 'Day',
     autoDelegate: true,
     fields: {
-        id: basis.entity.IntId,
+        id: entity.IntId,
         group: 'Month',
         title: String,
         isHoliday: Boolean,
@@ -74,19 +74,19 @@ var Day = basis.entity.createType({
     },
     all: {
         syncAction: function(){
-            this.sync(daysSource && daysSource.map(this.wrapper.reader));
+            this.setAndDestroyRemoved(daysSource && daysSource.map(this.wrapper.reader));
         }
     }
 });
 
 
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     name: 'PublicHolidaysYear',
     template: '<div class="days-list"><div{childNodesElement}/><div class="clearfix"></div><!--{toggleButton}--></div>',
     dataSource: Day.all,
     binding: {
-        toggleButton: new basis.ui.button.Button({
+        toggleButton: new button.Button({
             caption: 'Toggle selected items',
             click: function () {
                 var selectedDates = [];
@@ -102,7 +102,7 @@ module.exports = basis.ui.Node.subclass({
                     postChanges(
                         selectedDates,
                         function(){
-                            self.owner.parentNode.delegate.sync(
+                            self.owner.parentNode.delegate.setAndDestroyRemoved(
                                 function(){
                                     self.owner.update({publicHolidays: self.owner.parentNode.delegate.data.publicHolidays});
                                 }
@@ -178,7 +178,7 @@ module.exports = basis.ui.Node.subclass({
                 momentDate.add(1, 'd');
             }
 
-            Day.all.sync(daysSource && daysSource.map(Day.all.wrapper.reader));
+            Day.all.setAndDestroyRemoved(daysSource && daysSource.map(Day.all.wrapper.reader));
         }
     }
 });

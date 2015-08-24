@@ -1,18 +1,18 @@
-require('basis.ui');
-require('basis.ui.form');
-require('basis.ui.button');
-require('basis.dom');
+var ui = require('basis.ui');
+var form = require('basis.ui.form');
+var button = require('basis.ui.button');
+var field = require('basis.ui.field');
 
 var ajax = require('basis.net.ajax');
 var FormInput = require('../form/text.js');
 var FormPasswordInput = require('../form/password.js');
 
-module.exports = basis.ui.form.FormContent.subclass({
+module.exports = form.FormContent.subclass({
     name: 'ProfileForm',
     template: resource('./template/profile.tmpl'),
     satellite: {
         submitButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Save',
                 click: function () {
                     this.owner.submit();
@@ -34,7 +34,7 @@ module.exports = basis.ui.form.FormContent.subclass({
         }
 
         if(config.type == 'label'){
-            return new basis.ui.field.Label(config);
+            return new field.Label(config);
         }
 
         return new FormInput(config);
@@ -58,7 +58,7 @@ module.exports = basis.ui.form.FormContent.subclass({
             url: '/profile/update',
             method: 'POST',
             contentType: "application/json",
-            postBody: JSON.stringify(data),
+            body: JSON.stringify(data),
             handler: {
                 success: function(){
                     alert("Profile successfully updated");

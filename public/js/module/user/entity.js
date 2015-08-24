@@ -5,7 +5,7 @@ module.exports = new entity.EntityType({
     fields: {
         path: String,
         team_code: String,
-        id: basis.entity.IntId,
+        id: entity.IntId,
         email: String,
         name: String,
         surname: String,

@@ -1,3 +1,4 @@
+var ui = require("basis.ui");
 
 var ajax = require('basis.net.ajax');
 var moment = require('../../../components/moment/moment.js');
@@ -9,7 +10,7 @@ module.exports = Page.subclass({
     name: 'reportsPage',
     title: 'Reports',
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         this.setChildNodes([
             new Statistic({delegate: this.delegate})

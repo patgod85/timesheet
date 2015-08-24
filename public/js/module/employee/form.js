@@ -1,26 +1,26 @@
-require('basis.ui');
-require('basis.ui.button');
-require('basis.dom');
+var ui = require('basis.ui');
+var button = require('basis.ui.button');
+var data = require("basis.data");
 
 var ajax = require('basis.net.ajax');
 var FormInput = require('../form/text.js');
 var FormDate = require('../form/date.js');
 
-var DataSet = basis.require('basis.data').Dataset;
+var DataSet = require('basis.data').Dataset;
 
 var CompensatoryLeave = require('../compensatory-leave/index.js');
 var MaternityLeave = require('../maternity-leave/index.js');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     name: 'EmployeeForm',
     template: resource('./template/form.tmpl'),
     satellite: {
         compensatoryLeaves: {
-            instanceOf: CompensatoryLeave,
+            instance: CompensatoryLeave,
             dataSource: function(owner){
 
                 var items = owner.data.compensatory_leaves.map(function(item){
-                    return new basis.data.Object({
+                    return new data.Object({
                         data: item
                     });
                 });
@@ -29,11 +29,11 @@ module.exports = basis.ui.Node.subclass({
             }
         },
         maternityLeaves: {
-            instanceOf: MaternityLeave,
+            instance: MaternityLeave,
             dataSource: function(owner){
 
                 var items = owner.data.maternity_leaves.map(function(item){
-                    return new basis.data.Object({
+                    return new data.Object({
                         data: item
                     });
                 });
@@ -42,7 +42,7 @@ module.exports = basis.ui.Node.subclass({
             }
         },
         submitButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Save',
                 click: function () {
                     this.owner.submit();
@@ -74,10 +74,10 @@ module.exports = basis.ui.Node.subclass({
             url: '/employee/update',
             method: 'POST',
             contentType: "application/json",
-            postBody: JSON.stringify(self.data),
+            body: JSON.stringify(self.data),
             handler: {
                 success: function(){
-                    self.owner.delegate.sync();
+                    self.owner.delegate.setAndDestroyRemoved();
                     alert("Employee successfully updated");
                 },
                 failure: function(){

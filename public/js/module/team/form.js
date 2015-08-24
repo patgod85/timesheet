@@ -1,7 +1,7 @@
-require('basis.ui');
-require('basis.ui.button');
-require('basis.dom');
-require('basis.ui.form');
+var ui = require('basis.ui');
+var button = require('basis.ui.button');
+var form = require('basis.ui.form');
+
 
 var ajax = require('basis.net.ajax');
 var moment = require('../../../components/moment/moment.js');
@@ -10,12 +10,12 @@ var FormInput = require('../form/text.js');
 
 var TeamsTree = require('../admin/index.js');
 
-module.exports = basis.ui.form.Form.subclass({
+module.exports = form.Form.subclass({
     name: 'TeamForm',
     template: resource('./template/form.tmpl'),
     satellite: {
         submitButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Save',
                 click: function () {
                     this.owner.submit();
@@ -23,7 +23,7 @@ module.exports = basis.ui.form.Form.subclass({
             })
         },
         addEmployeeButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Add new employee',
                 click: function () {
                     var d = this.owner.data;
@@ -49,7 +49,7 @@ module.exports = basis.ui.form.Form.subclass({
             })
         },
         addUserButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Add new user',
                 click: function () {
                     var d = this.owner.data;
@@ -89,10 +89,10 @@ module.exports = basis.ui.form.Form.subclass({
             url: '/team/update',
             method: 'POST',
             contentType: "application/json",
-            postBody: JSON.stringify(self.data),
+            body: JSON.stringify(self.data),
             handler: {
                 success: function(){
-                    self.owner.delegate.sync();
+                    self.owner.delegate.setAndDestroyRemoved();
                     alert("Team successfully updated");
                 },
                 failure: function(){

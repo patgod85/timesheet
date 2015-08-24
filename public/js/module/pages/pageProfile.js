@@ -1,4 +1,4 @@
-basis.require('basis.ui');
+var ui = require('basis.ui');
 
 var ajax = require('basis.net.ajax');
 
@@ -10,7 +10,7 @@ module.exports = Page.subclass({
     name: 'profilePage',
     title: 'Profile',
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         var self = this;
 

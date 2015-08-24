@@ -1,16 +1,21 @@
-module.exports = basis.ui.Node.subclass({
+var ui = require("basis.ui");
+var field = require("basis.ui.field");
+var button = require("basis.ui.button");
+var data = require("basis.data");
+
+module.exports = ui.Node.subclass({
     template: resource('./template/index.tmpl'),
     satellite: {
         addButton: {
-            instanceOf: basis.ui.button.Button.subclass({
+            instance: button.Button.subclass({
                 caption: 'Add',
                 click: function () {
                     var newLeave = {id: 0, employee_id: this.owner.owner.data.id};
                     this.owner.owner.data.compensatory_leaves.push(newLeave);
                     this.owner.owner.update({compensatory_leaves: this.owner.owner.data.compensatory_leaves});
 
-                    this.owner.dataSource.sync(this.owner.owner.data.compensatory_leaves.map(function(item){
-                        return new basis.data.Object({
+                    this.owner.dataSource.setAndDestroyRemoved(this.owner.owner.data.compensatory_leaves.map(function(item){
+                        return new data.Object({
                             data: item
                         });
                     }));
@@ -21,13 +26,13 @@ module.exports = basis.ui.Node.subclass({
     binding: {
         addButton: "satellite:"
     },
-    childClass:  basis.ui.Node.subclass({
+    childClass: ui.Node.subclass({
         template: resource('./template/row.tmpl'),
         binding: {
             id: "data.id"
         },
         init: function(){
-            basis.ui.Node.prototype.init.call(this);
+            ui.Node.prototype.init.call(this);
 
             this.setChildNodes([
                 {value: this.data.date, name: 'date'},
@@ -45,10 +50,10 @@ module.exports = basis.ui.Node.subclass({
                 }
             };
 
-            return new basis.ui.Node({
+            return new ui.Node({
                 template: '<td class="input-container"></td>',
                 childNodes: [
-                    new basis.ui.field.Text(config)
+                    new field.Text(config)
                 ]
             })
         }

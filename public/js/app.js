@@ -1,6 +1,8 @@
 var moment = require('../components/moment/moment.js');
 var ajax = require('basis.net.ajax');
-var router = basis.require('basis.router');
+var router = require('basis.router');
+var data = require("basis.data");
+var dataset = require("basis.data.dataset");
 
 var Toolbox = require('./module/toolbox/index.js');
 var User = require('./module/user/index.js');
@@ -15,7 +17,7 @@ var pages;
 
 var modelUrl = '/model';
 
-var model = new basis.data.Object({
+var model = new data.Object({
     data: {
         month: moment().format('MMMM'),
         year: moment().format('YYYY'),
@@ -28,7 +30,7 @@ var model = new basis.data.Object({
         employeesAndUsersByTeams: undefined,
         user: {}
     },
-    sync: function(done){
+    setAndDestroyRemoved: function(done){
         var self = this;
 
         ajax.request({
@@ -39,13 +41,13 @@ var model = new basis.data.Object({
                     response.Team = require("./module/team/entity.js");
                     response.Employee = require("./module/employee/entity.js");
                     response.User = require("./module/user/entity.js");
-                    response.Team.all.sync(response.teams);
-                    response.Employee.all.sync(response.employees);
-                    response.User.all.sync(response.users || []);
+                    response.Team.all.setAndDestroyRemoved(response.teams);
+                    response.Employee.all.setAndDestroyRemoved(response.employees);
+                    response.User.all.setAndDestroyRemoved(response.users || []);
 
-                    response.employeesByTeams = new basis.data.dataset.Split({
+                    response.employeesByTeams = new dataset.Split({
                         source:
-                            new basis.data.dataset.Merge({
+                            new dataset.Merge({
                                 sources: [
                                     response.Team.all,
                                     response.Employee.all
@@ -57,9 +59,9 @@ var model = new basis.data.Object({
                             }
                     });
 
-                    response.employeesAndUsersByTeams = new basis.data.dataset.Split({
+                    response.employeesAndUsersByTeams = new dataset.Split({
                         source:
-                            new basis.data.dataset.Merge({
+                            new dataset.Merge({
                                 sources: [
                                     response.Team.all,
                                     response.Employee.all,
@@ -90,7 +92,7 @@ new User({
 
         model.update({user: user});
 
-        model.sync(function(){
+        model.setAndDestroyRemoved(function(){
 
             router.start();
 

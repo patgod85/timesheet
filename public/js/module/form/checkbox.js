@@ -1,6 +1,7 @@
-require('basis.ui');
+var ui = require('basis.ui');
+var field = require('basis.ui.field');
 
-module.exports = basis.ui.field.Checkbox.subclass({
+module.exports = field.Checkbox.subclass({
     autoDelegate: true,
     handler: {
         update: function(){

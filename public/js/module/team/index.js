@@ -1,16 +1,15 @@
-require('basis.dom');
-require('basis.ui');
+var ui = require('basis.ui');
 var router = require('basis.router');
 var Month = require('../month/index.js');
 
 var Employee = require('../employee/index.js');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     name: 'Team',
     template: resource('./template/index.tmpl'),
     satellite: {
         month: {
-            instanceOf: Month,
+            instance: Month,
             delegate: function(owner){
                 return owner.delegate;
             },
@@ -19,7 +18,7 @@ module.exports = basis.ui.Node.subclass({
             }
         },
         modeSwitcher: {
-            instanceOf: basis.ui.Node.subclass({
+            instance: ui.Node.subclass({
                 template: '<button type="button" event-click="onClick">{title}</button>',
                 binding: {
                     title: function(node){

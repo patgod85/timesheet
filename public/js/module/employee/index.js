@@ -1,8 +1,8 @@
-require('basis.ui');
+var ui = require('basis.ui');
 var Month = require('../month/index.js');
 var Day = require('../day/index.js');
 
-module.exports = basis.ui.Node.subclass({
+module.exports = ui.Node.subclass({
     //data: {
     //    entity: null
     //},
@@ -13,7 +13,7 @@ module.exports = basis.ui.Node.subclass({
         surname: "data.surname"
     },
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         this.setChildNodes([
             new Month({

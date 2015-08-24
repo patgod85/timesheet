@@ -1,3 +1,5 @@
+var ui = require("basis.ui");
+
 var Page = require('./page.js');
 var PublicHolidays = require('../public-holidays/index.js');
 
@@ -8,7 +10,7 @@ module.exports = Page.subclass({
         new PublicHolidays()
     ],
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         var self = this;
 

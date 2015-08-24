@@ -1,4 +1,6 @@
+var ui = require("basis.ui");
 
+var event = require('basis.event');
 var ajax = require('basis.net.ajax');
 var moment = require('../../../components/moment/moment.js');
 
@@ -9,14 +11,14 @@ var Agenda = require('../agenda/index.js');
 module.exports = Page.subclass({
     name: 'teamPage',
     title: 'Team schedule',
-    emit_applyDayType: basis.event.create('applyDayType', 'typeId'),
+    emit_applyDayType: event.create('applyDayType', 'typeId'),
     handler: {
         applyDayType: function (sender, typeId) {
             applyTypeForSelectedDays(this.getChildByName('Team'), typeId, this.delegate);
         }
     },
     init: function(){
-        basis.ui.Node.prototype.init.call(this);
+        ui.Node.prototype.init.call(this);
 
         this.setChildNodes([
             new Team({delegate: this.delegate}),
@@ -81,14 +83,14 @@ function applyTypeForSelectedDays(currentTeam, typeId, model){
             url: url,
             method: 'POST',
             contentType: "application/json",
-            postBody: JSON.stringify(postModel),
+            body: JSON.stringify(postModel),
             handler: {
                 success: function(){
                     for(var i = 0; i < checkedDays.length; i++){
                         checkedDays[i].data.checked = false;
                         checkedDays[i].updateBind('checked');
                     }
-                    model.sync();
+                    model.setAndDestroyRemoved();
                 },
                 failure: function(){
                     alert("Setting of shift failed");
