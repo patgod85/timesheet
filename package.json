@@ -2,7 +2,9 @@
     "author": "patgod85",
     "name": "patgod85.timesheet",
     "version": "0.0.1",
-
+    "engines": {
+        "node": "6.11.1"
+    },
     "dependencies": {
         "sqlite3": "*",
         "jade": "*",
