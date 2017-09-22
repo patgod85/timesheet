@@ -24,7 +24,7 @@ Demo:
 <https://patgod85-timesheet.herokuapp.com/>
 
 Relative projects
------
+----
 
 - [Parser for XLS-files with data](https://github.com/patgod85/timesheet-xls-parser)
 - [Windows Form Client for quick updating of today's data](https://github.com//patgod85/timesheet-win-client)
