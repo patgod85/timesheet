@@ -7,6 +7,9 @@ Sandbox application for playing with [Basis.js](https://github.com/basisjs) fram
 1. Database - sqlite
 1. Client side - Basis.js
 
+Documentation
+-----
+
 [Documentation](doc/index.md)
 
 Functionality
